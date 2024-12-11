@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/screens/start_city_screen.dart';
 
 import '../domain/country.dart';
 import 'country_card.dart';
 
 class CountrySearchBar extends StatefulWidget {
-  CountrySearchBar({super.key, required this.allCountries});
+  CountrySearchBar({super.key, required this.countryList, required this.cardOnTap, required this.searchFieldOnSubmitted});
 
-  List<Country> allCountries;
+  List<Country> countryList;
+  final void Function(Country selectedCountry) cardOnTap;
+  final void Function(Country selectedCountry) searchFieldOnSubmitted;
+
 
   @override
   State<CountrySearchBar> createState() => _CountrySearchBarState();
+
 }
 
 class _CountrySearchBarState extends State<CountrySearchBar> {
@@ -24,7 +27,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
     super.initState();
     _searchController = SearchController();
     _focusNode = FocusNode();
-    filteredCountryList = widget.allCountries;
+    filteredCountryList = widget.countryList;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
@@ -49,28 +52,20 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
             padding: EdgeInsets.zero,
             itemCount: filteredCountryList.length,
             itemBuilder: (context, index) {
+              Country country = filteredCountryList[index];
               return CountryCard(
-                country: filteredCountryList[index],
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => StartCityScreen(country: filteredCountryList[index]),
-                    ),
-                  );
-                },
+                country: country,
+                cardOnTap: widget.cardOnTap,
               );
             },
           );
       },
       viewOnSubmitted: (userInput) {
-        bool validCountryInput = widget.allCountries.where((country) => country.getName == userInput).isNotEmpty;
+        List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName == userInput).toList();
+        bool validCountryInput = possibleValidCountry.isNotEmpty;
 
         if (validCountryInput) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => StartCityScreen(countryName: userInput),
-            ),
-          );
+          widget.searchFieldOnSubmitted(possibleValidCountry.first);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -87,7 +82,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
       searchController: _searchController,
       viewOnChanged: (userInput) {
         if (userInput.trim().isEmpty) {
-          filteredCountryList = List.from(widget.allCountries);
+          filteredCountryList = List.from(widget.countryList);
         } else {
           filteredCountryList = widget.allCountries.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
         }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nomad/constants.dart';
 import 'package:nomad/widgets/country_searchbar.dart';
 import 'package:nomad/widgets/dynamic_search_card.dart';
+import 'package:nomad/screens/home_screen.dart';
 
 void main() {
   runApp(const App());
@@ -17,31 +18,8 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const HomeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CountrySearchBar(allCountries: allCountries),
-        ),
-      ),
-    );
-  }
-}
