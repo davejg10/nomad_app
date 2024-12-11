@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nomad/screens/start_city_screen.dart';
 
 import '../domain/country.dart';
 import 'country_card.dart';
@@ -51,14 +52,36 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
               return CountryCard(
                 country: filteredCountryList[index],
                 onTap: () {
-                  //TODO navigator.pushNamed..
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => StartCityScreen(country: filteredCountryList[index]),
+                    ),
+                  );
                 },
               );
             },
           );
       },
       viewOnSubmitted: (userInput) {
-        //TODO navigator.pushNamed..
+        bool validCountryInput = widget.allCountries.where((country) => country.getName == userInput).isNotEmpty;
+
+        if (validCountryInput) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => StartCityScreen(countryName: userInput),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                'That is not a valid country in our list...',
+                style: TextStyle(fontSize: 20, fontFamily: "DMSans-Regular.ttf"),
+              ),
+            ),
+          );
+        }
       },
       isFullScreen: false,
       searchController: _searchController,
