@@ -42,7 +42,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
     return SearchAnchor(
       viewConstraints: BoxConstraints(maxHeight: 300),
       viewBuilder: (_) {
-        // Constructing the ListView here rather than suggestionBuilder as it allows us to use lazy initialization for the widgets.
+        // Constructing the List of search result Widgets here rather than suggestionBuilder as it allows us to use lazy initialization for the widgets.
         return ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: filteredCountryList.length,
