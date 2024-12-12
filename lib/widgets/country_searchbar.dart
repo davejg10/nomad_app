@@ -10,34 +10,28 @@ class CountrySearchBar extends StatefulWidget {
   final void Function(Country selectedCountry) cardOnTap;
   final void Function(Country selectedCountry) searchFieldOnSubmitted;
 
-
   @override
   State<CountrySearchBar> createState() => _CountrySearchBarState();
-
 }
 
 class _CountrySearchBarState extends State<CountrySearchBar> {
 
   late final SearchController _searchController;
-  late final FocusNode _focusNode;
   List<Country> filteredCountryList = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _focusNode = FocusNode();
     filteredCountryList = widget.countryList;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
       _searchController.openView();
     });
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -45,20 +39,23 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
   @override
   Widget build(BuildContext context) {
     return SearchAnchor(
+        key: const Key('country_search_field'),
       viewConstraints: BoxConstraints(maxHeight: 300),
       viewBuilder: (_) {
         // Constructing the List of search result Widgets here rather than suggestionBuilder as it allows us to use lazy initialization for the widgets.
-        return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: filteredCountryList.length,
-            itemBuilder: (context, index) {
-              Country country = filteredCountryList[index];
-              return CountryCard(
-                country: country,
-                cardOnTap: widget.cardOnTap,
-              );
-            },
-          );
+        ListView myView = ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: filteredCountryList.length,
+          itemBuilder: (context, index) {
+            Country country = filteredCountryList[index];
+            return CountryCard(
+              key: Key('countryCard${country.getName}'),
+              country: country,
+              cardOnTap: widget.cardOnTap,
+            );
+          },
+        );
+        return myView;
       },
       viewOnSubmitted: (userInput) {
         List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName == userInput).toList();
@@ -68,7 +65,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
           widget.searchFieldOnSubmitted(possibleValidCountry.first);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               backgroundColor: Colors.red,
               content: Text(
                 'That is not a valid country in our list...',
@@ -95,15 +92,15 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
                 fontStyle: FontStyle.italic,
               ),
           ),
-          autoFocus: true,
-          focusNode: _focusNode,
           controller: searchController,
           trailing: const [Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: Icon(Icons.search),
           )],
           onTap: () {
-            searchController.openView();
+            if (!searchController.isOpen) {
+              searchController.openView();
+            }
           },
         );
       },

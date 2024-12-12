@@ -19,6 +19,7 @@ class CityListView extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 5),
             child: CityCard(
+              key: Key('cityCard${city.getName}'),
                 city: city,
                 cardOnTap: cardOnTap,
                 arrowIconOnTap: arrowIconOnTap

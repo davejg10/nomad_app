@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nomad/data/destination_respository.dart';
 import 'package:nomad/screens/start_city_screen.dart';
 
-import '../constants.dart';
 import '../domain/country.dart';
 import '../widgets/country_searchbar.dart';
 
@@ -14,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  DestinationRepository repo = DestinationRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: CountrySearchBar(
-            countryList: allCountries,
+            countryList: repo.getCountries(),
             cardOnTap: (Country selectedCountry) {
               Navigator.of(context).push(
                 MaterialPageRoute(

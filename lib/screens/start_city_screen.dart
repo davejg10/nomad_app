@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/constants.dart';
 import 'package:nomad/screens/city_details_screen.dart';
 
+import '../data/destination_respository.dart';
 import '../domain/city.dart';
 import '../domain/country.dart';
 import '../widgets/city_list_view.dart';
@@ -12,10 +12,7 @@ class StartCityScreen extends StatelessWidget {
 
   final Country country;
 
-  // Mock a DB query...
-  List<City> getCityList(String countryName) {
-    return allCities.where(((city) => city.getCountryId == country.getId)).toList();
-  }
+  DestinationRepository repo = DestinationRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class StartCityScreen extends StatelessWidget {
             ),
             Expanded(
               child: CityListView(
-                cityList: getCityList(country.getName),
+                cityList: repo.getCitiesGivenCountry(country.getId),
                 cardOnTap: (City selectedCity) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
