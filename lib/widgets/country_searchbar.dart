@@ -4,9 +4,11 @@ import '../domain/country.dart';
 import 'country_card.dart';
 
 class CountrySearchBar extends StatefulWidget {
-  CountrySearchBar({super.key, required this.allCountries});
+  const CountrySearchBar({super.key, required this.countryList, required this.cardOnTap, required this.searchFieldOnSubmitted});
 
-  List<Country> allCountries;
+  final List<Country> countryList;
+  final void Function(Country selectedCountry) cardOnTap;
+  final void Function(Country selectedCountry) searchFieldOnSubmitted;
 
   @override
   State<CountrySearchBar> createState() => _CountrySearchBarState();
@@ -15,25 +17,21 @@ class CountrySearchBar extends StatefulWidget {
 class _CountrySearchBarState extends State<CountrySearchBar> {
 
   late final SearchController _searchController;
-  late final FocusNode _focusNode;
   List<Country> filteredCountryList = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _focusNode = FocusNode();
-    filteredCountryList = widget.allCountries;
+    filteredCountryList = widget.countryList;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
       _searchController.openView();
     });
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -41,32 +39,48 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
   @override
   Widget build(BuildContext context) {
     return SearchAnchor(
+        key: const Key('country_search_field'),
       viewConstraints: BoxConstraints(maxHeight: 300),
       viewBuilder: (_) {
         // Constructing the List of search result Widgets here rather than suggestionBuilder as it allows us to use lazy initialization for the widgets.
         return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: filteredCountryList.length,
-            itemBuilder: (context, index) {
-              return CountryCard(
-                country: filteredCountryList[index],
-                onTap: () {
-                  //TODO navigator.pushNamed..
-                },
-              );
-            },
-          );
+          padding: EdgeInsets.zero,
+          itemCount: filteredCountryList.length,
+          itemBuilder: (context, index) {
+            Country country = filteredCountryList[index];
+            return CountryCard(
+              key: Key('countryCard${country.getName}'),
+              country: country,
+              cardOnTap: widget.cardOnTap,
+            );
+          },
+        );
       },
       viewOnSubmitted: (userInput) {
-        //TODO navigator.pushNamed..
+        List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
+        bool validCountryInput = possibleValidCountry.isNotEmpty;
+
+        if (validCountryInput) {
+          widget.searchFieldOnSubmitted(possibleValidCountry.first);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                'That is not a valid country in our list...',
+                style: TextStyle(fontSize: 20, fontFamily: "DMSans-Regular.ttf"),
+              ),
+            ),
+          );
+        }
       },
       isFullScreen: false,
       searchController: _searchController,
       viewOnChanged: (userInput) {
         if (userInput.trim().isEmpty) {
-          filteredCountryList = List.from(widget.allCountries);
+          filteredCountryList = List.from(widget.countryList);
         } else {
-          filteredCountryList = widget.allCountries.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
+          filteredCountryList = widget.countryList.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
         }
       },
       builder: (BuildContext context, SearchController searchController) {
@@ -77,15 +91,15 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
                 fontStyle: FontStyle.italic,
               ),
           ),
-          autoFocus: true,
-          focusNode: _focusNode,
           controller: searchController,
           trailing: const [Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: Icon(Icons.search),
           )],
           onTap: () {
-            searchController.openView();
+            if (!searchController.isOpen) {
+              searchController.openView();
+            }
           },
         );
       },
