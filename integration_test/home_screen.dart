@@ -13,8 +13,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   Finder findSearchBarTextField() {
-    //Even though when run manually the cursor and keyboard open, when testing
-    // you have to specify a widget to type into. This method returns the ViewContent texfield.
+    // Even though when run manually the cursor and keyboard open, when testing
+    // you have to specify a widget to type into. This method returns the ViewContent textfield.
     // Cant just do widget.findByType(Searchbar). Weirdly this was the wrong textField.
     // See https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/search_anchor_test.dart#L903
 
