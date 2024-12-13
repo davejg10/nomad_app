@@ -14,7 +14,7 @@ void main() {
 
   Finder findSearchBarTextField() {
     //Even though when run manually the cursor and keyboard open, when testing
-    // you have to specify a widget to type into. This method returns the searchbar widget
+    // you have to specify a widget to type into. This method returns the ViewContent texfield.
     // Cant just do widget.findByType(Searchbar). Weirdly this was the wrong textField.
     // See https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/search_anchor_test.dart#L903
 
@@ -37,7 +37,7 @@ void main() {
 
   group('home screen tests', () {
     testWidgets('when I search for a country that exists, I should be able to see the country card in the view', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeScreen), findsOneWidget);
@@ -48,7 +48,7 @@ void main() {
       expect(find.byKey(ValueKey('countryCard${validCountry.getName}')), findsOneWidget);
     });
     testWidgets('when I search for a country that exists, I should be able to tap on the card and be navigated to the StartCityScreen with this country selected', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeScreen), findsOneWidget);
@@ -69,7 +69,7 @@ void main() {
       expect(find.text(validCountry.getName.toUpperCase()), findsOneWidget);
     });
     testWidgets('when I search for a country that exists, I should be able tap enter on keyboard and be navigated to the StartCityScreen with this country selected', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeScreen), findsOneWidget);
@@ -84,7 +84,7 @@ void main() {
       expect(find.text(validCountry.getName.toUpperCase()), findsOneWidget);
     });
     testWidgets('when I search for a country that doesnt exist no CountryCards should be displayed in the view', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeScreen), findsOneWidget);
@@ -110,7 +110,7 @@ void main() {
       expect(childCount, equals(0));
     });
     testWidgets('when I search for a country that doesnt exist and press enter on keyboard a error diaglogue should flash on screen and I should stay on home page', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeScreen), findsOneWidget);

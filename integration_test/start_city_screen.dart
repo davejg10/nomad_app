@@ -53,6 +53,9 @@ void main() {
       final cityCards = find.byType(CityCard);
       final numCityCards = tester.widgetList(cityCards).length;
       expect(numCityCards, equals(0));
+
+      // Replace test data
+      DestinationRepository.setCities(testCities);
     });
     testWidgets('when I tap on one of the city cards I should be navigated to NextCityScreen', (tester) async {
       await tester.pumpWidget(MaterialApp(home: StartCityScreen(country: country)));
@@ -85,11 +88,13 @@ void main() {
 
       final cityCard = find.byKey(ValueKey('cityCard${startingCity.getName}'));
       expect(cityCard, findsOneWidget);
+
       final arrowButton =  find.descendant(
           of: cityCard,
           matching: find.byType(IconButton)
       );
-      // Emulate a tap on the country card.
+
+      // Emulate a tap on the city card.
       await tester.tap(arrowButton);
 
       // Trigger a frame.

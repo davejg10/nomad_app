@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../domain/city.dart';
 
 class NextCityScreen extends StatefulWidget {
-  NextCityScreen({super.key, required this.startCity});
+  const NextCityScreen({super.key, required this.startCity});
 
   final City startCity;
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/constants.dart';
 import 'package:nomad/widgets/country_searchbar.dart';
-import 'package:nomad/widgets/dynamic_search_card.dart';
 import 'package:nomad/screens/home_screen.dart';
 
 void main() {

@@ -5,14 +5,14 @@ import '../data/destination_respository.dart';
 import '../domain/city.dart';
 import '../domain/country.dart';
 import '../widgets/city_list_view.dart';
+import '../widgets/page_title.dart';
 import 'next_city_screen.dart';
 
 class StartCityScreen extends StatelessWidget {
   StartCityScreen({super.key, required this.country});
 
   final Country country;
-
-  DestinationRepository repo = DestinationRepository();
+  final DestinationRepository repo = DestinationRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +20,7 @@ class StartCityScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                    child: Text(
-                      country.getName.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.w500
-                      ),
-                    ),
-                ),
-              ),
-            ),
+            PageTitle(titleText: country.getName),
             Expanded(
               child: CityListView(
                 cityList: repo.getCitiesGivenCountry(country.getId),

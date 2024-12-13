@@ -4,9 +4,9 @@ import '../domain/country.dart';
 import 'country_card.dart';
 
 class CountrySearchBar extends StatefulWidget {
-  CountrySearchBar({super.key, required this.countryList, required this.cardOnTap, required this.searchFieldOnSubmitted});
+  const CountrySearchBar({super.key, required this.countryList, required this.cardOnTap, required this.searchFieldOnSubmitted});
 
-  List<Country> countryList;
+  final List<Country> countryList;
   final void Function(Country selectedCountry) cardOnTap;
   final void Function(Country selectedCountry) searchFieldOnSubmitted;
 
@@ -58,7 +58,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
         return myView;
       },
       viewOnSubmitted: (userInput) {
-        List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName == userInput).toList();
+        List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
         bool validCountryInput = possibleValidCountry.isNotEmpty;
 
         if (validCountryInput) {
@@ -81,7 +81,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
         if (userInput.trim().isEmpty) {
           filteredCountryList = List.from(widget.countryList);
         } else {
-          filteredCountryList = widget.allCountries.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
+          filteredCountryList = widget.countryList.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
         }
       },
       builder: (BuildContext context, SearchController searchController) {

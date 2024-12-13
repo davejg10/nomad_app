@@ -4,9 +4,9 @@ import '../domain/city.dart';
 import 'city_card.dart';
 
 class CityListView extends StatelessWidget {
-  CityListView({super.key, required this.cityList, required this.cardOnTap, required this.arrowIconOnTap});
+  const CityListView({super.key, required this.cityList, required this.cardOnTap, required this.arrowIconOnTap});
 
-  List<City> cityList;
+  final List<City> cityList;
   final void Function(City selectedCity) cardOnTap;
   final void Function(City selectedCity) arrowIconOnTap;
 
