@@ -43,7 +43,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
       viewConstraints: BoxConstraints(maxHeight: 300),
       viewBuilder: (_) {
         // Constructing the List of search result Widgets here rather than suggestionBuilder as it allows us to use lazy initialization for the widgets.
-        ListView myView = ListView.builder(
+        return ListView.builder(
           padding: EdgeInsets.zero,
           itemCount: filteredCountryList.length,
           itemBuilder: (context, index) {
@@ -55,7 +55,6 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
             );
           },
         );
-        return myView;
       },
       viewOnSubmitted: (userInput) {
         List<Country> possibleValidCountry = widget.countryList.where((country) => country.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
