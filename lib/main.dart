@@ -3,11 +3,11 @@ import 'package:nomad/constants.dart';
 import 'package:nomad/widgets/country_searchbar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
