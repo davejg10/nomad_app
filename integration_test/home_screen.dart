@@ -18,14 +18,12 @@ void main() {
     // Cant just do widget.findByType(Searchbar). Weirdly this was the wrong textField.
     // See https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/search_anchor_test.dart#L903
 
-    Finder findViewContent() {
-      return find.byWidgetPredicate((Widget widget) {
-        return widget.runtimeType.toString() == '_ViewContent';
-      });
-    }
+    Finder viewContentWidget = find.byWidgetPredicate((Widget widget) {
+      return widget.runtimeType.toString() == '_ViewContent';
+    });
 
     return find.descendant(
-        of: findViewContent(),
+        of: viewContentWidget,
         matching: find.byType(TextField)
     );
   }
