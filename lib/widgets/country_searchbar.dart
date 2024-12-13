@@ -66,7 +66,7 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
         if (userInput.trim().isEmpty) {
           filteredCountryList = List.from(widget.allCountries);
         } else {
-          filteredCountryList = widget.allCountries.where((country) => country.getName.contains(userInput)).toList();
+          filteredCountryList = widget.allCountries.where((country) => country.getName.toLowerCase().contains(userInput.toLowerCase())).toList();
         }
       },
       builder: (BuildContext context, SearchController searchController) {
