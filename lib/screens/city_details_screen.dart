@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/constants.dart';
-import 'package:nomad/screen_scaffold.dart';
 
 import '../domain/city.dart';
 import '../widgets/city_rating.dart';
