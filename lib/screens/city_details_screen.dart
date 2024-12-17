@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../domain/city.dart';
+import '../widgets/city_rating.dart';
 import '../widgets/page_title.dart';
 
 class CityDetailsScreen extends StatelessWidget {
