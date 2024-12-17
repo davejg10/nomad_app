@@ -29,7 +29,7 @@ class DestinationRepository {
   }
 
   List<City> getCitiesGivenCountry(int countryId) {
-    return getCities().where(((city) => city.getCountryId == countryId)).toList();
+    return getCities().where((city) => city.getCountryId == countryId).toList();
   }
 
   //Temporarily used for testing.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../domain/city.dart';
+import '../widgets/city_rating.dart';
 import '../widgets/page_title.dart';
 
 class CityDetailsScreen extends StatelessWidget {
@@ -14,8 +15,22 @@ class CityDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            PageTitle(
-              titleText: selectedCity.getName,
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                PageTitle(
+                  titleText: selectedCity.getName,
+                ),
+              ],
+            ),
+            Divider(
+              color: Colors.black,
+              height: 0,
             ),
             Expanded(
               child: ListView(
@@ -39,20 +54,9 @@ class CityDetailsScreen extends StatelessWidget {
                             padding: EdgeInsets.all(20),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CityRating(
-                                  score: 9,
-                                  ratingIcon: Icons.sailing,
-                                ),
-                                CityRating(
-                                  score: 9,
-                                  ratingIcon: Icons.restaurant,
-                                ),
-                                CityRating(
-                                  score: 9,
-                                  ratingIcon: Icons.local_bar,
-                                )
-                              ],
+                              children: selectedCity.getCityRatings.entries.map((entry) {
+                                return CityRating(score: entry.value, ratingIcon: City.convertCriteriaToIcon(entry.key));
+                              }).toList(),
                             ),
                           ),
                         ),
@@ -66,49 +70,9 @@ class CityDetailsScreen extends StatelessWidget {
                 ],
               ),
             )
-
           ],
         ),
       )
     );
   }
 }
-
-class CityRating extends StatelessWidget {
-  const CityRating({super.key, required this.score, required this.ratingIcon});
-
-  final int score;
-  final IconData ratingIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '$score/10',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10,),
-            Expanded(
-              child: FittedBox(
-                alignment: Alignment.centerLeft,
-                fit: BoxFit.contain,
-                child: Icon(ratingIcon),
-              ),
-            )
-          ],
-        ),
-    );
-  }
-}
-
