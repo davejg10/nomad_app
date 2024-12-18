@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nomad/data/destination_respository.dart';
+import 'package:nomad/global_screen.dart';
 import 'package:nomad/screens/start_city_screen.dart';
 
 import '../domain/country.dart';
@@ -18,27 +19,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CountrySearchBar(
-            countryList: repo.getCountries(),
-            cardOnTap: (Country selectedCountry) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => StartCityScreen(country: selectedCountry),
-                ),
-              );
-            },
-            searchFieldOnSubmitted: (Country selectedCountry) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => StartCityScreen(country: selectedCountry),
-                ),
-              );
-            },
-          ),
+    return GlobalScreen(
+      child: Center(
+        child: CountrySearchBar(
+          countryList: repo.getCountries(),
+          cardOnTap: (Country selectedCountry) {
+            scopedCities = repo.getCitiesGivenCountry(selectedCountry.getId);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => StartCityScreen(country: selectedCountry),
+              ),
+            );
+          },
+          searchFieldOnSubmitted: (Country selectedCountry) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => StartCityScreen(country: selectedCountry),
+              ),
+            );
+          },
         ),
       ),
     );

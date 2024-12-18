@@ -17,7 +17,7 @@ class CityCard extends StatelessWidget {
       },
       child: Card(
         elevation: 5.0,
-        margin: EdgeInsets.all(0.0),
+        margin: EdgeInsets.all(8.0),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
