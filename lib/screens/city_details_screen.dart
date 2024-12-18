@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nomad/constants.dart';
 import 'package:nomad/global_screen.dart';
 
 import '../domain/city.dart';
 import '../widgets/city_rating.dart';
-import '../widgets/page_title.dart';
 
 class CityDetailsScreen extends StatelessWidget {
   const CityDetailsScreen({super.key, required this.selectedCity});
@@ -13,25 +13,14 @@ class CityDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlobalScreen(
+      appBar: AppBar(
+        title: Text(
+          selectedCity.getName,
+          style: kAppBarTextStyle,
+        ),
+      ),
       child: Column(
         children: [
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              PageTitle(
-                titleText: selectedCity.getName,
-              ),
-            ],
-          ),
-          Divider(
-            color: Colors.black,
-            height: 0,
-          ),
           Expanded(
             child: ListView(
               children: [
