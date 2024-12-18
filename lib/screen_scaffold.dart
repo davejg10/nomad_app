@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class GlobalScreen extends StatelessWidget {
-  GlobalScreen({super.key, this.appBar, required this.child});
+import 'constants.dart';
+
+class ScreenScaffold extends StatelessWidget {
+  ScreenScaffold({super.key, this.appBar, required this.child});
 
   AppBar? appBar;
   Widget child;
@@ -12,7 +14,7 @@ class GlobalScreen extends StatelessWidget {
       appBar: appBar,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          padding: kSidePadding,
           child: child,
         ),
       ),

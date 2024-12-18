@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nomad/constants.dart';
-import 'package:nomad/global_screen.dart';
+import 'package:nomad/screen_scaffold.dart';
 
 import '../domain/city.dart';
 import '../widgets/city_rating.dart';
@@ -12,7 +12,7 @@ class CityDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalScreen(
+    return ScreenScaffold(
       appBar: AppBar(
         title: Text(
           selectedCity.getName,

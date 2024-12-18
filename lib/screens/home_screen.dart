@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nomad/data/destination_respository.dart';
-import 'package:nomad/global_screen.dart';
+import 'package:nomad/screen_scaffold.dart';
 import 'package:nomad/screens/select_city_screen.dart';
 
 import '../domain/country.dart';
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalScreen(
+    return ScreenScaffold(
       child: Center(
         child: CountrySearchBar(
           countryList: repo.getCountries(),
