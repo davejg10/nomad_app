@@ -16,14 +16,11 @@ class CityListView extends StatelessWidget {
         itemCount: cityList.length,
         itemBuilder: (context, index) {
           City city = cityList[index];
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(25, 10, 25, 5),
-            child: CityCard(
-              key: Key('cityCard${city.getName}'),
-                city: city,
-                cardOnTap: cardOnTap,
-                arrowIconOnTap: arrowIconOnTap
-            ),
+          return CityCard(
+            key: Key('cityCard${city.getName}'),
+              city: city,
+              cardOnTap: cardOnTap,
+              arrowIconOnTap: arrowIconOnTap
           );
         }
     );
