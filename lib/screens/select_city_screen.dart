@@ -56,6 +56,8 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('inhere');
+
     return ScreenScaffold(
         appBar: AppBar(
         title: Text(
