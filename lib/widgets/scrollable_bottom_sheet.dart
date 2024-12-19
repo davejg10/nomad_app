@@ -6,24 +6,22 @@ class ScrollableBottomSheet extends StatefulWidget {
   ScrollableBottomSheet({
     super.key,
     required this.sheetContent,
-    this.sheetColor = Colors.amber,
     this.minSheetPosition = 0.05,
     this.maxSheetPosition = 0.3,
     this.dragSensitivity = 600
   });
 
   final ListView sheetContent;
-  final Color sheetColor;
   final double minSheetPosition;
   final double maxSheetPosition;
-  late double sheetPosition = minSheetPosition;
-  final double dragSensitivity;
+  final int dragSensitivity;
 
   @override
   State<ScrollableBottomSheet> createState() => _ScrollableBottomSheetState();
 }
 
 class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
+  late double sheetPosition = widget.minSheetPosition;
 
   @override
   void initState() {
@@ -37,10 +35,11 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+
     return DraggableScrollableSheet(
       minChildSize: widget.minSheetPosition,
       maxChildSize: widget.maxSheetPosition,
-      initialChildSize: widget.sheetPosition,
+      initialChildSize: sheetPosition,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -60,14 +59,14 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
                 onVerticalDragUpdate: (DragUpdateDetails details) {
                   setState(() {
                     // Gives drag animation
-                    widget.sheetPosition -= details.delta.dy / widget.dragSensitivity;
+                    sheetPosition -= details.delta.dy / widget.dragSensitivity;
 
-                    if (widget.sheetPosition < widget.minSheetPosition) {
-                      widget.sheetPosition = widget.minSheetPosition;
+                    if (sheetPosition < widget.minSheetPosition) {
+                      sheetPosition = widget.minSheetPosition;
                     }
                     // Only let the 30% of the column be covered
-                    if (widget.sheetPosition > widget.maxSheetPosition) {
-                      widget.sheetPosition = widget.maxSheetPosition;
+                    if (sheetPosition > widget.maxSheetPosition) {
+                      sheetPosition = widget.maxSheetPosition;
                     }
                   });
                 },
