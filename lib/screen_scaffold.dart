@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class ScreenScaffold extends StatelessWidget {
-  ScreenScaffold({super.key, this.appBar, required this.child});
+  ScreenScaffold({super.key, this.appBar, required this.child, this.padding});
 
   AppBar? appBar;
   Widget child;
+  EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class ScreenScaffold extends StatelessWidget {
       appBar: appBar,
       body: SafeArea(
         child: Padding(
-          padding: kSidePadding,
+          padding: padding == null ?  kSidePadding : padding!,
           child: child,
         ),
       ),

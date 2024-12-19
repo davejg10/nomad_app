@@ -34,13 +34,6 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
     super.initState();
     // In future this will be a network request to request all recommended cities from routeList.last();
     ensureDisjointLists();
-
-    _searchController.addListener(() {
-      String userInput = _searchController.text.toLowerCase().trim();
-      setState(() {
-        queriedCityList = remainingCityList.where((city) => city.getName.toLowerCase().contains(userInput)).toList();
-      });
-    });
   }
 
   @override
@@ -63,10 +56,8 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('inhere');
-
     return ScreenScaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         title: Text(
           widget.country.getName,
           style: kAppBarTextStyle,
@@ -103,18 +94,38 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                     child: SearchBar(
-                        controller: _searchController,
-                        focusNode: _focusNode,
-                        hintText: 'Search cities...',
-                        leading: Icon(Icons.search),
-                        trailing: [IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            setState(() {
-                              closeSearchBar();
-                            });
-                          },
-                        ),]
+                      onSubmitted: (userInput) {
+                        List<City> possibleValidCity = scopedCities.where((city) => city.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
+                        bool validCityInput = possibleValidCity.isNotEmpty;
+
+                        if (validCityInput) {
+                          setState(() {
+                            closeSearchBar();
+                            routeList = [...routeList, possibleValidCity.first];
+                            ensureDisjointLists();
+                          });
+                        } else {
+                          print('not valid!');
+                        }
+                      },
+                      onChanged: (userInput) {
+                        setState(() {
+                          String sanitizedUserInput = userInput.trim().toLowerCase();
+                          queriedCityList = remainingCityList.where((city) => city.getName.toLowerCase().contains(sanitizedUserInput)).toList();
+                        });
+                      },
+                      controller: _searchController,
+                      focusNode: _focusNode,
+                      hintText: 'Search cities...',
+                      leading: Icon(Icons.search),
+                      trailing: [IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          setState(() {
+                            closeSearchBar();
+                          });
+                        },
+                      ),]
                     ),
                   ),
                 ),
@@ -152,3 +163,4 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
     );
   }
 }
+
