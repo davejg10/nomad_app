@@ -11,7 +11,7 @@ class ScrollableBottomSheet extends StatefulWidget {
     this.dragSensitivity = 600
   });
 
-  final ListView sheetContent;
+  final List<Widget> sheetContent;
   final double minSheetPosition;
   final double maxSheetPosition;
   final int dragSensitivity;
@@ -33,6 +33,8 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
     super.dispose();
   }
 
+  bool disableContentScroll = true;
+
   @override
   Widget build(BuildContext context) {
 
@@ -40,7 +42,7 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
       minChildSize: widget.minSheetPosition,
       maxChildSize: widget.maxSheetPosition,
       initialChildSize: sheetPosition,
-      builder: (BuildContext context, ScrollController scrollController) {
+      builder: (BuildContext context1, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
               color: Colors.amber,
@@ -58,11 +60,16 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
               GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
                   setState(() {
+                    // Solves the issue of accidentally scrolling Listview instead of dragging handle.
+                    if (sheetPosition > widget.minSheetPosition) {
+                      disableContentScroll = false;
+                    }
                     // Gives drag animation
                     sheetPosition -= details.delta.dy / widget.dragSensitivity;
 
                     if (sheetPosition < widget.minSheetPosition) {
                       sheetPosition = widget.minSheetPosition;
+                      disableContentScroll = true;
                     }
                     // Only let the 30% of the column be covered
                     if (sheetPosition > widget.maxSheetPosition) {
@@ -77,6 +84,7 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
                     child: Center(
                       child: Icon(
                         Icons.drag_handle,
+                        size: 30,
                       ),
                     ),
                   ),
@@ -85,7 +93,10 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
               Flexible(
                 child: Padding(
                   padding: kSidePadding,
-                  child: widget.sheetContent
+                  child: ListView(
+                    physics: disableContentScroll ? NeverScrollableScrollPhysics() : null,
+                    children: widget.sheetContent,
+                  )
                 ),
               )
             ],

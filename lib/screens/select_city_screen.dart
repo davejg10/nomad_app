@@ -151,12 +151,10 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
             ],
           ),
           ScrollableBottomSheet(
-            sheetContent: ListView(
-              children: [
-                RouteSummary(routeList: routeList),
-                RouteAggregateCard(routeList: routeList),
-              ],
-            ),
+            sheetContent:  [
+              RouteSummary(routeList: routeList),
+              RouteAggregateCard(routeList: routeList),
+            ],
           )
         ],
       )
