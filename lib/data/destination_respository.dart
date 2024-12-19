@@ -16,7 +16,7 @@ List<City> _allCities = List.generate(500, (index) {
       random.nextInt(100 + 1));
 });
 
-
+// Temporary - will introduce a proper state management tool in next PR which will avoid this.
 List<City> scopedCities = [];
 
 class DestinationRepository {
