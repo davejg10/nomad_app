@@ -105,7 +105,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                             ensureDisjointLists();
                           });
                         } else {
-                          print('not valid!');
+                          // TODO add popup diaglogue
                         }
                       },
                       onChanged: (userInput) {
