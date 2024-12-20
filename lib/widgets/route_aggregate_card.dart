@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import '../domain/city.dart';
+
 class RouteAggregateCard extends StatelessWidget {
   const RouteAggregateCard({
     super.key,
