@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nomad/screens/route_view_screen.dart';
 import 'package:nomad/widgets/scrollable_bottom_sheet.dart';
 
 import '../constants.dart';
 import '../data/destination_respository.dart';
 import '../domain/city.dart';
 import '../domain/country.dart';
+import '../domain/route_metric.dart';
 import '../screen_scaffold.dart';
 import '../widgets/city_list_view.dart';
 import '../widgets/route_aggregate_card.dart';
@@ -59,6 +61,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
     print('inhere');
 
     return ScreenScaffold(
+      padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
         appBar: AppBar(
         title: Text(
           widget.country.getName,
@@ -83,79 +86,100 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                   _focusNode.requestFocus();
                 });
               },
-            )
+            ),
+          IconButton(
+            icon: Icon(Icons.task_alt),
+            onPressed: routeList.isNotEmpty ? () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      RouteViewScreen(country: widget.country, routeList: routeList,),
+                ),
+              );
+            } : null,
+          ),
         ],
       ),
       child: Stack(
         children: [
-          Column(
-            children: [
-              if (searchBarOpen)
-                Flexible(
-                  flex: 0, // Required to allow CityListView below to take up all remaining space
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    child: SearchBar(
-                      onSubmitted: (userInput) {
-                        List<City> possibleValidCity = scopedCities.where((city) => city.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
-                        bool validCityInput = possibleValidCity.isNotEmpty;
+          Padding(
+            padding: kSidePadding,
+            child: Column(
+              children: [
+                if (searchBarOpen)
+                  Flexible(
+                    flex: 0, // Required to allow CityListView below to take up all remaining space
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      child: SearchBar(
+                        onSubmitted: (userInput) {
+                          List<City> possibleValidCity = scopedCities.where((city) => city.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
+                          bool validCityInput = possibleValidCity.isNotEmpty;
 
-                        if (validCityInput) {
+                          if (validCityInput) {
+                            setState(() {
+                              closeSearchBar();
+                              routeList = [...routeList, possibleValidCity.first];
+                              ensureDisjointLists();
+                            });
+                          } else {
+                            // TODO add popup diaglogue
+                          }
+                        },
+                        onChanged: (userInput) {
                           setState(() {
-                            closeSearchBar();
-                            routeList = [...routeList, possibleValidCity.first];
-                            ensureDisjointLists();
-                          });
-                        } else {
-                          // TODO add popup diaglogue
-                        }
-                      },
-                      onChanged: (userInput) {
-                        setState(() {
-                          String sanitizedUserInput = userInput.trim().toLowerCase();
-                          queriedCityList = remainingCityList.where((city) => city.getName.toLowerCase().contains(sanitizedUserInput)).toList();
-                        });
-                      },
-                      controller: _searchController,
-                      focusNode: _focusNode,
-                      hintText: 'Search cities...',
-                      leading: Icon(Icons.search),
-                      trailing: [IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          setState(() {
-                            closeSearchBar();
+                            String sanitizedUserInput = userInput.trim().toLowerCase();
+                            queriedCityList = remainingCityList.where((city) => city.getName.toLowerCase().contains(sanitizedUserInput)).toList();
                           });
                         },
-                      ),]
+                        controller: _searchController,
+                        focusNode: _focusNode,
+                        hintText: 'Search cities...',
+                        leading: Icon(Icons.search),
+                        trailing: [IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              closeSearchBar();
+                            });
+                          },
+                        ),]
+                      ),
                     ),
                   ),
+                Expanded(
+                  child: CityListView(
+                    cityList: queriedCityList,
+                    cardOnTap: (City selectedCity) {
+                      setState(() {
+                        closeSearchBar();
+                        routeList = [...routeList, selectedCity];
+                        ensureDisjointLists();
+                      });
+                    },
+                    arrowIconOnTap: (City selectedCity) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CityDetailsScreen(selectedCity: selectedCity),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              Expanded(
-                child: CityListView(
-                  cityList: queriedCityList,
-                  cardOnTap: (City selectedCity) {
-                    setState(() {
-                      closeSearchBar();
-                      routeList = [...routeList, selectedCity];
-                      ensureDisjointLists();
-                    });
-                  },
-                  arrowIconOnTap: (City selectedCity) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CityDetailsScreen(selectedCity: selectedCity),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           ScrollableBottomSheet(
             sheetContent:  [
               RouteSummary(routeList: routeList),
-              RouteAggregateCard(routeList: routeList),
+              RouteAggregateCard(
+                boxConstraints: BoxConstraints(maxHeight: 100, maxWidth: 125),
+                columnChildren: [
+                  RouteTotalMetric(metric: RouteMetric.WEIGHT.name, metricTotal: routeList.length.toDouble()),
+                  RouteTotalMetric(metric: RouteMetric.COST.name, metricTotal: routeList.length.toDouble()),
+                  RouteTotalMetric(metric: RouteMetric.POPULARITY.name, metricTotal: routeList.length.toDouble())
+                ],
+              )
             ],
           )
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../domain/city.dart';
 
 class CityCard extends StatelessWidget {
@@ -16,10 +17,11 @@ class CityCard extends StatelessWidget {
         cardOnTap(city);
       },
       child: Card(
-        elevation: 5.0,
+        color: Color(0xFF4A4A61),
+        elevation: kCardElevation,
         margin: EdgeInsets.all(8.0),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: kCardPadding,
           child: Row(
             children: [
               Icon(city.getIcon),
@@ -28,7 +30,7 @@ class CityCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(city.getName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                    Text(city.getName, style: TextStyle(fontWeight: kFontWeight, fontSize: 18),),
                     Text(city.getDescription, overflow: TextOverflow.ellipsis,)
                   ],
                 ),

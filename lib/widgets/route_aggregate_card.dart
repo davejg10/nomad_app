@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../domain/city.dart';
-
 class RouteAggregateCard extends StatelessWidget {
-  const RouteAggregateCard({super.key, required this.routeList});
+  const RouteAggregateCard({
+    super.key,
+    required this.columnChildren,
+    this.boxConstraints = const BoxConstraints(maxHeight: 150, maxWidth: 125),
+    this.alignment = Alignment.center
+  });
 
-  final List<City> routeList;
+  final List<Widget> columnChildren;
+  final BoxConstraints boxConstraints;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Card(
-        elevation: 8.0,
-        color: Colors.white54,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'WEIGHT - ${routeList.length}',
-              ),
-              Text(
-                'COST - ${routeList.length}'
-              ),
-              Text(
-                'POPULARITY - ${routeList.length}',
-              )
-            ],
+      alignment: alignment,
+      child: ConstrainedBox(
+        constraints: boxConstraints,
+        child: Card(
+          color: Color(0xFF4A4A61),
+          elevation: kCardElevation,
+          child: Padding(
+            padding: kCardPadding,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: columnChildren,
+            ),
           ),
         ),
       ),
