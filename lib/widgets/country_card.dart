@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../domain/country.dart';
 
 class CountryCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class CountryCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(country.getName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                        Text(country.getName, style: const TextStyle(fontWeight: kFontWeight, fontSize: 18),),
                         Text(country.getDescription, overflow: TextOverflow.ellipsis,)
                       ],
                     ),
