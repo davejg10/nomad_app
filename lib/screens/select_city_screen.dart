@@ -58,8 +58,6 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('inhere');
-
     return ScreenScaffold(
       padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
         appBar: AppBar(
@@ -151,18 +149,18 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                   child: CityListView(
                     cityList: queriedCityList,
                     cardOnTap: (City selectedCity) {
-                      setState(() {
-                        closeSearchBar();
-                        routeList = [...routeList, selectedCity];
-                        ensureDisjointLists();
-                      });
-                    },
-                    arrowIconOnTap: (City selectedCity) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => CityDetailsScreen(selectedCity: selectedCity),
                         ),
                       );
+                    },
+                    arrowIconOnTap: (City selectedCity) {
+                      setState(() {
+                        closeSearchBar();
+                        routeList = [...routeList, selectedCity];
+                        ensureDisjointLists();
+                      });
                     },
                   ),
                 ),

@@ -6,7 +6,7 @@ class RouteAggregateCard extends StatelessWidget {
   const RouteAggregateCard({
     super.key,
     required this.columnChildren,
-    this.boxConstraints = const BoxConstraints(maxHeight: 150, maxWidth: 125),
+    this.boxConstraints = const BoxConstraints(maxHeight: 140, maxWidth: 125),
     this.alignment = Alignment.center
   });
 

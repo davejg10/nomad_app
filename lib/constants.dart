@@ -11,3 +11,16 @@ const BorderRadiusGeometry kCurvedTopEdges = BorderRadius.only(
 const kCardElevation = 5.0;
 const kCardPadding = EdgeInsets.all(8.0);
 const kFontWeight = FontWeight.w600;
+const kSunkenBoxDecoration = BoxDecoration(
+  boxShadow: [
+    const BoxShadow(
+      color: Colors.black,
+    ),
+    const BoxShadow(
+      color: Color(0xFF1D1E33),
+      spreadRadius: -2.0,
+      blurRadius: 8.0,
+    ),
+  ],
+  borderRadius: BorderRadius.all(Radius.circular(12.0))
+);

@@ -4,9 +4,10 @@ import '../constants.dart';
 import '../domain/city.dart';
 
 class CityCard extends StatelessWidget {
-  const CityCard({super.key, required this.city, required this.cardOnTap, required this.arrowIconOnTap});
+  const CityCard({super.key, required this.city, required this.trailingIcon, required this.cardOnTap, required this.arrowIconOnTap});
 
   final City city;
+  final IconData trailingIcon;
   final void Function(City selectedCity) cardOnTap;
   final void Function(City selectedCity) arrowIconOnTap;
 
@@ -36,7 +37,7 @@ class CityCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
+                icon: Icon(trailingIcon),
                 onPressed: () {
                   arrowIconOnTap(city);
                 },

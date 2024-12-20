@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../domain/city.dart';
 import 'city_card.dart';
@@ -19,6 +20,7 @@ class CityListView extends StatelessWidget {
           return CityCard(
             key: Key('cityCard${city.getName}'),
               city: city,
+              trailingIcon: Symbols.add,
               cardOnTap: cardOnTap,
               arrowIconOnTap: arrowIconOnTap
           );
