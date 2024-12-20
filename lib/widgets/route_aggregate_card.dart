@@ -20,15 +20,11 @@ class RouteAggregateCard extends StatelessWidget {
       alignment: alignment,
       child: ConstrainedBox(
         constraints: boxConstraints,
-        child: Card(
-          color: Color(0xFF4A4A61),
-          elevation: kCardElevation,
-          child: Padding(
-            padding: kCardPadding,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: columnChildren,
-            ),
+        child: Padding(
+          padding: kCardPadding,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: columnChildren,
           ),
         ),
       ),

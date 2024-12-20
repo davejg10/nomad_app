@@ -58,8 +58,6 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('inhere');
-
     return ScreenScaffold(
       padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
         appBar: AppBar(
@@ -179,7 +177,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                   RouteTotalMetric(metric: RouteMetric.COST.name, metricTotal: routeList.length.toDouble()),
                   RouteTotalMetric(metric: RouteMetric.POPULARITY.name, metricTotal: routeList.length.toDouble())
                 ],
-              )
+              ),
             ],
           )
         ],

@@ -37,78 +37,25 @@ class RouteViewScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    const RouteSectionTitle(title: 'Route totals'),
-                    Container(
-                      width: 170,
-                      height: 180,
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            const BoxShadow(
-                              color: Colors.black,
-                            ),
-                            const BoxShadow(
-                              color: Color(0xFF1D1E33),
-                              spreadRadius: -2.0,
-                              blurRadius: 8.0,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(12.0))
-                      ),
-                      child: Center(
-                        child: RouteAggregateCard(
-                          columnChildren: [
-                            RouteTotalMetric(metric: RouteMetric.WEIGHT.name, metricTotal: routeList.length.toDouble()),
-                            RouteTotalMetric(metric: RouteMetric.COST.name, metricTotal: routeList.length.toDouble()),
-                            RouteTotalMetric(metric: RouteMetric.POPULARITY.name, metricTotal: routeList.length.toDouble())
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const RouteSectionTitle(title: 'City averages'),
-                    Container(
-                      width: 170,
-                      height: 180,
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            const BoxShadow(
-                              color: Colors.black,
-                            ),
-                            const BoxShadow(
-                              color: Color(0xFF1D1E33),
-                              spreadRadius: -2.0,
-                              blurRadius: 8.0,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(12.0))
-                      ),
-                      child: Center(
-                        child: RouteAggregateCard(
-                          columnChildren: [
-                            ...CityCriteria.values.map((criteria ) {
-                              return Expanded(child: CityRating(score: City.calculateAggregateScore(criteria, routeList), ratingIcon: City.convertCriteriaToIcon(criteria)));
-                            }).toList()
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 30,),
-            const RouteSectionTitle(title: 'Itinerary'),
             Expanded(
-              flex: 3,
-              child: ItineraryListView(routeList: routeList)
+              flex: 5,
+              child:
+              Container(
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      const BoxShadow(
+                        color: Colors.black,
+                      ),
+                      const BoxShadow(
+                        color: Color(0xFF1D1E33),
+                        spreadRadius: -2.0,
+                        blurRadius: 8.0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.all(Radius.circular(12.0))
+                ),
+                child: ItineraryListView(routeList: routeList),
+              ),
             ),
             Flexible(
               child: Center(
@@ -168,55 +115,85 @@ class _ItineraryListViewState extends State<ItineraryListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          boxShadow: [
-            const BoxShadow(
-              color: Colors.black,
-            ),
-            const BoxShadow(
-              color: Color(0xFF1D1E33),
-              spreadRadius: -2.0,
-              blurRadius: 8.0,
-            ),
-          ],
-          borderRadius: BorderRadius.all(Radius.circular(12.0))
-      ),
-      padding: EdgeInsets.only(top: 15, bottom: 15),
-      child: ListView.separated(
-          itemCount: widget.routeList.length,
-          separatorBuilder: (context, index) {
-            return Stack(
-              alignment: Alignment.center,
+    return ListView.separated(
+        itemCount: widget.routeList.length + 1,
+        separatorBuilder: (context, index) {
+          // Don't show separator above the header
+          if (index == 0) return SizedBox.shrink();
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(
+                Symbols.south,
+                weight: 150,
+                size: 80,
+                opticalSize: 6.0,
+                fill: 1,
+              ),
+              Positioned(right: 110, child: Text('WEIGHT(1)'))
+            ],
+          );
+        },
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Column(
               children: [
-                Icon(
-                  Symbols.south,
-                  weight: 150,
-                  size: 80,
-                  opticalSize: 6.0,
-                  fill: 1,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(height: 20,),
+                        const RouteSectionTitle(title: 'Route totals'),
+                        Center(
+                          child: RouteAggregateCard(
+                            columnChildren: [
+                              RouteTotalMetric(metric: RouteMetric.WEIGHT.name, metricTotal: widget.routeList.length.toDouble()),
+                              RouteTotalMetric(metric: RouteMetric.COST.name, metricTotal: widget.routeList.length.toDouble()),
+                              RouteTotalMetric(metric: RouteMetric.POPULARITY.name, metricTotal: widget.routeList.length.toDouble())
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const RouteSectionTitle(title: 'City averages'),
+                        Center(
+                          child: RouteAggregateCard(
+                            columnChildren: [
+                              ...CityCriteria.values.map((criteria ) {
+                                return Expanded(child: CityRating(score: City.calculateAggregateScore(criteria, widget.routeList), ratingIcon: City.convertCriteriaToIcon(criteria)));
+                              }).toList()
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Positioned(right: 110, child: Text('WEIGHT(1)'))
+                const SizedBox(height: 30,),
+                const RouteSectionTitle(title: 'Itinerary'),
               ],
             );
-          },
-          itemBuilder: (context, index) {
-            City city = widget.routeList[index];
-            return CityCard(
-                key: Key('cityCard${city.getName}'),
-                city: city,
-                cardOnTap: (_) {},
-                arrowIconOnTap: (selectedCity) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CityDetailsScreen(selectedCity: selectedCity),
-                    ),
-                  );
-                }
-            );
           }
-      ),
+          // Actual list items start at index - 1 (because header took index 0)
+          final itemIndex = index - 1;
+          City city = widget.routeList[itemIndex];
+          return CityCard(
+              key: Key('cityCard${city.getName}'),
+              city: city,
+              cardOnTap: (_) {},
+              arrowIconOnTap: (selectedCity) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CityDetailsScreen(selectedCity: selectedCity),
+                  ),
+                );
+              }
+          );
+        }
     );
   }
 }
