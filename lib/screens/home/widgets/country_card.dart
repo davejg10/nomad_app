@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../domain/country.dart';
+import '../../../constants.dart';
+import '../../../domain/country.dart';
 
 class CountryCard extends StatelessWidget {
   const CountryCard({super.key, required this.country, required this.cardOnTap});
@@ -18,10 +18,10 @@ class CountryCard extends StatelessWidget {
             cardOnTap(country);
           },
           child: Card(
-            margin: EdgeInsets.all(0.0),
-            shape: ContinuousRectangleBorder(),
+            elevation: kCardElevation,
+            margin: EdgeInsets.all(8.0),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: kCardPadding,
               child: Row(
                 children: [
                   Icon(country.getIcon),
@@ -40,10 +40,6 @@ class CountryCard extends StatelessWidget {
             ),
           ),
         ),
-        Divider(
-          color: Colors.black,
-          height: 0,
-        )
       ],
     );
   }

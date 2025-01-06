@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../domain/city.dart';
+import '../../../constants.dart';
+import '../../../domain/city.dart';
 
 class RouteSummary extends StatelessWidget {
   RouteSummary({super.key, required this.routeList});

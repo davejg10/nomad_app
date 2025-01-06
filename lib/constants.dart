@@ -24,3 +24,5 @@ const kSunkenBoxDecoration = BoxDecoration(
   ],
   borderRadius: BorderRadius.all(Radius.circular(12.0))
 );
+
+const kSearchBarPadding = EdgeInsets.only(top: 8.0, bottom: 8.0);

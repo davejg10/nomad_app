@@ -21,7 +21,6 @@ class RouteAggregateCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: boxConstraints,
         child: Card(
-          color: Color(0xFF4A4A61),
           elevation: kCardElevation,
           child: Padding(
             padding: kCardPadding,

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/screens/route_view_screen.dart';
-import 'package:nomad/widgets/scrollable_bottom_sheet.dart';
+import 'package:nomad/screens/route_view/route_view_screen.dart';
+import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet.dart';
+import 'package:nomad/widgets/route_total_metric.dart';
 
-import '../constants.dart';
-import '../data/destination_respository.dart';
-import '../domain/city.dart';
-import '../domain/country.dart';
-import '../domain/route_metric.dart';
-import '../screen_scaffold.dart';
-import '../widgets/city_list_view.dart';
-import '../widgets/route_aggregate_card.dart';
-import '../widgets/route_summary.dart';
-import 'city_details_screen.dart';
+import '../../constants.dart';
+import '../../data/destination_respository.dart';
+import '../../domain/city.dart';
+import '../../domain/country.dart';
+import '../../domain/route_metric.dart';
+import '../../screen_scaffold.dart';
+import 'widgets/city_list_view.dart';
+import '../../widgets/route_aggregate_card.dart';
+import 'widgets/route_summary.dart';
+import '../city_details/city_details_screen.dart';
 
 class SelectCityScreen extends StatefulWidget {
   const SelectCityScreen({super.key, required this.country});
@@ -40,8 +41,8 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _searchController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -108,7 +109,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
                   Flexible(
                     flex: 0, // Required to allow CityListView below to take up all remaining space
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      padding: kSearchBarPadding,
                       child: SearchBar(
                         onSubmitted: (userInput) {
                           List<City> possibleValidCity = scopedCities.where((city) => city.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();

@@ -18,7 +18,6 @@ class CityCard extends StatelessWidget {
         cardOnTap(city);
       },
       child: Card(
-        color: Color(0xFF4A4A61),
         elevation: kCardElevation,
         margin: EdgeInsets.all(8.0),
         child: Padding(

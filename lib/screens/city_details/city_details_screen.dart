@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../domain/city.dart';
-import '../screen_scaffold.dart';
-import '../widgets/city_rating.dart';
+import '../../constants.dart';
+import '../../domain/city.dart';
+import '../../screen_scaffold.dart';
+import '../../widgets/city_rating.dart';
 
 class CityDetailsScreen extends StatelessWidget {
   const CityDetailsScreen({super.key, required this.selectedCity});
