@@ -8,7 +8,7 @@ import '../../data/destination_respository.dart';
 import '../../domain/city.dart';
 import '../../domain/country.dart';
 import '../../domain/route_metric.dart';
-import '../../screen_scaffold.dart';
+import '../../widgets/screen_scaffold.dart';
 import 'widgets/city_list_view.dart';
 import '../../widgets/route_aggregate_card.dart';
 import 'widgets/route_summary.dart';

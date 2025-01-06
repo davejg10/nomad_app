@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomad/constants.dart';
 import 'package:nomad/data/destination_respository.dart';
-import 'package:nomad/screen_scaffold.dart';
+import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/home/widgets/country_list_view.dart';
 import 'package:nomad/screens/select_city/select_city_screen.dart';
 

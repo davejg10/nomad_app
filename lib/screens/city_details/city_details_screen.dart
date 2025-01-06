@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../domain/city.dart';
-import '../../screen_scaffold.dart';
+import '../../widgets/screen_scaffold.dart';
 import '../../widgets/city_rating.dart';
 
 class CityDetailsScreen extends StatelessWidget {

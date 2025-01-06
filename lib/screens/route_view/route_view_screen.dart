@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/screen_scaffold.dart';
+import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
 import '../../constants.dart';
