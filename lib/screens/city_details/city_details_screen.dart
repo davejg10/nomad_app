@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nomad/constants.dart';
-import 'package:nomad/screen_scaffold.dart';
 
-import '../domain/city.dart';
-import '../widgets/city_rating.dart';
+import '../../constants.dart';
+import '../../domain/city.dart';
+import '../../widgets/screen_scaffold.dart';
+import '../../widgets/city_rating.dart';
 
 class CityDetailsScreen extends StatelessWidget {
   const CityDetailsScreen({super.key, required this.selectedCity});
@@ -44,7 +44,7 @@ class CityDetailsScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: selectedCity.getCityRatings.entries.map((entry) {
-                              return CityRating(score: entry.value, ratingIcon: City.convertCriteriaToIcon(entry.key));
+                              return Expanded(child: CityRating(score: entry.value.toDouble(), ratingIcon: City.convertCriteriaToIcon(entry.key)));
                             }).toList(),
                           ),
                         ),

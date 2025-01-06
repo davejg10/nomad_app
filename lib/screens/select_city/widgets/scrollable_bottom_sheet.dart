@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../../../constants.dart';
 
 class ScrollableBottomSheet extends StatefulWidget {
   ScrollableBottomSheet({
     super.key,
     required this.sheetContent,
-    this.minSheetPosition = 0.05,
+    this.minSheetPosition = 0.08,
     this.maxSheetPosition = 0.3,
     this.dragSensitivity = 600
   });
@@ -33,11 +33,11 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
     super.dispose();
   }
 
-  bool disableContentScroll = true;
+  // Used to disable Listview content before the sheet has been dragged up.
+  bool renderSheetContent = false;
 
   @override
   Widget build(BuildContext context) {
-
     return DraggableScrollableSheet(
       minChildSize: widget.minSheetPosition,
       maxChildSize: widget.maxSheetPosition,
@@ -45,31 +45,31 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
       builder: (BuildContext context1, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: kCurvedTopEdges,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
-                  spreadRadius: 4,
-                  blurRadius: 10,
-                )
-              ]
+            color: Colors.amber,
+            borderRadius: kCurvedTopEdges,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4),
+                spreadRadius: 4,
+                blurRadius: 10,
+              )
+            ],
           ),
           child: Column(
             children: [
               GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
                   setState(() {
-                    // Solves the issue of accidentally scrolling Listview instead of dragging handle.
                     if (sheetPosition > widget.minSheetPosition) {
-                      disableContentScroll = false;
+                      renderSheetContent = true;
                     }
+
                     // Gives drag animation
                     sheetPosition -= details.delta.dy / widget.dragSensitivity;
 
                     if (sheetPosition < widget.minSheetPosition) {
                       sheetPosition = widget.minSheetPosition;
-                      disableContentScroll = true;
+                      renderSheetContent = false;
                     }
                     // Only let the 30% of the column be covered
                     if (sheetPosition > widget.maxSheetPosition) {
@@ -78,27 +78,24 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
                   });
                 },
                 child: Container(
-                  width: double.infinity,
-                  child: const Align(
-                    alignment: Alignment.topCenter,
-                    child: Center(
-                      child: Icon(
-                        Icons.drag_handle,
-                        size: 30,
-                      ),
+                  width: 40,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Icon(
+                      Icons.drag_handle,
                     ),
                   ),
                 ),
               ),
-              Flexible(
-                child: Padding(
-                  padding: kSidePadding,
-                  child: ListView(
-                    physics: disableContentScroll ? NeverScrollableScrollPhysics() : null,
-                    children: widget.sheetContent,
-                  )
-                ),
-              )
+              if (renderSheetContent)
+                Flexible(
+                  child: Padding(
+                    padding: kSidePadding,
+                    child: ListView(
+                      children: widget.sheetContent,
+                    ),
+                  ),
+                )
             ],
           ),
         );

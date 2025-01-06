@@ -4,9 +4,9 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nomad/data/destination_respository.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/main.dart';
-import 'package:nomad/screens/home_screen.dart';
+import 'package:nomad/screens/home_screen/home_screen.dart';
 import 'package:nomad/screens/start_city_screen.dart';
-import 'package:nomad/widgets/country_card.dart';
+import 'package:nomad/screens/home/widgets/country_card.dart';
 
 void main() {
 

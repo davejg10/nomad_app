@@ -4,7 +4,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nomad/data/destination_respository.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
-import 'package:nomad/screens/city_details_screen.dart';
+import 'package:nomad/screens/city_details/city_details_screen.dart';
 import 'package:nomad/screens/next_city_screen.dart';
 import 'package:nomad/screens/start_city_screen.dart';
 import 'package:nomad/widgets/city_card.dart';

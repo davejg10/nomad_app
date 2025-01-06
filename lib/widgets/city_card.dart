@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../domain/city.dart';
 
 class CityCard extends StatelessWidget {
-  const CityCard({super.key, required this.city, required this.cardOnTap, required this.arrowIconOnTap});
+  const CityCard({super.key, required this.city, required this.trailingIcon, required this.cardOnTap, required this.arrowIconOnTap});
 
   final City city;
+  final IconData trailingIcon;
   final void Function(City selectedCity) cardOnTap;
   final void Function(City selectedCity) arrowIconOnTap;
 
@@ -16,10 +18,10 @@ class CityCard extends StatelessWidget {
         cardOnTap(city);
       },
       child: Card(
-        elevation: 5.0,
+        elevation: kCardElevation,
         margin: EdgeInsets.all(8.0),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: kCardPadding,
           child: Row(
             children: [
               Icon(city.getIcon),
@@ -28,13 +30,13 @@ class CityCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(city.getName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                    Text(city.getName, style: TextStyle(fontWeight: kFontWeight, fontSize: 18),),
                     Text(city.getDescription, overflow: TextOverflow.ellipsis,)
                   ],
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
+                icon: Icon(trailingIcon),
                 onPressed: () {
                   arrowIconOnTap(city);
                 },
