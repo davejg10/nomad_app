@@ -1,14 +1,15 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/route_list_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'selected_country_provider.g.dart';
 
-@riverpod
-class SelectedCountry extends _$SelectedCountry {
+final selectedCountryProvider = NotifierProvider<SelectedCountry, Country?>(SelectedCountry.new);
+
+class SelectedCountry extends Notifier<Country?> {
 
   @override
   Country? build() {
+    ref.keepAlive(); // Keeps the state alive even when there are no listeners
     return null;
   }
 

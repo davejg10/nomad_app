@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'city_searchbar_visibility_provider.g.dart';
+final citySearchbarVisibilityProvider = NotifierProvider<CitySearchbarVisibility, bool>(CitySearchbarVisibility.new);
 
-@riverpod
-class CitySearchbarVisibility extends _$CitySearchbarVisibility {
+class CitySearchbarVisibility extends Notifier<bool> {
 
   @override
   bool build() {
@@ -19,4 +17,3 @@ class CitySearchbarVisibility extends _$CitySearchbarVisibility {
     state = false;
   }
 }
-

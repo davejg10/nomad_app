@@ -1,13 +1,11 @@
 import 'package:nomad/domain/country.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'all_countries_provider.dart';
 
-part 'queried_country_list_provider.g.dart';
+final queriedCountryListProvider = NotifierProvider<QueriedCountryList, List<Country>>(QueriedCountryList.new);
 
-@riverpod
-class QueriedCountryList extends _$QueriedCountryList {
+class QueriedCountryList extends Notifier<List<Country>> {
 
   @override
   List<Country> build() {

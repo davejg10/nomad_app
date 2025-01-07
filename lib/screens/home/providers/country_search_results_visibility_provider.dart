@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'country_search_results_visibility_provider.g.dart';
+final countrySearchResultsVisibilityProvider = NotifierProvider<CountrySearchResultsVisibility, bool>(CountrySearchResultsVisibility.new);
 
-@riverpod
-class CountrySearchResultsVisibility extends _$CountrySearchResultsVisibility {
+class CountrySearchResultsVisibility extends Notifier<bool> {
 
   @override
   bool build() {
@@ -19,4 +17,3 @@ class CountrySearchResultsVisibility extends _$CountrySearchResultsVisibility {
     state = false;
   }
 }
-

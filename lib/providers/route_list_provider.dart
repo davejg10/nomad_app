@@ -1,12 +1,9 @@
 import 'package:nomad/domain/city.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'route_list_provider.g.dart';
+final routeListProvider = NotifierProvider<RouteList, List<City>>(RouteList.new);
 
-@riverpod
-class RouteList extends _$RouteList {
-
+class RouteList extends Notifier<List<City>> {
   @override
   List<City> build() {
     return [];
