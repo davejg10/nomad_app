@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/providers/selected_country_provider.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
 import '../../constants.dart';
-import '../../domain/city.dart';
 import '../../domain/country.dart';
 import 'widgets/itinerary_sliver_view.dart';
 
-class RouteViewScreen extends StatelessWidget {
-  const RouteViewScreen(
-      {super.key, required this.country, required this.routeList});
-
-  final Country country;
-  final List<City> routeList;
+class RouteViewScreen extends ConsumerWidget {
+  const RouteViewScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Country country = ref.read(selectedCountryProvider)!;
     return ScreenScaffold(
       appBar: AppBar(
         title: Text(
@@ -35,8 +33,8 @@ class RouteViewScreen extends StatelessWidget {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  ItineraryTotalsBar(routeList: routeList),
-                  ItinerarySliverView(routeList: routeList)
+                  ItineraryTotalsBar(),
+                  ItinerarySliverView()
                 ],
               ),
             ),

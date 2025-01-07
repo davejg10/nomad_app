@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/screens/select_city/providers/queried_city_list_provider.dart';
 
 import '../../../domain/city.dart';
 import '../../../widgets/city_card.dart';
 
-class CityListView extends StatelessWidget {
+class CityListView extends ConsumerWidget {
   const CityListView({
     super.key,
-    required this.cityList,
-    required this.cardOnTap,
-    required this.arrowIconOnTap
   });
 
-  final List<City> cityList;
-  final void Function(City selectedCity) cardOnTap;
-  final void Function(City selectedCity) arrowIconOnTap;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<City> queriedCityList = ref.watch(queriedCityListProvider);
     return ListView.builder(
-      itemCount: cityList.length,
+      itemCount: queriedCityList.length,
       itemBuilder: (context, index) {
-        City city = cityList[index];
+        City city = queriedCityList[index];
         return CityCard(
           key: Key('cityCard${city.getName}'),
-            city: city,
-            trailingIcon: Symbols.add,
-            cardOnTap: cardOnTap,
-            arrowIconOnTap: arrowIconOnTap
+          city: city,
+          trailingIcon: Symbols.add,
+          trailingIconOnTap: (City selectedCity) {
+            ref.read(routeListProvider.notifier).addToItinerary(city);
+          },
         );
       }
     );

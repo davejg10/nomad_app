@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/providers/route_list_provider.dart';
 
 import '../../../constants.dart';
 import '../../../domain/city.dart';
 
-class RouteSummary extends StatelessWidget {
-  RouteSummary({super.key, required this.routeList});
-
-  final List<City> routeList;
-  final ScrollController _scrollbarController = ScrollController();
+class RouteSummary extends ConsumerWidget {
+  RouteSummary({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<City> routeList = ref.watch(routeListProvider);
+
     return Container(
       alignment: Alignment.topLeft,
       height: 60,
@@ -26,18 +27,13 @@ class RouteSummary extends StatelessWidget {
           ),
           Container(
             height: 30,
-            child: Scrollbar(
-              controller: _scrollbarController,
-              thumbVisibility: true,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                controller: _scrollbarController,
-                children: [Text(
-                  routeList.map((city) => city.getName).join(' -> '),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 15.0),
-                )],
-              ),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [Text(
+                routeList.map((city) => city.getName).join(' -> '),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 15.0),
+              )],
             ),
           ),
         ],

@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/screens/select_city/select_city_screen.dart';
 
 import '../../../constants.dart';
 import '../../../domain/country.dart';
 
-class CountryCard extends StatelessWidget {
-  const CountryCard({super.key, required this.country, required this.cardOnTap});
+class CountryCard extends ConsumerWidget {
+  const CountryCard({
+    super.key,
+    required this.country
+  });
 
   final Country country;
-  final void Function(Country selectedCountry) cardOnTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         GestureDetector(
           onTap: () {
-            cardOnTap(country);
+            ref.read(selectedCountryProvider.notifier).setCountry(country);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    SelectCityScreen(),
+              ),
+            );
           },
           child: Card(
             elevation: kCardElevation,

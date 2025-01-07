@@ -1,45 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:nomad/screens/city_details/city_details_screen.dart';
+import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/widgets/city_card.dart';
 
 import '../../../domain/city.dart';
 
-class ItinerarySliverView extends StatefulWidget {
-  const ItinerarySliverView({super.key, required this.routeList});
-
-  final List<City> routeList;
+class ItinerarySliverView extends ConsumerWidget {
 
   @override
-  State<ItinerarySliverView> createState() => _ItinerarySliverViewState();
-}
-
-class _ItinerarySliverViewState extends State<ItinerarySliverView> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<City> routeList = ref.watch(routeListProvider);
     return SliverList.separated(
-        itemCount: widget.routeList.length,
+        itemCount: routeList.length,
         itemBuilder: (context, index) {
-          City city = widget.routeList[index];
+          City city = routeList[index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: CityCard(
                 key: Key('cityCard${city.getName}'),
                 city: city,
                 trailingIcon: Symbols.close,
-                cardOnTap: (City selectedCity) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CityDetailsScreen(selectedCity: selectedCity),
-                    ),
-                  );
-                },
-                arrowIconOnTap: (City selectedCity) {
-                  setState(() {
-                    widget.routeList.remove(selectedCity);
-                  });
+                trailingIconOnTap: (City selectedCity) {
+                  ref.read(routeListProvider.notifier).removeFromItinerary(selectedCity);
                 }
             ),
           );
