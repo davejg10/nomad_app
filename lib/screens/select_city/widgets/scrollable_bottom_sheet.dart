@@ -77,13 +77,10 @@ class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
                     }
                   });
                 },
-                child: Container(
-                  width: 40,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Icon(
-                      Icons.drag_handle,
-                    ),
+                child: const FittedBox(
+                  fit: BoxFit.contain,
+                  child: Icon(
+                    Icons.drag_handle,
                   ),
                 ),
               ),

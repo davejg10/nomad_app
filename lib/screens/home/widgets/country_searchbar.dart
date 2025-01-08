@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/selected_country_provider.dart';
 import 'package:nomad/screens/home/providers/queried_country_list_provider.dart';
-import 'package:nomad/screens/home/providers/country_search_results_visibility_provider.dart';
+import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/select_city_screen.dart';
 
 import '../providers/all_countries_provider.dart';
@@ -59,7 +59,7 @@ class _CountrySearchbarState extends ConsumerState<CountrySearchbar> {
           }
         },
         onTap: () {
-          ref.read(countrySearchResultsVisibilityProvider.notifier).open();
+          ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).open();
         },
         onChanged: (userInput) {
           ref.read(queriedCountryListProvider.notifier).filter(userInput);
@@ -72,7 +72,7 @@ class _CountrySearchbarState extends ConsumerState<CountrySearchbar> {
             icon: Icon(Icons.close),
             onPressed: () {
               _searchController.text = '';
-              ref.read(countrySearchResultsVisibilityProvider.notifier).close();
+              ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).close();
               ref.read(queriedCountryListProvider.notifier).reset();
             },
           ),

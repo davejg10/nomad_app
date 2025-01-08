@@ -4,9 +4,9 @@ import 'package:nomad/constants.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/providers/selected_country_provider.dart';
 import 'package:nomad/screens/route_view/route_view_screen.dart';
-import 'package:nomad/screens/select_city/providers/city_searchbar_visibility_provider.dart';
 
 class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
   const SelectCityAppBar({super.key});
@@ -15,7 +15,7 @@ class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     Country country = ref.read(selectedCountryProvider)!;
     List<City> routeList = ref.watch(routeListProvider);
-    bool searchBarOpen = ref.watch(citySearchbarVisibilityProvider);
+    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchVisibility.SEARCHBAR));
 
     return AppBar(
       title: Text(
@@ -33,7 +33,7 @@ class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              ref.read(citySearchbarVisibilityProvider.notifier).open();
+              ref.read(searchWidgetVisibility(SearchVisibility.SEARCHBAR).notifier).open();
             },
           ),
         IconButton(

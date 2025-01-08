@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
-import 'package:nomad/screens/select_city/providers/city_searchbar_visibility_provider.dart';
+import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/widgets/city_searchbar.dart';
 import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet.dart';
 import 'package:nomad/screens/select_city/widgets/select_city_app_bar.dart';
@@ -19,7 +18,7 @@ class SelectCityScreen extends ConsumerWidget  {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool searchBarOpen = ref.watch(citySearchbarVisibilityProvider);
+    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchVisibility.SEARCHBAR));
     return ScreenScaffold(
       padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
       appBar: SelectCityAppBar(),

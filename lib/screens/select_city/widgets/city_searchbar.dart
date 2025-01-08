@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/screens/select_city/providers/city_searchbar_visibility_provider.dart';
+import 'package:nomad/providers/search_widget_visibility_provider.dart';
 
 import '../../../domain/city.dart';
 import '../../../providers/route_list_provider.dart';
@@ -31,7 +31,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
 
   void closeSearchBar() {
     _searchController.text = '';
-    ref.read(citySearchbarVisibilityProvider.notifier).close();
+    ref.read(searchWidgetVisibility(SearchVisibility.SEARCHBAR).notifier).close();
   }
 
   @override
@@ -45,13 +45,23 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
           ref.read(routeListProvider.notifier).addToItinerary(possibleValidCity.first);
           closeSearchBar();
         } else {
-          // TODO add popup diaglogue
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                'That is not a valid city in this list...',
+                style: TextStyle(
+                    fontSize: 20, fontFamily: "DMSans-Regular.ttf"),
+              ),
+            ),
+          );
         }
       },
       onChanged: (userInput) {
         ref.read(queriedCityListProvider.notifier).filter(userInput);
       },
       controller: _searchController,
+      autoFocus: true,
       hintText: 'Search cities...',
       leading: Icon(Icons.search),
       trailing: [
