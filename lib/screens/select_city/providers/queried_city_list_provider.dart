@@ -13,8 +13,9 @@ class QueriedCityList extends Notifier<List<City>> {
   }
 
   void filter(String userInput) {
+    List<City> availableCities = ref.read(availableCityListProvider);
     String sanitizedUserInput = userInput.trim().toLowerCase();
-    state = state.where((city) => city.getName.toLowerCase().contains(sanitizedUserInput)).toList();
+    state = availableCities.where((city) => city.getName.toLowerCase().contains(sanitizedUserInput)).toList();
   }
 
   void reset() {

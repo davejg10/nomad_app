@@ -44,4 +44,25 @@ class City {
     }
     return double.parse(criteriaScore.toStringAsFixed(2));
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is City &&
+          runtimeType == other.runtimeType &&
+          _icon == other._icon &&
+          _id == other._id &&
+          _name == other._name &&
+          _description == other._description &&
+          _cityRatings == other._cityRatings &&
+          _countryId == other._countryId;
+
+  @override
+  int get hashCode =>
+      _icon.hashCode ^
+      _id.hashCode ^
+      _name.hashCode ^
+      _description.hashCode ^
+      _cityRatings.hashCode ^
+      _countryId.hashCode;
 }
