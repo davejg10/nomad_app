@@ -4,5 +4,5 @@ import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/destination_repository_provider.dart';
 
 final allCountriesProvider = Provider<List<Country>>((ref) {
-  return ref.watch(destinationRepositoryProvider).getCountries();
+  return ref.read(destinationRepositoryProvider).getCountries();
 });

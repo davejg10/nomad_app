@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 
-
 final selectedCountryProvider = NotifierProvider<SelectedCountry, Country?>(SelectedCountry.new);
 
 class SelectedCountry extends Notifier<Country?> {
@@ -14,7 +13,10 @@ class SelectedCountry extends Notifier<Country?> {
   }
 
   void setCountry(Country selectedCountry) {
-    ref.invalidate(routeListProvider); // If a new country is chosen clear routeList state
+    if (state != selectedCountry ) {
+      ref.invalidate(routeListProvider);
+    }
+
     state = selectedCountry;
   }
 }
