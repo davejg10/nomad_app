@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/screens/city_details/city_details_screen.dart';
 
 import '../constants.dart';
 import '../domain/city.dart';
 
-class CityCard extends StatelessWidget {
-  const CityCard({super.key, required this.city, required this.trailingIcon, required this.cardOnTap, required this.arrowIconOnTap});
+class CityCard extends ConsumerWidget {
+  const CityCard({
+    super.key,
+    required this.city,
+    required this.trailingIcon,
+    required this.trailingIconOnTap
+  });
 
   final City city;
   final IconData trailingIcon;
-  final void Function(City selectedCity) cardOnTap;
-  final void Function(City selectedCity) arrowIconOnTap;
+  final void Function(City selectedCity) trailingIconOnTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        cardOnTap(city);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => CityDetailsScreen(selectedCity: city),
+          ),
+        );
       },
       child: Card(
         elevation: kCardElevation,
@@ -38,7 +49,7 @@ class CityCard extends StatelessWidget {
               IconButton(
                 icon: Icon(trailingIcon),
                 onPressed: () {
-                  arrowIconOnTap(city);
+                  trailingIconOnTap(city);
                 },
               ),
             ],

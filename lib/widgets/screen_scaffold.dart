@@ -9,7 +9,7 @@ class ScreenScaffold extends StatelessWidget {
     required this.child,
     this.padding = kSidePadding});
 
-  final AppBar? appBar;
+  final PreferredSizeWidget? appBar;
   final Widget child;
   final EdgeInsetsGeometry padding;
 

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/domain/route_metric.dart';
+import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/screens/route_view/widgets/route_section_title.dart';
 import 'package:nomad/widgets/city_rating.dart';
 import 'package:nomad/widgets/route_aggregate_card.dart';
 import 'package:nomad/widgets/route_total_metric.dart';
 
-class ItineraryTotalsBar extends StatelessWidget {
+class ItineraryTotalsBar extends ConsumerWidget {
   const ItineraryTotalsBar({
-    super.key,
-    required this.routeList
+    super.key
   });
 
-  final List<City> routeList;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<City> routeList = ref.watch(routeListProvider);
     // Using SliverAppBar allows us to create the custom animation of having the route aggregates
     // float and be snapped back to UI if user scrolls back up
     return SliverAppBar(
@@ -41,16 +41,13 @@ class ItineraryTotalsBar extends StatelessWidget {
                         columnChildren: [
                           RouteTotalMetric(
                               metric: RouteMetric.WEIGHT.name,
-                              metricTotal: routeList.length
-                                  .toDouble()),
+                          ),
                           RouteTotalMetric(
                               metric: RouteMetric.COST.name,
-                              metricTotal: routeList.length
-                                  .toDouble()),
+                          ),
                           RouteTotalMetric(
                               metric: RouteMetric.POPULARITY.name,
-                              metricTotal: routeList.length
-                                  .toDouble())
+                          )
                         ],
                       ),
                     ),
