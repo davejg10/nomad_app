@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nomad/data/destination_respository.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/destination_repository_provider.dart';
+import 'package:nomad/providers/selected_country_provider.dart';
 import 'package:nomad/screens/home/providers/all_countries_provider.dart';
 import 'package:nomad/screens/home/providers/queried_country_list_provider.dart';
 
@@ -19,12 +20,12 @@ void main() {
   late Listener listener;
   late ProviderContainer container;
   List<Country> _allCountries = List.generate(4, (index) {
-    return Country(index, 'Country$index', '');
+    return Country("$index", 'Country$index', '');
   });
 
   setUp(() {
     final destinationRepository = MockUserRepository();
-    when(() => destinationRepository.getCountries()).thenReturn(_allCountries);
+    when(() => destinationRepository.getCountries()).thenAnswer((_) async => _allCountries);
 
     container = createContainer(
       overrides: [
@@ -32,44 +33,77 @@ void main() {
       ]
     );
 
-    listener = Listener<List<Country>>();
+    listener = Listener<AsyncValue<List<Country>>>();
 
     container.listen(
-      queriedCountryListProvider,
+      queriedCountriesListProvider,
       listener,
       fireImmediately: true,
     );
 
   });
 
-  test('queriedCountryListProvider state should be initialized to the value of allCountriesProvider', () {
+  test('asyncQueriedCountryListProvider state should be initialized to the value of allCountriesProvider', () async {
+    await container.read(queriedCountriesListProvider);
 
-    verify(
-          () => listener(null, _allCountries),
-    ).called(1);
+    verifyInOrder([
+          () => listener(null, AsyncLoading<List<Country>>()),
+          () => listener(AsyncLoading<List<Country>>(), AsyncData<List<Country>>(_allCountries)),
+    ]);
 
-    assert(container.read(allCountriesProvider) == container.read(queriedCountryListProvider));
+    assert(container.read(allCountriesProvider) == container.read(queriedCountriesListProvider));
   });
 
-  test('if queriedCountryListProvider.filter is called then its state should be filtered to only contain Countries that contain the userInput', () {
-    container.read(queriedCountryListProvider.notifier).filter('Country');
-    assert(container.read(queriedCountryListProvider).length == 4);
+  test('if asyncQueriedCountryListProvider.filter is called then its state should be filtered to only contain Countries that contain the userInput', () async {
+    await container.read(queriedCountriesListProvider);
 
-    container.read(queriedCountryListProvider.notifier).filter('Country0');
-    assert(container.read(queriedCountryListProvider).length == 1);
+    container.read(queriedCountriesListProvider.notifier).filter('Country');
+    assert(container.read(queriedCountriesListProvider).value!.length == 4);
 
-    container.read(queriedCountryListProvider.notifier).filter('');
-    assert(container.read(queriedCountryListProvider).length == container.read(allCountriesProvider).length);
+    container.read(queriedCountriesListProvider.notifier).filter('Country0');
+    assert(container.read(queriedCountriesListProvider).value!.length == 1);
+
+    container.read(queriedCountriesListProvider.notifier).filter('');
+    assert(container.read(queriedCountriesListProvider).value!.length == container.read(allCountriesProvider).value!.length);
   });
 
-  test('if queriedCountryListProvider.reset is called then its state should be set back to allCountriesProvider state', () {
+  test('if asyncQueriedCountryListProvider.submit is called with invalid userInput then it should not set selectedCountryProvider state to userInput & return null & not touch internal state', () async {
+    await container.read(queriedCountriesListProvider);
 
-    container.read(queriedCountryListProvider.notifier).filter('Country0');
-    assert(container.read(queriedCountryListProvider).length == 1);
+    Country? submittedCountry = container.read(queriedCountriesListProvider.notifier).submit('invalid');
 
-    container.read(queriedCountryListProvider.notifier).reset();
-    assert(container.read(queriedCountryListProvider).length != 1);
-    assert(container.read(queriedCountryListProvider) == container.read(allCountriesProvider));
+    assert(container.read(selectedCountryProvider) == null);
+    assert(submittedCountry == null);
+
+    verifyInOrder([
+          () => listener(null, AsyncLoading<List<Country>>()),
+          () => listener(AsyncLoading<List<Country>>(), AsyncData<List<Country>>(_allCountries)),
+    ]);
+  });
+
+  test('if asyncQueriedCountryListProvider.submit is called with valid userInput then it should set selectedCountryProvider state to userInput & return userInput as country and not touch internal state', () async {
+    await container.read(queriedCountriesListProvider);
+
+    Country? submittedCountry = container.read(queriedCountriesListProvider.notifier).submit('Country0');
+
+    assert(container.read(selectedCountryProvider) == _allCountries[0]);
+    assert(submittedCountry == _allCountries[0]);
+
+    verifyInOrder([
+          () => listener(null, AsyncLoading<List<Country>>()),
+          () => listener(AsyncLoading<List<Country>>(), AsyncData<List<Country>>(_allCountries)),
+    ]);
+  });
+
+  test('if asyncQueriedCountryListProvider.reset is called then its state should be set back to allCountriesProvider state', () async {
+    await container.read(queriedCountriesListProvider);
+
+    container.read(queriedCountriesListProvider.notifier).filter('Country0');
+    assert(container.read(queriedCountriesListProvider).value!.length == 1);
+
+    container.read(queriedCountriesListProvider.notifier).reset();
+    assert(container.read(queriedCountriesListProvider).value!.length != 1);
+    assert(container.read(queriedCountriesListProvider) == container.read(allCountriesProvider));
   });
 
 

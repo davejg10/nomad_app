@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nomad/data/destination_respository.dart';
@@ -15,14 +16,14 @@ class Listener<T> extends Mock {
 
 void main() {
 
-  test('allCountriesProvider state should be initialized to a list of all countries fetched from the destinationRepository', () {
+  test('allCountriesProvider state should be initialized to a list of all countries fetched from the destinationRepository', ()  async {
     final destinationRepository = MockUserRepository();
 
     List<Country> _allCountries = List.generate(4, (index) {
-      return Country(index, 'Country$index', '');
+      return Country("$index", 'Country$index', '');
     });
 
-    when(() => destinationRepository.getCountries()).thenReturn(_allCountries);
+    when(() => destinationRepository.getCountries()).thenAnswer((_) async => _allCountries);
 
     final container = createContainer(
       overrides: [
@@ -30,7 +31,7 @@ void main() {
       ]
     );
 
-    final listener = Listener<List<Country>>();
+    final listener = Listener<AsyncValue<List<Country>>>();
 
     container.listen(
       allCountriesProvider,
@@ -38,9 +39,12 @@ void main() {
       fireImmediately: true,
     );
 
-    verify(
-          () => listener(null, _allCountries),
-    ).called(1);
+    await container.read(allCountriesProvider);
+
+    verifyInOrder([
+        () => listener(null, AsyncLoading<List<Country>>()),
+        () => listener(AsyncLoading<List<Country>>(), AsyncData<List<Country>>(_allCountries)),
+    ]);
 
     // verify that the listener is no longer called
     verifyNoMoreInteractions(listener);

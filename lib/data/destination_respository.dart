@@ -1,44 +1,71 @@
-import 'dart:math';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+
+import '../custom_log_printer.dart';
 import '../domain/city.dart';
 import '../domain/country.dart';
 
-// Mock DB data
-List<Country> _allCountries = List.generate(100, (index) {
-  return Country(index, 'Country$index', 'some random crap');
-});
-List<City> _allCities = List.generate(500, (index) {
-  Random random = Random();
-  return City(
-      index,
-      'City$index',
-      'Lorem ipsum odor amet, consectetuer adipiscing elit. Fringilla id nibh dapibus quam, porttitor dignissim sagittis. Inceptos maecenas odio luctus mattis efficitur quis eros est. Leo ante nullam phasellus; pulvinar eleifend integer donec ridiculus pretium. Non facilisi sem; posuere nullam nibh ligula pellentesque. Mus nisl sem ultrices; tempor pellentesque malesuada. Torquent nostra quam sollicitudin ac fermentum sociosqu. Augue habitasse fames purus tincidunt justo porttitor placerat ut. Pulvinar posuere varius sit vivamus, justo cursus. Fames libero nulla quam curabitur blandit sed.Hac at congue lacus auctor magnis. Condimentum amet iaculis potenti fusce et diam diam pharetra dapibus. Sapien consectetur tincidunt etiam vivamus metus hendrerit felis tempor. Leo efficitur a nam blandit; massa accumsan. Pretium duis curae curabitur accumsan faucibus ex et. Viverra mauris pharetra est dapibus per nostra proin. Arcu natoque maecenas etiam dui nisi dolor sed. Porttitor curabitur suspendisse orci lobortis id rhoncus litora porttitor. Ultrices sapien sociosqu diam malesuada massa non nibh quis.Risus fringilla porta taciti diam elit duis nunc. Semper euismod nascetur egestas ullamcorper; cubilia semper convallis enim. Viverra ultricies volutpat habitant elementum sapien eget finibus. Cursus magnis nibh dapibus vehicula mollis semper nullam. Suspendisse iaculis vivamus, cras duis tempus scelerisque. Maximus platea parturient taciti pellentesque massa cubilia. Neque tempus tortor imperdiet eget nisl vitae semper.',
-      random.nextInt(100 + 1));
-});
-
-
 class DestinationRepository {
+  static Logger _logger = Logger(printer: CustomLogPrinter('destination_repository.dart'));
 
-  DestinationRepository();
+  http.Client httpClient;
+  String backendUri;
 
-  List<Country> getCountries() {
-    return _allCountries;
+  DestinationRepository(this.httpClient, this.backendUri);
+
+  Future<Set<Country>> getCountries() async {
+    _logger.w("Fetching all countries");
+    final response = await httpClient.get(Uri.parse(backendUri + '/countries'));
+    List<dynamic> fetchedCountries = jsonDecode(response.body);
+    Set<Country> allCountries = {};
+    for (var country in fetchedCountries) {
+      allCountries.add(Country.fromJson(country));
+    }
+    return allCountries;
   }
 
-  List<City> getCities() {
-    return _allCities;
+  Future<Set<City>> getCitiesGivenCountry(String countryId) async {
+    _logger.w("Fetching cities given country with id $countryId");
+    final response = await httpClient.get(Uri.parse(backendUri + '/countries/$countryId/cities'));
+
+    switch (response.statusCode) {
+      case 200:
+        _logger.i('${response.statusCode} - [Reponse]: ${response.body}');
+        List<dynamic> fetchedCities = jsonDecode(response.body);
+        Set<City> allCities = {};
+        for (var city in fetchedCities) {
+          allCities.add(City.fromJson(city));
+        }
+        return allCities;
+      case 404:
+        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        throw Exception(response.body);
+      default:
+        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        throw Exception("There is an issue completing that request right now.");
+    }
   }
 
-  List<City> getCitiesGivenCountry(int countryId) {
-    return getCities().where((city) => city.getCountryId == countryId).toList();
+  Future<City> findByIdFetchRoutes(String cityId) async {
+    _logger.w("Fetching city and all its routes with id: $cityId");
+    final response = await httpClient.get(Uri.parse(backendUri + '/cities/$cityId?includeRoutes=true'));
+
+    switch (response.statusCode) {
+      case 200:
+        _logger.i('${response.statusCode} - [Reponse]: ${response.body}');
+        Map<String, dynamic> cityAsMap = jsonDecode(response.body);
+        City fetchedCity = City.fromJson(cityAsMap);
+        return fetchedCity;
+      case 404:
+        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        throw Exception(response.body);
+      default:
+        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        throw Exception("There is an issue completing that request right now.");
+    }
   }
 
-  //Temporarily used for testing.
-  // We will mock this repo later when we are using an actual backend.
-  static setCities(List<City> testCities) {
-    _allCities = testCities;
-  }
-  static setCountries(List<Country> testCountries) {
-    _allCountries = testCountries;
-  }
+
 }

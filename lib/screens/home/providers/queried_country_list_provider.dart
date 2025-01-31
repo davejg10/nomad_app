@@ -1,24 +1,52 @@
 import 'package:nomad/domain/country.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../providers/selected_country_provider.dart';
 import 'all_countries_provider.dart';
 
-final queriedCountryListProvider = NotifierProvider<QueriedCountryList, List<Country>>(QueriedCountryList.new);
+// Provider definition
+final queriedCountriesListProvider = AsyncNotifierProvider<QueriedCountriesList, Set<Country>>(
+      () => QueriedCountriesList(),
+);
 
-class QueriedCountryList extends Notifier<List<Country>> {
+class QueriedCountriesList extends AsyncNotifier<Set<Country>> {
 
   @override
-  List<Country> build() {
-    return ref.read(allCountriesProvider);
+  Future<Set<Country>> build() {
+    return ref.watch(allCountriesProvider.future); //AsyncValue so need to watch for changes
   }
 
   void filter(String userInput) {
-    List<Country> countryList = ref.read(allCountriesProvider);
-    String sanitizedUserInput = userInput.trim().toLowerCase();
-    state = countryList.where((country) => country.getName.toLowerCase().contains(sanitizedUserInput)).toList();
+    final allCountriesProviderState = ref.read(allCountriesProvider);
+
+    if (allCountriesProviderState.hasValue) {
+      final sanitizedUserInput = userInput.trim().toLowerCase();
+      final filteredList = allCountriesProviderState.value!
+          .where((country) => country.getName.toLowerCase().contains(sanitizedUserInput))
+          .toSet();
+
+      state = AsyncValue.data(filteredList);
+    }
+  }
+
+  Country? submit(String userInput)  {
+    final sanitizedUserInput = userInput.trim().toLowerCase();
+
+    if (state.hasValue) {
+      Set<Country> possibleValidCountry = state.value!.where((country) =>
+      country.getName.toLowerCase() == sanitizedUserInput)
+          .toSet();
+      if (possibleValidCountry.isNotEmpty) {
+        ref.read(selectedCountryProvider.notifier).setCountry(possibleValidCountry.first);
+        return possibleValidCountry.first;
+      } else {
+        return null;
+      }
+    }
   }
 
   void reset() {
-    ref.invalidateSelf();
+    state = ref.read(allCountriesProvider);
   }
 }

@@ -30,7 +30,7 @@ class CountryCard extends ConsumerWidget {
           },
           child: Card(
             elevation: kCardElevation,
-            margin: EdgeInsets.all(8.0),
+            margin: kCardPadding,
             child: Padding(
               padding: kCardPadding,
               child: Row(

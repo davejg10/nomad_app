@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/selected_country_provider.dart';
 import 'package:nomad/screens/home/providers/queried_country_list_provider.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/select_city_screen.dart';
+import 'package:nomad/widgets/error_snackbar.dart';
 
+import '../../../providers/logger_provider.dart';
 import '../providers/all_countries_provider.dart';
 
 class CountrySearchbar extends ConsumerStatefulWidget {
@@ -17,7 +20,7 @@ class CountrySearchbar extends ConsumerStatefulWidget {
 
 class _CountrySearchbarState extends ConsumerState<CountrySearchbar> {
   final TextEditingController _searchController = TextEditingController();
-
+  final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     super.initState();
@@ -25,58 +28,50 @@ class _CountrySearchbarState extends ConsumerState<CountrySearchbar> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return SearchBar(
-        onSubmitted: (userInput) {
-          List<Country> possibleValidCountry = ref.read(allCountriesProvider).where((
-              country) =>
-          country.getName.toLowerCase() == userInput.trim().toLowerCase())
-              .toList();
-          bool validCountryInput = possibleValidCountry.isNotEmpty;
-          if (validCountryInput) {
-            ref.read(selectedCountryProvider.notifier).setCountry(possibleValidCountry.first);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => SelectCityScreen(),
-              ),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'That is not a valid country in our list...',
-                  style: TextStyle(
-                      fontSize: 20, fontFamily: "DMSans-Regular.ttf"),
-                ),
-              ),
-            );
-          }
-        },
-        onTap: () {
-          ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).open();
-        },
-        onChanged: (userInput) {
-          ref.read(queriedCountryListProvider.notifier).filter(userInput);
-        },
-        controller: _searchController,
-        hintText: 'Where to next..?',
-        leading: Icon(Icons.search),
-        trailing: [
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () {
-              _searchController.text = '';
-              ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).close();
-              ref.read(queriedCountryListProvider.notifier).reset();
-            },
-          ),
-        ]
+      onSubmitted: (userInput) {
+        Country? submittedCountry = ref.read(queriedCountriesListProvider.notifier).submit(userInput);
+        if (submittedCountry != null) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SelectCityScreen(),
+            ),
+          );
+        } else {
+          _focusNode.requestFocus();
+          ScaffoldMessenger.of(context).showSnackBar(
+            ErrorSnackbar('$userInput is not a valid country in our list...')
+          );
+        }
+      },
+      onTap: () {
+        ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).open();
+      },
+      onChanged: (userInput) {
+        ref.read(queriedCountriesListProvider.notifier).filter(userInput);
+      },
+      controller: _searchController,
+      focusNode: _focusNode,
+      hintText: 'Where to next..?',
+      leading: Icon(Icons.search),
+      trailing: [
+        IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            _searchController.text = '';
+            ref.read(searchWidgetVisibility(SearchVisibility.SEARCH_RESULTS).notifier).close();
+            ref.read(queriedCountriesListProvider.notifier).reset();
+          },
+        ),
+      ]
     );
   }
 }

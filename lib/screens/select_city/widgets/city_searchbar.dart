@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
+import 'package:nomad/widgets/error_snackbar.dart';
 
 import '../../../domain/city.dart';
 import '../../../providers/route_list_provider.dart';
@@ -38,22 +39,13 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
   Widget build(BuildContext context) {
     return SearchBar(
       onSubmitted: (userInput) {
-        List<City> possibleValidCity = ref.read(availableCityListProvider).where((city) => city.getName.toLowerCase() == userInput.trim().toLowerCase()).toList();
-        bool validCityInput = possibleValidCity.isNotEmpty;
+        City? submittedCity = ref.read(queriedCityListProvider.notifier).submit(userInput);
 
-        if (validCityInput) {
-          ref.read(routeListProvider.notifier).addToItinerary(possibleValidCity.first);
+        if (submittedCity != null) {
           closeSearchBar();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'That is not a valid city in this list...',
-                style: TextStyle(
-                    fontSize: 20, fontFamily: "DMSans-Regular.ttf"),
-              ),
-            ),
+            ErrorSnackbar('$userInput is not a valid city in this list...')
           );
         }
       },

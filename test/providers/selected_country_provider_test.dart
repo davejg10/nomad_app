@@ -49,7 +49,7 @@ void main() {
             () => listener(null, null),
       ).called(1);
 
-      Country someCountry = Country(0, 'Country0', 'Some country');
+      Country someCountry = Country("0", 'Country0', 'Some country');
 
       container.read(selectedCountryProvider.notifier).setCountry(someCountry);
 
@@ -65,8 +65,8 @@ void main() {
       // Creates a container containing all of our providers
 
       final container = createContainer();
-      City someCity = City(0, 'City0', 'Some city', 0);
-      Country someCountry = Country(0, 'Country0', 'Some country');
+      City someCity = City(0, 'City0', 'Some city', "0");
+      Country someCountry = Country("0", 'Country0', 'Some country');
 
       container.read(routeListProvider.notifier).state = [someCity];
 
