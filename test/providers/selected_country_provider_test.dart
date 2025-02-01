@@ -3,7 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/route_list_provider.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_destination_provider.dart';
 
 import '../riverpod_provider_container.dart';
 

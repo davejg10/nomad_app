@@ -5,7 +5,7 @@ import 'package:nomad/data/destination_respository.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/destination_repository_provider.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_destination_provider.dart';
 import 'package:nomad/screens/select_city/providers/all_cities_provider.dart';
 
 import '../../../riverpod_provider_container.dart';

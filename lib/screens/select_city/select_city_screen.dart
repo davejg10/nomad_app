@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:nomad/providers/logger_provider.dart';
+import 'package:nomad/custom_log_printer.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/providers/queried_city_list_provider.dart';
 import 'package:nomad/screens/select_city/widgets/city_searchbar.dart';
@@ -18,19 +18,19 @@ import '../../widgets/route_aggregate_card.dart';
 import 'widgets/route_summary.dart';
 
 class SelectCityScreen extends ConsumerWidget  {
+  static Logger _logger = Logger(printer: CustomLogPrinter('select_city_screen.dart'));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Logger logger = ref.read(loggerProvider('select_city_screen.dart'));
 
     ref.listen<AsyncValue>(
       queriedCityListProvider,
       (_, state) {
-        return state.showSnackbarOnError(context, logger);
+        return state.showSnackbarOnError(context, _logger);
       },
     );
 
-    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchVisibility.SEARCHBAR));
+    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR));
     return ScreenScaffold(
       padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
       appBar: SelectCityAppBar(),

@@ -6,7 +6,7 @@ import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
 import 'package:nomad/providers/destination_repository_provider.dart';
 import 'package:nomad/providers/route_list_provider.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_destination_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_list_provider.dart';
 import 'package:nomad/screens/select_city/providers/queried_city_list_provider.dart';
 

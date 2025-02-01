@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nomad/constants.dart';
 import 'package:nomad/widgets/shimmer_loading.dart';
 
-class CountryCardShimmer extends StatelessWidget {
-  const CountryCardShimmer({super.key});
+class DestinationCardShimmer extends StatelessWidget {
+  const DestinationCardShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

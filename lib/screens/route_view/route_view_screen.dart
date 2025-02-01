@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_destination_provider.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
@@ -13,7 +13,7 @@ class RouteViewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(selectedCountryProvider)!;
+    Country country = ref.read(destinationCountrySelectedProvider)!;
     return ScreenScaffold(
       appBar: AppBar(
         title: Text(

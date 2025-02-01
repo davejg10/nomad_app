@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 import '../../../domain/city.dart';
-import '../../../providers/logger_provider.dart';
 import '../../../providers/route_list_provider.dart';
 import 'available_city_list_provider.dart';
 

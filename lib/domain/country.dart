@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Country {
+import 'destination.dart';
+
+class Country implements Destination {
 
   final IconData _icon = Icons.south_america;
   final String _id;

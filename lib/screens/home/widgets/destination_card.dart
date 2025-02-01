@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
-import 'package:nomad/screens/select_city/select_city_screen.dart';
+import 'package:nomad/domain/destination.dart';
 
 import '../../../constants.dart';
-import '../../../domain/country.dart';
 
-class CountryCard extends ConsumerWidget {
-  const CountryCard({
+class DestinationCard extends ConsumerWidget {
+  const DestinationCard({
     super.key,
-    required this.country
+    required this.destination,
+    required this.cardOnTap
   });
 
-  final Country country;
+  final Destination destination;
+  final void Function(Destination selectedCountry) cardOnTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,13 +20,7 @@ class CountryCard extends ConsumerWidget {
       children: [
         GestureDetector(
           onTap: () {
-            ref.read(selectedCountryProvider.notifier).setCountry(country);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) =>
-                    SelectCityScreen(),
-              ),
-            );
+            cardOnTap(destination);
           },
           child: Card(
             elevation: kCardElevation,
@@ -35,14 +29,14 @@ class CountryCard extends ConsumerWidget {
               padding: kCardPadding,
               child: Row(
                 children: [
-                  Icon(country.getIcon),
+                  Icon(destination.getIcon),
                   SizedBox(width: 12,),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(country.getName, style: const TextStyle(fontWeight: kFontWeight, fontSize: 18),),
-                        Text(country.getDescription, overflow: TextOverflow.ellipsis,)
+                        Text(destination.getName, style: const TextStyle(fontWeight: kFontWeight, fontSize: 18),),
+                        Text(destination.getDescription, overflow: TextOverflow.ellipsis,)
                       ],
                     ),
                   ),

@@ -32,7 +32,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
 
   void closeSearchBar() {
     _searchController.text = '';
-    ref.read(searchWidgetVisibility(SearchVisibility.SEARCHBAR).notifier).close();
+    ref.read(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR).notifier).close();
   }
 
   @override

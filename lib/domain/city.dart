@@ -5,10 +5,11 @@ import 'package:logger/logger.dart';
 
 import '../custom_log_printer.dart';
 import 'city_criteria.dart';
+import 'destination.dart';
 import 'route.dart' as Route;
 
 
-class City {
+class City implements Destination {
   static Logger _logger = Logger(printer: CustomLogPrinter('city.dart'));
 
   final IconData _icon = Icons.location_city;
