@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 
 import '../custom_log_printer.dart';
 import 'city_criteria.dart';
+import 'country.dart';
 import 'geo_entity.dart';
 import 'route_entity.dart';
 
@@ -18,9 +19,9 @@ class City implements GeoEntity {
   final String _description;
   final Map<CityCriteria, double> _cityRatings;
   final List<RouteEntity> _routes;
-  final String _countryId;
+  final Country _country;
 
-  City(this._id, this._name, this._description, this._cityRatings, this._routes, this._countryId);
+  City(this._id, this._name, this._description, this._cityRatings, this._routes, this._country);
 
   factory City.literalFromJson(Map<String, dynamic> json) {
     String cityId = json['id'];
@@ -33,7 +34,10 @@ class City implements GeoEntity {
       _cityMetrics[CityCriteria.values.firstWhere((e) => e.name == value['criteria'])] = double.parse((value['metric']).toStringAsFixed(2));
     });
 
-    return City(cityId, name, description, _cityMetrics, [], "0");
+    Map<String, dynamic> countryJson = json['country'];
+    Country country = Country.fromJson(countryJson);
+
+    return City(cityId, name, description, _cityMetrics, [], country);
   }
 
   factory City.fromJson(Map<String, dynamic> json) {
@@ -44,8 +48,7 @@ class City implements GeoEntity {
     routeList.forEach((route) {
       routes.add(RouteEntity.fromJson(route));
     });
-
-    return City(literalFromJson.getId, literalFromJson.getName, literalFromJson.getDescription, literalFromJson.getCityRatings, routes, literalFromJson.getCountryId);
+    return City(literalFromJson.getId, literalFromJson.getName, literalFromJson.getDescription, literalFromJson.getCityRatings, routes, literalFromJson.getCountry);
   }
 
   Set<RouteEntity> fetchRoutesForGivenCity(String cityId) {
@@ -58,7 +61,7 @@ class City implements GeoEntity {
   String get getDescription => _description;
   Map<CityCriteria, double> get getCityRatings => _cityRatings;
   List<RouteEntity> get getRoutes => _routes;
-  String get getCountryId => _countryId;
+  Country get getCountry => _country;
 
   static IconData convertCriteriaToIcon(CityCriteria criteria) {
     switch (criteria) {
@@ -79,15 +82,15 @@ class City implements GeoEntity {
       other is City &&
           runtimeType == other.runtimeType &&
           _id == other._id &&
-          _countryId == other._countryId;
+          _country == other._country;
 
   @override
   int get hashCode =>
       _id.hashCode ^
-      _countryId.hashCode;
+      _country.hashCode;
 
   @override
   String toString() {
-    return 'City{_icon: $_icon, _id: $_id, _name: $_name, _description: $_description, _cityRatings: $_cityRatings, _routes: $_routes, _countryId: $_countryId}';
+    return 'City{_icon: $_icon, _id: $_id, _name: $_name, _description: $_description, _cityRatings: $_cityRatings, _routes: $_routes, _country: $_country}';
   }
 }

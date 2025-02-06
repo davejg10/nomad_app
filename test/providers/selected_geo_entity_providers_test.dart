@@ -20,8 +20,8 @@ void main() {
     CityCriteria.NIGHTLIFE: 10.0
   };
   Country country0 = Country("0", 'Country0', 'Some country');
-  City cityA = City("", "CityA", "", cityMetrics, [], country0.getId);
-  City cityB = City("", "CityB", "", cityMetrics, [], country0.getId);
+  City cityA = City("", "CityA", "", cityMetrics, [], country0);
+  City cityB = City("", "CityB", "", cityMetrics, [], country0);
   RouteEntity aToB = RouteEntity("", 4.0, 3.2, TransportType.BUS, cityB);
 
 

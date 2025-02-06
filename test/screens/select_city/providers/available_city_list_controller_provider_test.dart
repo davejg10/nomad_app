@@ -8,7 +8,6 @@ import 'package:nomad/domain/country.dart';
 import 'package:nomad/domain/route_entity.dart';
 import 'package:nomad/domain/transport_type.dart';
 import 'package:nomad/providers/backend_repository_provider.dart';
-import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_list_controller_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_list_provider.dart';
@@ -36,7 +35,7 @@ void main() {
   };
 
   Set<City> _allCities = List.generate(3, (index) {
-    return City("$index", 'City$index', '', cityMetrics, [], countryId);
+    return City("$index", 'City$index', '', cityMetrics, [], country);
   }).toSet();
   RouteEntity aTo0 = RouteEntity(
       "", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
@@ -45,7 +44,7 @@ void main() {
   RouteEntity aTo2 = RouteEntity(
       "", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(2));
   City fetchedCity = City(
-      cityId, "CityA", "", cityMetrics, [aTo0, aTo1, aTo2], countryId);
+      cityId, "CityA", "", cityMetrics, [aTo0, aTo1, aTo2], country);
 
 
   final backendRepository = MockBackendRepository();
@@ -127,12 +126,12 @@ void main() {
       RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
       RouteEntity aTo1Bus = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(1));
       RouteEntity aTo1Flight = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, _allCities.elementAt(1));
-      City cityToFetch = City("someId", "CityA", "", cityMetrics, [aTo0, aTo1Bus, aTo1Flight], countryId);
+      City cityToFetch = City("someId", "CityA", "", cityMetrics, [aTo0, aTo1Bus, aTo1Flight], country);
 
-      when(() => backendRepository.findByIdFetchRoutesByCountryId(cityToFetch.getId, cityToFetch.getCountryId))
+      when(() => backendRepository.findByIdFetchRoutesByCountryId(cityToFetch.getId, cityToFetch.getCountry.getId))
           .thenAnswer((_) async => cityToFetch);
 
-      container.read(availableCityListProvider.notifier).fetchAllNextCities(cityToFetch.getId, cityToFetch.getCountryId);
+      container.read(availableCityListProvider.notifier).fetchAllNextCities(cityToFetch.getId, cityToFetch.getCountry.getId);
       await Future.delayed(Duration.zero); // Allows event loop to process changes
 
       expectedStates = [

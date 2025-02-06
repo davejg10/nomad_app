@@ -18,12 +18,19 @@ class BackendRepository {
   Future<Set<Country>> getCountries() async {
     _logger.w("Fetching all countries");
     final response = await httpClient.get(Uri.parse(backendUri + '/countries'));
-    List<dynamic> fetchedCountries = jsonDecode(response.body);
-    Set<Country> allCountries = {};
-    for (var country in fetchedCountries) {
-      allCountries.add(Country.fromJson(country));
+
+    switch (response.statusCode) {
+      case 200:
+        List<dynamic> fetchedCountries = jsonDecode(response.body);
+        Set<Country> allCountries = {};
+        for (var country in fetchedCountries) {
+          allCountries.add(Country.fromJson(country));
+        }
+        return allCountries;
+      default:
+        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        throw Exception("There is an issue completing that request right now.");
     }
-    return allCountries;
   }
 
   Future<Set<City>> getCitiesGivenCountry(String countryId) async {

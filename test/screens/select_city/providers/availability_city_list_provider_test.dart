@@ -33,12 +33,12 @@ void main() {
   };
 
   Set<City> _allCities = List.generate(3, (index) {
-    return City("$index", 'City$index', '', cityMetrics, [], countryId);
+    return City("$index", 'City$index', '', cityMetrics, [], country);
   }).toSet();
   RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
   RouteEntity aTo1 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(1));
   RouteEntity aTo2 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(2));
-  City fetchedCity = City(cityId, "CityA", "", cityMetrics, [aTo0, aTo1, aTo2], countryId);
+  City fetchedCity = City(cityId, "CityA", "", cityMetrics, [aTo0, aTo1, aTo2], country);
 
 
   final backendRepository = MockBackendRepository();
@@ -109,16 +109,16 @@ void main() {
       RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
       RouteEntity aTo1Bus = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(1));
       RouteEntity aTo1Flight = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, _allCities.elementAt(1));
-      City cityWithDuplicateTargets = City("someId", "CityA", "", cityMetrics, [aTo0, aTo1Bus, aTo1Flight], countryId);
+      City cityWithDuplicateTargets = City("someId", "CityA", "", cityMetrics, [aTo0, aTo1Bus, aTo1Flight], country);
 
-      when(() => backendRepository.findByIdFetchRoutesByCountryId(cityWithDuplicateTargets.getId, cityWithDuplicateTargets.getCountryId))
+      when(() => backendRepository.findByIdFetchRoutesByCountryId(cityWithDuplicateTargets.getId, cityWithDuplicateTargets.getCountry.getId))
           .thenAnswer((_) async => cityWithDuplicateTargets);
 
       container.read(originCitySelectedProvider.notifier).setGeoEntity(fetchedCity);
       container.read(destinationCountrySelectedProvider.notifier).setGeoEntity(country);
       await Future.delayed(Duration.zero); // Allows event loop to process changes
 
-      container.read(availableCityListProvider.notifier).fetchAllNextCities(cityWithDuplicateTargets.getId, cityWithDuplicateTargets.getCountryId);
+      container.read(availableCityListProvider.notifier).fetchAllNextCities(cityWithDuplicateTargets.getId, cityWithDuplicateTargets.getCountry.getId);
       await Future.delayed(Duration.zero); // Allows event loop to process changes
 
       List<AsyncValue<Set<City>>> expectedStates = [
@@ -137,7 +137,7 @@ void main() {
     test('fetchAllNextCities() sets state of currentCitySelectedProvider to the city fetched from backendRepository.findByIdFetchRoutesByCountryId()', () async {
       expect(container.read(currentCitySelectedProvider), null);
 
-      container.read(availableCityListProvider.notifier).fetchAllNextCities(fetchedCity.getId, fetchedCity.getCountryId);
+      container.read(availableCityListProvider.notifier).fetchAllNextCities(fetchedCity.getId, fetchedCity.getCountry.getId);
       await Future.delayed(Duration.zero); // Allows event loop to process changes
 
       expect(container.read(currentCitySelectedProvider), fetchedCity);
@@ -145,7 +145,7 @@ void main() {
 
     test(
         'reset() should set the state to all cities reachable from the city in `originCitySelectedProvider` within the country in `desintationCountrySelectedProvider`', () async {
-      City initialCity =  City(cityId, "CityA", "", cityMetrics, [], countryId);
+      City initialCity =  City(cityId, "CityA", "", cityMetrics, [], country);
       container.read(availableCityListProvider.notifier).state = AsyncData<Set<City>>(Set.of({initialCity}));
 
       container.read(originCitySelectedProvider.notifier).state = fetchedCity;

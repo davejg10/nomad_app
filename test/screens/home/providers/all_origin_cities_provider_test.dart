@@ -29,7 +29,7 @@ void main() {
     CityCriteria.NIGHTLIFE: 10.0
   };
   Set<City> _allCities = List.generate(4, (index) {
-    return City("$index", 'City$index', '', cityMetrics, [], countryId);
+    return City("$index", 'City$index', '', cityMetrics, [], country);
   }).toSet();
 
   final backendRepository = MockBackendRepository();
@@ -79,7 +79,7 @@ void main() {
       String secondCountryId = "sfsdsa";
       Country secondCountry = Country(secondCountryId, 'Country2', '');
       Set<City> secondCountryCities = List.generate(4, (index) {
-        return City("$index", 'City$index', '', cityMetrics, [], secondCountryId);
+        return City("$index", 'City$index', '', cityMetrics, [], secondCountry);
       }).toSet();
       when(() => backendRepository.getCitiesGivenCountry(secondCountryId)).thenAnswer((_) async => secondCountryCities);
 

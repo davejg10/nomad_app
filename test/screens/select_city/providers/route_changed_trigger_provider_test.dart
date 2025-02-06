@@ -35,7 +35,7 @@ void main() {
   };
 
   City fetchedCity = City(
-      cityId, "CityA", "", cityMetrics, [], countryId);
+      cityId, "CityA", "", cityMetrics, [], country);
 
   final backendRepository = MockBackendRepository();
 
