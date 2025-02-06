@@ -21,6 +21,7 @@ class BackendRepository {
 
     switch (response.statusCode) {
       case 200:
+        _logger.e('we do have a response: ${response.body}');
         List<dynamic> fetchedCountries = jsonDecode(response.body);
         Set<Country> allCountries = {};
         for (var country in fetchedCountries) {
