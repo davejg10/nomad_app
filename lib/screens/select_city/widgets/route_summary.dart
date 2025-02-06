@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
+import 'package:nomad/custom_log_printer.dart';
+import 'package:nomad/domain/route_entity.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 
 import '../../../constants.dart';
@@ -7,11 +10,11 @@ import '../../../domain/city.dart';
 
 class RouteSummary extends ConsumerWidget {
   RouteSummary({super.key});
+  static Logger _logger = Logger(printer: CustomLogPrinter('route_summary.dart'));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<City> routeList = ref.watch(routeListProvider);
-
+    List<RouteEntity> routeList = ref.watch(routeListProvider);
     return Container(
       alignment: Alignment.topLeft,
       height: 60,
@@ -30,7 +33,7 @@ class RouteSummary extends ConsumerWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [Text(
-                routeList.map((city) => city.getName).join(' -> '),
+                routeList.map((route) => route.getTargetCity.getName).join(' -> '),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15.0),
               )],

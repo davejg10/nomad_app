@@ -1,25 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
+import 'package:nomad/custom_log_printer.dart';
 import 'package:nomad/domain/city.dart';
-import 'package:nomad/providers/route_list_provider.dart';
-import 'package:nomad/screens/select_city/providers/next_cities_provider.dart';
+import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/providers/backend_repository_provider.dart';
+import 'package:nomad/providers/selected_geo_entity_provider.dart';
+import 'package:nomad/screens/select_city/providers/providers.dart';
 
-import 'all_cities_provider.dart';
+final availableCityListProvider = AsyncNotifierProvider<AvailableCityListNotifier, Set<City>>(
+      () => AvailableCityListNotifier(),
+);
 
-final availableCityListProvider = FutureProvider<Set<City>>((ref) {
-  ref.watch(availableCitiesTriggerProvider);
+class AvailableCityListNotifier extends AsyncNotifier<Set<City>> {
+  static Logger _logger = Logger(printer: CustomLogPrinter('available_city_list_provider.dart'));
 
-  if (ref.read(routeListProvider).isEmpty) {
-    return ref.watch(allCitiesProvider.future);
-  } else {
-    return ref.watch(nextCitiesListProvider.future);
-  }
-});
-
-final availableCitiesTriggerProvider = Provider((ref) {
-  ref.listen<List<City>>(routeListProvider, (previous, next) {
-    if (next.isNotEmpty) {
-      ref.read(nextCitiesListProvider.notifier).fetchNextCities(next.last.getId);
+  @override
+  FutureOr<Set<City>> build() {
+    final originCitySelected = ref.watch(originCitySelectedProvider);
+    final destinationCountrySelected = ref.watch(destinationCountrySelectedProvider);
+    if (originCitySelected != null && destinationCountrySelected != null) {
+      return _fetchAllNextCities(originCitySelected.getId, destinationCountrySelected.getId);
     }
-    ref.notifyListeners();
-  });
-});
+    return {};
+  }
+
+  Future<Set<City>> _fetchAllNextCities(String cityId, String countryId) async {
+    City fetchedCity = await ref.read(backendRepositoryProvider).findByIdFetchRoutesByCountryId(cityId, countryId);
+    ref.read(currentCitySelectedProvider.notifier).setGeoEntity(fetchedCity);
+    Set<City> targetCities = {};
+    for (RouteEntity route in fetchedCity.getRoutes) {
+      targetCities.add(route.getTargetCity);
+    }
+    return targetCities;
+  }
+
+  void fetchAllNextCities(String cityId, String countryId) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _fetchAllNextCities(cityId, countryId));
+  }
+
+  void reset() {
+    ref.invalidateSelf();
+  }
+
+}

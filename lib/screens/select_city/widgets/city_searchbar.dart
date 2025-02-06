@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
+import 'package:nomad/screens/select_city/providers/providers.dart';
 import 'package:nomad/widgets/error_snackbar.dart';
 
 import '../../../domain/city.dart';
-import '../../../providers/route_list_provider.dart';
-import '../providers/available_city_list_provider.dart';
-import '../providers/queried_city_list_provider.dart';
 
 class CitySearchbar extends ConsumerStatefulWidget {
   const CitySearchbar({super.key});
@@ -39,7 +37,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
   Widget build(BuildContext context) {
     return SearchBar(
       onSubmitted: (userInput) {
-        City? submittedCity = ref.read(queriedCityListProvider.notifier).submit(userInput);
+        City? submittedCity = ref.read(availableCityQueriedListProvider.notifier).submit(userInput);
 
         if (submittedCity != null) {
           closeSearchBar();
@@ -50,7 +48,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
         }
       },
       onChanged: (userInput) {
-        ref.read(queriedCityListProvider.notifier).filter(userInput);
+        ref.read(availableCityQueriedListProvider.notifier).filter(userInput);
       },
       controller: _searchController,
       autoFocus: true,
@@ -60,7 +58,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
         IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
-            ref.read(queriedCityListProvider.notifier).reset();
+            ref.read(availableCityQueriedListProvider.notifier).reset();
             closeSearchBar();
           },
         ),

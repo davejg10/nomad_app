@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/city_criteria.dart';
+import 'package:nomad/domain/route_entity.dart';
 import 'package:nomad/domain/route_metric.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/screens/route_view/widgets/route_section_title.dart';
@@ -16,7 +17,7 @@ class ItineraryTotalsBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<City> routeList = ref.watch(routeListProvider);
+    List<RouteEntity> routeList = ref.watch(routeListProvider);
     // Using SliverAppBar allows us to create the custom animation of having the route aggregates
     // float and be snapped back to UI if user scrolls back up
     return SliverAppBar(
@@ -32,21 +33,18 @@ class ItineraryTotalsBar extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
+                const Column(
                   children: [
-                    const RouteSectionTitle(
+                    RouteSectionTitle(
                         title: 'Route totals'),
                     Center(
                       child: RouteAggregateCard(
                         columnChildren: [
                           RouteTotalMetric(
-                              metric: RouteMetric.WEIGHT.name,
+                              metric: RouteMetric.TIME,
                           ),
                           RouteTotalMetric(
-                              metric: RouteMetric.COST.name,
-                          ),
-                          RouteTotalMetric(
-                              metric: RouteMetric.POPULARITY.name,
+                              metric: RouteMetric.POPULARITY,
                           )
                         ],
                       ),
@@ -61,12 +59,12 @@ class ItineraryTotalsBar extends ConsumerWidget {
                       columnChildren: [
                         ...CityCriteria.values.map((criteria) {
                           return Expanded(child: CityRating(
-                              score: City.calculateAggregateScore(
-                                  criteria, routeList),
+                              score: ref.read(routeListProvider.notifier).calculateCityCriteriaTotal(
+                                  criteria),
                               ratingIcon: City
                                   .convertCriteriaToIcon(
                                   criteria)));
-                        }).toList()
+                        })
                       ],
                     ),
                   ],

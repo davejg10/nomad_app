@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/providers/selected_destination_provider.dart';
-import 'package:nomad/screens/home/widgets/destination_card_shimmer.dart';
+import 'package:nomad/providers/selected_geo_entity_provider.dart';
+import 'package:nomad/screens/home/home_screen.dart';
+import 'package:nomad/screens/home/widgets/geo_entity_card_shimmer.dart';
 
-import '../../../domain/destination.dart';
+import '../../../domain/geo_entity.dart';
 import '../../../providers/generic_queried_list_providers.dart';
-import '../../../providers/search_widget_visibility_provider.dart';
-import 'destination_card.dart';
+import 'geo_entity_card.dart';
 
 class DropdownSearchResults extends ConsumerWidget {
   const DropdownSearchResults({
@@ -14,16 +14,14 @@ class DropdownSearchResults extends ConsumerWidget {
     required this.dropdownIdentifier,
     required this.searchController,
     required this.focusNode,
-    required this.dropdownVisibilityProvider,
     required this.queriedListProvider,
     required this.selectedDestinationProvider,
   });
-  final SearchWidgetIdentifier dropdownIdentifier;
-  final TextEditingController searchController;
+  final DropdownIdentifier dropdownIdentifier;
+  final SearchController searchController;
   final FocusNode focusNode;
-  final NotifierFamilyProvider<SearchWidgetVisibility, bool, SearchWidgetIdentifier> dropdownVisibilityProvider;
-  final AsyncNotifierFamilyProvider<GenericQueriedListNotifier<Destination>, Set<Destination>, FutureProvider<Set<Destination>>> queriedListProvider;
-  final NotifierProvider<SelectedDestination<Destination>, Destination?> selectedDestinationProvider;
+  final AsyncNotifierFamilyProvider<GenericQueriedListNotifier<GeoEntity>, Set<GeoEntity>, FutureProvider<Set<GeoEntity>>> queriedListProvider;
+  final NotifierProvider<GeoEntitySelectedTemplate<GeoEntity>, GeoEntity?> selectedDestinationProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,20 +30,21 @@ class DropdownSearchResults extends ConsumerWidget {
     return quieredListProviderState.when(
         data: (queriedList) {
           return ListView.builder(
-              itemCount: queriedList.length,
-              itemBuilder: (context, index) {
-                Destination destination = queriedList.elementAt(index);
-                return DestinationCard(
-                  key: Key('destinationCard${destination.getName}'),
-                  destination: destination,
-                  cardOnTap: (Destination destination) {
-                    ref.read(selectedDestinationProvider.notifier).setDestination(destination);
-                    searchController.text = destination.getName;
-                    ref.read(dropdownVisibilityProvider.notifier).close();
-                    ref.read(queriedListProvider.notifier).reset();
-                  },
-                );
-              }
+            padding: EdgeInsets.zero,
+            itemCount: queriedList.length,
+            itemBuilder: (context, index) {
+              GeoEntity geoEntity = queriedList.elementAt(index);
+              return GeoEntityCard(
+                key: Key('destinationCard${geoEntity.getName}'),
+                geoEntity: geoEntity,
+                cardOnTap: (GeoEntity geoEntity) {
+                  ref.read(selectedDestinationProvider.notifier).setGeoEntity(geoEntity);
+                  ref.read(queriedListProvider.notifier).reset();
+                  searchController.closeView(geoEntity.getName);
+
+                },
+              );
+            }
           );
         },
         error: (error, trace) {
@@ -53,10 +52,11 @@ class DropdownSearchResults extends ConsumerWidget {
         },
         loading: () {
           return ListView.builder(
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return DestinationCardShimmer();
-              }
+            padding: EdgeInsets.zero,
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return GeoEntityCardShimmer();
+            }
           );
         }
     );

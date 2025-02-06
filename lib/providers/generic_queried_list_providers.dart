@@ -1,18 +1,18 @@
 import 'package:nomad/domain/city.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/country.dart';
-import 'package:nomad/domain/destination.dart';
+import 'package:nomad/domain/geo_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 
-final countryQueriedListProvider = AsyncNotifierProviderFamily<GenericQueriedListNotifier<Country>, Set<Country>, FutureProvider<Set<Country>>>(
+final countryQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<Country>, Set<Country>, FutureProvider<Set<Country>>>(
       () => GenericQueriedListNotifier<Country>(),
 );
-final cityQueriedListProvider = AsyncNotifierProviderFamily<GenericQueriedListNotifier<City>, Set<City>, FutureProvider<Set<City>>>(
+final cityQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<City>, Set<City>, FutureProvider<Set<City>>>(
       () => GenericQueriedListNotifier<City>(),
 );
 
-class GenericQueriedListNotifier<T extends Destination> extends FamilyAsyncNotifier<Set<T>, FutureProvider<Set<T>>> {
+class GenericQueriedListNotifier<T extends GeoEntity> extends FamilyAsyncNotifier<Set<T>, FutureProvider<Set<T>>> {
   late FutureProvider<Set<T>> _sourceProvider;
 
   @override
@@ -27,7 +27,7 @@ class GenericQueriedListNotifier<T extends Destination> extends FamilyAsyncNotif
     if (sourceProviderState.hasValue) {
       final sanitizedUserInput = userInput.trim().toLowerCase();
       final filteredList = sourceProviderState.value!
-          .where((city) => city.getName.toLowerCase().contains(sanitizedUserInput))
+          .where((geoEntity) => geoEntity.getName.toLowerCase().contains(sanitizedUserInput))
           .toSet();
 
       state = AsyncValue.data(filteredList);
@@ -38,8 +38,8 @@ class GenericQueriedListNotifier<T extends Destination> extends FamilyAsyncNotif
     final sanitizedUserInput = userInput.trim().toLowerCase();
 
     if (state.hasValue) {
-      Set<T> elementsContainingInput = state.value!.where((city) =>
-      city.getName.toLowerCase() == sanitizedUserInput)
+      Set<T> elementsContainingInput = state.value!.where((geoEntity) =>
+      geoEntity.getName.toLowerCase() == sanitizedUserInput)
           .toSet();
       if (elementsContainingInput.isNotEmpty) {
         return elementsContainingInput.first;

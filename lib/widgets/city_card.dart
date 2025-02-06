@@ -10,13 +10,11 @@ class CityCard extends ConsumerWidget {
   const CityCard({
     super.key,
     required this.city,
-    required this.trailingIcon,
-    required this.trailingIconOnTap
+    required this.trailingIconButton,
   });
 
   final City city;
-  final IconData trailingIcon;
-  final void Function(City selectedCity) trailingIconOnTap;
+  final IconButton trailingIconButton;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,12 +44,7 @@ class CityCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: Icon(trailingIcon),
-                onPressed: () {
-                  trailingIconOnTap(city);
-                },
-              ),
+              trailingIconButton,
             ],
           ),
         ),

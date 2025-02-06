@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum SearchWidgetIdentifier { ORIGIN_COUNTRY, DESTINATION_COUNTRY, ORIGIN_CITY, SELECT_CITY_SEARCHBAR }
+enum SearchWidgetIdentifier { SELECT_CITY_SEARCHBAR }
 
 final searchWidgetVisibility = NotifierProvider.family<SearchWidgetVisibility, bool, SearchWidgetIdentifier>(SearchWidgetVisibility.new);
 

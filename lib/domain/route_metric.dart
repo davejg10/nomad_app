@@ -1,5 +1,4 @@
 enum RouteMetric {
-  WEIGHT,
-  COST,
+  TIME,
   POPULARITY
 }

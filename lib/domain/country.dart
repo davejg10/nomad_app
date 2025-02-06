@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'destination.dart';
+import 'geo_entity.dart';
 
-class Country implements Destination {
+class Country implements GeoEntity {
 
   final IconData _icon = Icons.south_america;
   final String _id;

@@ -7,13 +7,13 @@ import '../custom_log_printer.dart';
 import '../domain/city.dart';
 import '../domain/country.dart';
 
-class DestinationRepository {
+class BackendRepository {
   static Logger _logger = Logger(printer: CustomLogPrinter('destination_repository.dart'));
 
   http.Client httpClient;
   String backendUri;
 
-  DestinationRepository(this.httpClient, this.backendUri);
+  BackendRepository(this.httpClient, this.backendUri);
 
   Future<Set<Country>> getCountries() async {
     _logger.w("Fetching all countries");
@@ -48,9 +48,9 @@ class DestinationRepository {
     }
   }
 
-  Future<City> findByIdFetchRoutes(String cityId) async {
-    _logger.w("Fetching city and all its routes with id: $cityId");
-    final response = await httpClient.get(Uri.parse(backendUri + '/cities/$cityId?includeRoutes=true'));
+  Future<City> findByIdFetchRoutesByCountryId(String cityId, String countryId) async {
+    _logger.w("Fetching city with id $cityId and all routes with countryId $countryId");
+    final response = await httpClient.get(Uri.parse(backendUri + '/cities/$cityId/routes/$countryId'));
 
     switch (response.statusCode) {
       case 200:
