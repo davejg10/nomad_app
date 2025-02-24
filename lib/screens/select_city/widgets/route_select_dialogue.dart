@@ -24,7 +24,7 @@ class RouteSelectDialogue extends ConsumerWidget {
               ref.read(routeListProvider.notifier).addToItinerary(route);
               Navigator.pop(context);
             },
-            child: Text('Time: ${route.getTime}, Popularity: ${route.getPopularity}, Method: ${route.getTransportType.name}')
+            child: Text('Cost: ${route.getCost}, Time: ${route.getTime}, Popularity: ${route.getPopularity}, Method: ${route.getTransportType.name}')
           );
         })
       ],

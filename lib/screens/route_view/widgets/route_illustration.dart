@@ -27,6 +27,7 @@ class RouteIllustration extends StatelessWidget {
             Text('(${routeEntity.getTransportType.name})'),
             Text('${RouteMetric.TIME.name}(${routeEntity.getTime})'),
             Text('${RouteMetric.POPULARITY.name}(${routeEntity.getPopularity})'),
+            Text('${RouteMetric.COST.name}(${routeEntity.getCost})'),
           ],
         ))
       ],

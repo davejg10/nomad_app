@@ -13,6 +13,7 @@ class TestData {
   static double targetCityNightlifeMetric = 9.8;
   static double popularity = 3.444;
   static double time = 3;
+  static double cost = 16.0;
 
 
   static Map<CityCriteria, double> cityMetrics = {
@@ -32,7 +33,7 @@ class TestData {
   static Country country = Country('countryid', 'countryname', 'countrydescription');
   static City targetCity = City('targetid', 'targetname', 'targetdescription', targetCityMetrics, [], country);
 
-  static RouteEntity routeToTarget = RouteEntity('routeid', double.parse(popularity.toStringAsFixed(2)), double.parse(time.toStringAsFixed(2)), TransportType.BUS, targetCity);
+  static RouteEntity routeToTarget = RouteEntity('routeid', double.parse(popularity.toStringAsFixed(2)), double.parse(time.toStringAsFixed(2)), cost, TransportType.BUS, targetCity);
   static City city = City('cityid', 'cityname', 'citydescription', cityMetrics, [routeToTarget], country);
 
   static Map<String, dynamic> countryJson = {
@@ -53,6 +54,7 @@ class TestData {
     },
     'popularity': popularity,
     'time': time,
+    'cost': cost,
     'transportType': routeToTarget.getTransportType.name
   };
 

@@ -15,10 +15,12 @@ class RouteTotalMetric extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<RouteEntity> routeList = ref.watch(routeListProvider);
+
+    double total = metric == RouteMetric.COST ? ref.read(routeListProvider.notifier).calculateRouteCostTotal(metric) : ref.read(routeListProvider.notifier).calculateRouteMetricTotal(metric);
     return FittedBox(
       fit: BoxFit.contain,
       child: Text(
-        '${metric.name} - ${ref.read(routeListProvider.notifier).calculateRouteMetricTotal(metric)}',
+        '${metric.name} - $total',
         style: const TextStyle(
             fontWeight: kFontWeight
         ),

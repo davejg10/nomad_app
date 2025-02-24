@@ -29,6 +29,14 @@ class RouteList extends Notifier<List<RouteEntity>> {
     state = state.sublist(0, state.length - 1);
   }
 
+  double calculateRouteCostTotal(RouteMetric cost) {
+    double total = 0;
+    for (RouteEntity route in state) {
+      total += route.getCost;
+    }
+    return total;
+  }
+
   double calculateRouteMetricTotal(RouteMetric metric) {
     double total = 0;
     for (RouteEntity route in state) {

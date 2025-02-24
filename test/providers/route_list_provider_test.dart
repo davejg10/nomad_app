@@ -27,9 +27,9 @@ void main() {
     Country country0 = Country("0", 'Country0', 'Some country');
     City cityA = City("", "CityA", "", cityMetrics, [], country0);
     City cityB = City("", "CityB", "", cityMetrics, [], country0);
-    RouteEntity aToB = RouteEntity("", 4.0, 3.2, TransportType.BUS, cityB);
-    RouteEntity aToBFlight = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, cityB);
-    RouteEntity bToA = RouteEntity("", 3.0, 4.2, TransportType.BUS, cityA);
+    RouteEntity aToB = RouteEntity("", 4.0, 3.2, 16.0, TransportType.BUS, cityB);
+    RouteEntity aToBFlight = RouteEntity("", 4.0, 3.2, 30.0, TransportType.FLIGHT, cityB);
+    RouteEntity bToA = RouteEntity("", 3.0, 4.2, 17.0, TransportType.BUS, cityA);
 
     setUp(() {
       // Creates a container containing all of our providers

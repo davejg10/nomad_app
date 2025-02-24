@@ -33,7 +33,6 @@ class City implements GeoEntity {
     cityMetrics.forEach((key, value) {
       _cityMetrics[CityCriteria.values.firstWhere((e) => e.name == value['criteria'])] = double.parse((value['metric']).toStringAsFixed(2));
     });
-    _logger.e("In literal from json ${json['country']}");
     Map<String, dynamic> countryJson = json['country'];
     Country country = Country.fromJson(countryJson);
 

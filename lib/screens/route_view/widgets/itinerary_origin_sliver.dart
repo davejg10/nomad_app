@@ -15,6 +15,7 @@ class ItineraryOriginSliver extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     City originCity = ref.read(originCitySelectedProvider)!;
+    final routeList = ref.watch(routeListProvider);
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -30,7 +31,8 @@ class ItineraryOriginSliver extends ConsumerWidget {
               ),
             ),
           ),
-          RouteIllustration(routeEntity: ref.read(routeListProvider)[0])
+          if (routeList.isNotEmpty)
+            RouteIllustration(routeEntity: routeList[0])
         ]
       ),
     );

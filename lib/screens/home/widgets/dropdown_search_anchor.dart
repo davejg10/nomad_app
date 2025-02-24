@@ -7,8 +7,8 @@ import 'package:nomad/screens/home/home_screen.dart';
 import 'package:nomad/screens/home/widgets/dropdown_search_results.dart';
 import 'package:nomad/widgets/error_snackbar.dart';
 
-class DropdownSearchanchor extends ConsumerWidget {
-  DropdownSearchanchor({
+class DropdownSearchAnchor extends ConsumerWidget {
+  DropdownSearchAnchor({
     super.key,
     required this.dropdownIdentifier,
     required this.searchController,
@@ -44,7 +44,7 @@ class DropdownSearchanchor extends ConsumerWidget {
     }
   }
 
-  RoundedRectangleBorder searchShape = RoundedRectangleBorder(
+  final RoundedRectangleBorder searchShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10), // Rounded corners
   );
 

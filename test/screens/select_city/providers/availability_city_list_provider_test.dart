@@ -35,9 +35,9 @@ void main() {
   Set<City> _allCities = List.generate(3, (index) {
     return City("$index", 'City$index', '', cityMetrics, [], country);
   }).toSet();
-  RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
-  RouteEntity aTo1 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(1));
-  RouteEntity aTo2 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(2));
+  RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, 16.0, TransportType.BUS, _allCities.elementAt(0));
+  RouteEntity aTo1 = RouteEntity("", 4.0, 3.2, 15.0, TransportType.BUS, _allCities.elementAt(1));
+  RouteEntity aTo2 = RouteEntity("", 4.0, 3.2, 5.0, TransportType.BUS, _allCities.elementAt(2));
   City fetchedCity = City(cityId, "CityA", "", cityMetrics, [aTo0, aTo1, aTo2], country);
 
 
@@ -106,9 +106,9 @@ void main() {
     test(
         'fetchAllNextCities() should set the state to a Set of all UNIQUE cities reachable from the city returned from backendRepository.findByIdFetchRoutesByCountryId()', () async {
 
-      RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(0));
-      RouteEntity aTo1Bus = RouteEntity("", 4.0, 3.2, TransportType.BUS, _allCities.elementAt(1));
-      RouteEntity aTo1Flight = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, _allCities.elementAt(1));
+      RouteEntity aTo0 = RouteEntity("", 4.0, 3.2, 16.0, TransportType.BUS, _allCities.elementAt(0));
+      RouteEntity aTo1Bus = RouteEntity("", 4.0, 3.2, 15.0, TransportType.BUS, _allCities.elementAt(1));
+      RouteEntity aTo1Flight = RouteEntity("", 4.0, 3.2, 30.0, TransportType.FLIGHT, _allCities.elementAt(1));
       City cityWithDuplicateTargets = City("someId", "CityA", "", cityMetrics, [aTo0, aTo1Bus, aTo1Flight], country);
 
       when(() => backendRepository.findByIdFetchRoutesByCountryId(cityWithDuplicateTargets.getId, cityWithDuplicateTargets.getCountry.getId))

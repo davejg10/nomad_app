@@ -61,7 +61,7 @@ void main() {
     test('if routeListProvider next state is not empty, calls availableCityListProvider.fetchAllNextCities(cityId, countryId), where cityId is the ID of the last element in routeListProvider and countryId is the id of the country stored in destinationCountrySelectedProvider', () async {
 
       container.read(destinationCountrySelectedProvider.notifier).setGeoEntity(country);
-      RouteEntity routeToCityFetchedCity = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, fetchedCity);
+      RouteEntity routeToCityFetchedCity = RouteEntity("", 4.0, 3.2, 30.0, TransportType.FLIGHT, fetchedCity);
       await container.read(availableCityListControllerProvider); // This registers the _routeChangedTriggerProvider
 
       container.read(routeListProvider.notifier).addToItinerary(routeToCityFetchedCity);
@@ -72,7 +72,7 @@ void main() {
     test('if routeListProvider next state is empty, calls availableCityListProvider.reset()', () async {
 
       container.read(destinationCountrySelectedProvider.notifier).setGeoEntity(country);
-      RouteEntity routeToCityFetchedCity = RouteEntity("", 4.0, 3.2, TransportType.FLIGHT, fetchedCity);
+      RouteEntity routeToCityFetchedCity = RouteEntity("", 4.0, 3.2, 30.0, TransportType.FLIGHT, fetchedCity);
       await container.read(availableCityListControllerProvider); // This registers the _routeChangedTriggerProvider
 
       container.read(routeListProvider.notifier).state = [routeToCityFetchedCity];

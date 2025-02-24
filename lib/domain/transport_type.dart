@@ -1,4 +1,4 @@
 enum TransportType {
-  BUS,
-  FLIGHT
+  BUS, FLIGHT, TAXI, TRAIN, VAN
+
 }

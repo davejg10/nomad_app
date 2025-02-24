@@ -45,6 +45,9 @@ class ItineraryTotalsBar extends ConsumerWidget {
                           ),
                           RouteTotalMetric(
                               metric: RouteMetric.POPULARITY,
+                          ),
+                          RouteTotalMetric(
+                            metric: RouteMetric.COST,
                           )
                         ],
                       ),

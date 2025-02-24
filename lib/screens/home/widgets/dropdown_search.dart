@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/constants.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/home/home_screen.dart';
-import 'package:nomad/screens/home/widgets/dropdown_searchanchor.dart';
+import 'package:nomad/screens/home/widgets/dropdown_search_anchor.dart';
 
 import '../providers/providers.dart';
 
@@ -44,7 +44,7 @@ class _DropdownSearchState extends ConsumerState<DropdownSearch> {
 
     return Padding(
       padding: kSearchBarPadding,
-      child: DropdownSearchanchor(
+      child: DropdownSearchAnchor(
         dropdownIdentifier: widget.dropdownIdentifier,
         searchController: _searchController,
         focusNode: _focusNode,

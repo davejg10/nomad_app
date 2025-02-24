@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:nomad/custom_log_printer.dart';
 import 'package:nomad/domain/route_entity.dart';
 import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/providers/selected_geo_entity_provider.dart';
 
 import '../../../constants.dart';
 import '../../../domain/city.dart';
@@ -32,11 +33,18 @@ class RouteSummary extends ConsumerWidget {
             height: 30,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: [Text(
-                routeList.map((route) => route.getTargetCity.getName).join(' -> '),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 15.0),
-              )],
+              children: [
+                Text(
+                  '${ref.read(originCitySelectedProvider)!.getName} (Home): ',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 15.0),
+                ),
+                Text(
+                  '${routeList.map((route) => route.getTargetCity.getName).join(' -> ')}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 15.0),
+                )
+              ],
             ),
           ),
         ],
