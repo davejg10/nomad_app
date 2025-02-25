@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/constants.dart';
-import 'package:nomad/domain/city.dart';
 import 'package:nomad/domain/country.dart';
+import 'package:nomad/domain/route_entity.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/route_view/route_view_screen.dart';
 
 class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
@@ -13,9 +13,9 @@ class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(selectedCountryProvider)!;
-    List<City> routeList = ref.watch(routeListProvider);
-    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchVisibility.SEARCHBAR));
+    Country country = ref.read(destinationCountrySelectedProvider)!;
+    List<RouteEntity> routeList = ref.watch(routeListProvider);
+    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR));
 
     return AppBar(
       title: Text(
@@ -33,7 +33,7 @@ class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              ref.read(searchWidgetVisibility(SearchVisibility.SEARCHBAR).notifier).open();
+              ref.read(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR).notifier).open();
             },
           ),
         IconButton(

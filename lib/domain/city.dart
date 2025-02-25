@@ -1,28 +1,66 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
+import '../custom_log_printer.dart';
 import 'city_criteria.dart';
+import 'country.dart';
+import 'geo_entity.dart';
+import 'route_entity.dart';
 
-class City {
+
+class City implements GeoEntity {
+  static Logger _logger = Logger(printer: CustomLogPrinter('city.dart'));
 
   final IconData _icon = Icons.location_city;
-  final int _id;
+  final String _id;
   final String _name;
   final String _description;
-  final Map<CityCriteria, int> _cityRatings = {
-    CityCriteria.SAILING: 9,
-    CityCriteria.FOOD: 7,
-    CityCriteria.NIGHTLIFE: 8
-  };
-  final int _countryId;
+  final Map<CityCriteria, double> _cityRatings;
+  final List<RouteEntity> _routes;
+  final Country _country;
 
-  City(this._id, this._name, this._description, this._countryId);
+  City(this._id, this._name, this._description, this._cityRatings, this._routes, this._country);
+
+  factory City.literalFromJson(Map<String, dynamic> json) {
+    String cityId = json['id'];
+    String name = json['name'];
+    String description = json['description'];
+
+    Map<String, dynamic> cityMetrics = jsonDecode(json['cityMetrics']);
+    final Map<CityCriteria, double> _cityMetrics = {};
+    cityMetrics.forEach((key, value) {
+      _cityMetrics[CityCriteria.values.firstWhere((e) => e.name == value['criteria'])] = double.parse((value['metric']).toStringAsFixed(2));
+    });
+    Map<String, dynamic> countryJson = json['country'];
+    Country country = Country.fromJson(countryJson);
+
+    return City(cityId, name, description, _cityMetrics, [], country);
+  }
+
+  factory City.fromJson(Map<String, dynamic> json) {
+    City literalFromJson = City.literalFromJson(json);
+
+    List<dynamic> routeList = json['routes'];
+    List<RouteEntity> routes = [];
+    routeList.forEach((route) {
+      routes.add(RouteEntity.fromJson(route));
+    });
+    return City(literalFromJson.getId, literalFromJson.getName, literalFromJson.getDescription, literalFromJson.getCityRatings, routes, literalFromJson.getCountry);
+  }
+
+  Set<RouteEntity> fetchRoutesForGivenCity(String cityId) {
+    return _routes.where((route) => route.getTargetCity.getId == cityId).toSet();
+  }
 
   IconData get getIcon => _icon;
-  int get getId => _id;
+  String get getId => _id;
   String get getName => _name;
   String get getDescription => _description;
-  Map<CityCriteria, int> get getCityRatings => _cityRatings;
-  int get getCountryId => _countryId;
+  Map<CityCriteria, double> get getCityRatings => _cityRatings;
+  List<RouteEntity> get getRoutes => _routes;
+  Country get getCountry => _country;
 
   static IconData convertCriteriaToIcon(CityCriteria criteria) {
     switch (criteria) {
@@ -37,32 +75,21 @@ class City {
     }
   }
 
-  static double calculateAggregateScore(CityCriteria criteria, List<City> routeList) {
-    double criteriaScore = 0.0;
-    for (var city in routeList) {
-      criteriaScore += (city.getCityRatings[criteria]! / routeList.length);
-    }
-    return double.parse(criteriaScore.toStringAsFixed(2));
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is City &&
           runtimeType == other.runtimeType &&
-          _icon == other._icon &&
           _id == other._id &&
-          _name == other._name &&
-          _description == other._description &&
-          _cityRatings == other._cityRatings &&
-          _countryId == other._countryId;
+          _country == other._country;
 
   @override
   int get hashCode =>
-      _icon.hashCode ^
       _id.hashCode ^
-      _name.hashCode ^
-      _description.hashCode ^
-      _cityRatings.hashCode ^
-      _countryId.hashCode;
+      _country.hashCode;
+
+  @override
+  String toString() {
+    return 'City{_icon: $_icon, _id: $_id, _name: $_name, _description: $_description, _cityRatings: $_cityRatings, _routes: $_routes, _country: $_country}';
+  }
 }

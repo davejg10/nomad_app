@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/providers/selected_country_provider.dart';
+import 'package:nomad/providers/selected_geo_entity_provider.dart';
+import 'package:nomad/screens/route_view/widgets/itinerary_origin_sliver.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
 import '../../constants.dart';
 import '../../domain/country.dart';
-import 'widgets/itinerary_sliver_view.dart';
+import 'widgets/itinerary_destination_slivers.dart';
 
 class RouteViewScreen extends ConsumerWidget {
   const RouteViewScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(selectedCountryProvider)!;
+    Country country = ref.read(destinationCountrySelectedProvider)!;
     return ScreenScaffold(
       appBar: AppBar(
         title: Text(
@@ -34,7 +35,8 @@ class RouteViewScreen extends ConsumerWidget {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   ItineraryTotalsBar(),
-                  ItinerarySliverView()
+                  ItineraryOriginSliver(),
+                  ItineraryDestinationSlivers()
                 ],
               ),
             ),
