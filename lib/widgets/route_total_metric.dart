@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/city.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/route_metric.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 
@@ -14,9 +13,9 @@ class RouteTotalMetric extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<RouteEntity> routeList = ref.watch(routeListProvider);
+    List<Neo4jRoute> routeList = ref.watch(routeListProvider);
 
-    double total = metric == RouteMetric.COST ? ref.read(routeListProvider.notifier).calculateRouteCostTotal(metric) : ref.read(routeListProvider.notifier).calculateRouteMetricTotal(metric);
+    double total = metric == RouteMetric.AVERAGE_COST ? ref.read(routeListProvider.notifier).calculateRouteCostTotal(metric) : ref.read(routeListProvider.notifier).calculateRouteMetricTotal(metric);
     return FittedBox(
       fit: BoxFit.contain,
       child: Text(

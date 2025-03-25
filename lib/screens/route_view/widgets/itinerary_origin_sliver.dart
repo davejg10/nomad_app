@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:nomad/constants.dart';
-import 'package:nomad/domain/city.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/route_view/widgets/route_illustration.dart';
@@ -14,7 +14,7 @@ class ItineraryOriginSliver extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    City originCity = ref.read(originCitySelectedProvider)!;
+    Neo4jCity originCity = ref.read(originCitySelectedProvider)!;
     final routeList = ref.watch(routeListProvider);
     return SliverList(
       delegate: SliverChildListDelegate(

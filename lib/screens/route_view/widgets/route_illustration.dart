@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/route_metric.dart';
 
 class RouteIllustration extends StatelessWidget {
@@ -8,7 +8,7 @@ class RouteIllustration extends StatelessWidget {
     super.key,
     required this.routeEntity,
   });
-  final RouteEntity routeEntity;
+  final Neo4jRoute routeEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +25,9 @@ class RouteIllustration extends StatelessWidget {
         Positioned(right: 60, child: Column(
           children: [
             Text('(${routeEntity.getTransportType.name})'),
-            Text('${RouteMetric.TIME.name}(${routeEntity.getTime})'),
+            Text('${RouteMetric.AVERAGE_DURATION.name}(${routeEntity.getAverageDuration})'),
             Text('${RouteMetric.POPULARITY.name}(${routeEntity.getPopularity})'),
-            Text('${RouteMetric.COST.name}(${routeEntity.getCost})'),
+            Text('${RouteMetric.AVERAGE_COST.name}(${routeEntity.getAverageCost})'),
           ],
         ))
       ],

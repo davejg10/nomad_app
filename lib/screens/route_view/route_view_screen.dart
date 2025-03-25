@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_origin_sliver.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
 import '../../constants.dart';
-import '../../domain/country.dart';
 import 'widgets/itinerary_destination_slivers.dart';
 
 class RouteViewScreen extends ConsumerWidget {
@@ -14,7 +14,7 @@ class RouteViewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(destinationCountrySelectedProvider)!;
+    Neo4jCountry country = ref.read(destinationCountrySelectedProvider)!;
     return ScreenScaffold(
       appBar: AppBar(
         title: Text(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/city.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/domain/city_criteria.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/route_metric.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/screens/route_view/widgets/route_section_title.dart';
@@ -17,7 +17,7 @@ class ItineraryTotalsBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<RouteEntity> routeList = ref.watch(routeListProvider);
+    List<Neo4jRoute> routeList = ref.watch(routeListProvider);
     // Using SliverAppBar allows us to create the custom animation of having the route aggregates
     // float and be snapped back to UI if user scrolls back up
     return SliverAppBar(
@@ -41,13 +41,13 @@ class ItineraryTotalsBar extends ConsumerWidget {
                       child: RouteAggregateCard(
                         columnChildren: [
                           RouteTotalMetric(
-                              metric: RouteMetric.TIME,
+                              metric: RouteMetric.AVERAGE_DURATION,
                           ),
                           RouteTotalMetric(
                               metric: RouteMetric.POPULARITY,
                           ),
                           RouteTotalMetric(
-                            metric: RouteMetric.COST,
+                            metric: RouteMetric.AVERAGE_COST,
                           )
                         ],
                       ),
@@ -61,12 +61,13 @@ class ItineraryTotalsBar extends ConsumerWidget {
                     RouteAggregateCard(
                       columnChildren: [
                         ...CityCriteria.values.map((criteria) {
-                          return Expanded(child: CityRating(
-                              score: ref.read(routeListProvider.notifier).calculateCityCriteriaTotal(
+                          return Expanded(
+                              child: CityRating(
+                                score: ref.read(routeListProvider.notifier).calculateCityCriteriaTotal(
                                   criteria),
-                              ratingIcon: City
-                                  .convertCriteriaToIcon(
-                                  criteria)));
+                                ratingIcon: criteria.convertCriteriaToIcon()
+                              ),
+                          );
                         })
                       ],
                     ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 
 import '../../../providers/route_list_provider.dart';
 
@@ -10,7 +10,7 @@ class RouteSelectDialogue extends ConsumerWidget {
     required this.routes
   });
 
-  final Set<RouteEntity> routes;
+  final Set<Neo4jRoute> routes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +24,7 @@ class RouteSelectDialogue extends ConsumerWidget {
               ref.read(routeListProvider.notifier).addToItinerary(route);
               Navigator.pop(context);
             },
-            child: Text('Cost: ${route.getCost}, Time: ${route.getTime}, Popularity: ${route.getPopularity}, Method: ${route.getTransportType.name}')
+            child: Text('Cost: ${route.getAverageCost}, Time: ${route.getAverageDuration}, Popularity: ${route.getPopularity}, Method: ${route.getTransportType.name}')
           );
         })
       ],

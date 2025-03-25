@@ -1,15 +1,15 @@
-import 'package:nomad/domain/city.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/country.dart';
 import 'package:nomad/domain/geo_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 
-final countryQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<Country>, Set<Country>, FutureProvider<Set<Country>>>(
-      () => GenericQueriedListNotifier<Country>(),
+final countryQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<Neo4jCountry>, Set<Neo4jCountry>, FutureProvider<Set<Neo4jCountry>>>(
+      () => GenericQueriedListNotifier<Neo4jCountry>(),
 );
-final cityQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<City>, Set<City>, FutureProvider<Set<City>>>(
-      () => GenericQueriedListNotifier<City>(),
+final cityQueriedListTemplate = AsyncNotifierProviderFamily<GenericQueriedListNotifier<Neo4jCity>, Set<Neo4jCity>, FutureProvider<Set<Neo4jCity>>>(
+      () => GenericQueriedListNotifier<Neo4jCity>(),
 );
 
 class GenericQueriedListNotifier<T extends GeoEntity> extends FamilyAsyncNotifier<Set<T>, FutureProvider<Set<T>>> {

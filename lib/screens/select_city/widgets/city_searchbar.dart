@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/providers/providers.dart';
 import 'package:nomad/widgets/error_snackbar.dart';
-
-import '../../../domain/city.dart';
 
 class CitySearchbar extends ConsumerStatefulWidget {
   const CitySearchbar({super.key});
@@ -37,7 +36,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
   Widget build(BuildContext context) {
     return SearchBar(
       onSubmitted: (userInput) {
-        City? submittedCity = ref.read(availableCityQueriedListProvider.notifier).submit(userInput);
+        Neo4jCity? submittedCity = ref.read(availableCityQueriedListProvider.notifier).submit(userInput);
 
         if (submittedCity != null) {
           closeSearchBar();

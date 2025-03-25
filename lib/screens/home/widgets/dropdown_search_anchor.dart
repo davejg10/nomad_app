@@ -125,10 +125,13 @@ class DropdownSearchAnchor extends ConsumerWidget {
               },
             ),
           ],
-          onTap: () {
+          onChanged: (someText) {
             if (!searchController.isOpen) {
               searchController.openView();
             }
+          },
+          onTap: () {
+
           },
         );
       },

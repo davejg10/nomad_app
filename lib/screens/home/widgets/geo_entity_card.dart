@@ -33,7 +33,7 @@ class GeoEntityCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(geoEntity.getName, style: const TextStyle(fontWeight: kFontWeight, fontSize: 18),),
-                      Text(geoEntity.getDescription, overflow: TextOverflow.ellipsis,)
+                      Text(geoEntity.getShortDescription, overflow: TextOverflow.ellipsis,)
                     ],
                   ),
                 ),

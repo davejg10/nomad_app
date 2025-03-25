@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/constants.dart';
-import 'package:nomad/domain/country.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
@@ -13,8 +13,8 @@ class SelectCityAppBar extends ConsumerWidget implements PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(destinationCountrySelectedProvider)!;
-    List<RouteEntity> routeList = ref.watch(routeListProvider);
+    Neo4jCountry country = ref.read(destinationCountrySelectedProvider)!;
+    List<Neo4jRoute> routeList = ref.watch(routeListProvider);
     bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR));
 
     return AppBar(

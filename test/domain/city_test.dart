@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nomad/domain/city.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j_city.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/transport_type.dart';
 
 import '../test_data.dart';
@@ -26,9 +26,9 @@ void main() {
       City cityA = City('cityAID', 'cityA', '', TestData.cityMetrics, [], TestData.country);
       City cityB = City('cityBID', 'cityB', '', TestData.cityMetrics, [], TestData.country);
 
-      RouteEntity routeToABUS = RouteEntity('1', 4.0, 3.2, 16.0, TransportType.BUS, cityA);
-      RouteEntity routeToAFLIGHT = RouteEntity('2', 4.5, 5, 30.0, TransportType.FLIGHT, cityA);
-      RouteEntity route = RouteEntity('3', 8, 4.3, 32.0, TransportType.BUS, cityB);
+      Neo4jRoute routeToABUS = Neo4jRoute('1', 4.0, 3.2, 16.0, TransportType.BUS, cityA);
+      Neo4jRoute routeToAFLIGHT = Neo4jRoute('2', 4.5, 5, 30.0, TransportType.FLIGHT, cityA);
+      Neo4jRoute route = Neo4jRoute('3', 8, 4.3, 32.0, TransportType.BUS, cityB);
       City originCity = City('originId', 'origin', '', TestData.cityMetrics, [routeToABUS, routeToAFLIGHT, route], TestData.country);
 
       expect(originCity.getRoutes.length, equals(3));
@@ -42,7 +42,7 @@ void main() {
 
       City cityB = City('cityBID', 'cityB', '', TestData.cityMetrics, [], TestData.country);
 
-      RouteEntity route = RouteEntity('1', 4.0, 3.2, 32.0, TransportType.BUS, cityB);
+      Neo4jRoute route = Neo4jRoute('1', 4.0, 3.2, 32.0, TransportType.BUS, cityB);
       City originCity = City('originId', 'origin', '', TestData.cityMetrics, [route], TestData.country);
 
       expect(originCity.getRoutes.length, equals(1));

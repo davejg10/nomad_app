@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:nomad/domain/city.dart';
-import 'package:nomad/domain/country.dart';
 import 'package:nomad/domain/geo_entity.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
 import 'package:nomad/providers/route_list_provider.dart';
 
 import '../custom_log_printer.dart';
 
-final originCountrySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<Country>, Country?>(OriginCountrySelected.new);
-final originCitySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<City>, City?>(GeoEntitySelected.new);
-final destinationCountrySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<Country>, Country?>(GeoEntitySelected.new);
+final originCountrySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<Neo4jCountry>, Neo4jCountry?>(OriginCountrySelected.new);
+final originCitySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<Neo4jCity>, Neo4jCity?>(GeoEntitySelected.new);
+final destinationCountrySelectedProvider = NotifierProvider<GeoEntitySelectedTemplate<Neo4jCountry>, Neo4jCountry?>(GeoEntitySelected.new);
 
 abstract class GeoEntitySelectedTemplate<T extends GeoEntity> extends Notifier<T?> {
   static Logger _logger = Logger(printer: CustomLogPrinter('selected_geo_entity_provider.dart'));
@@ -32,10 +32,10 @@ abstract class GeoEntitySelectedTemplate<T extends GeoEntity> extends Notifier<T
 
 class GeoEntitySelected<T extends GeoEntity> extends GeoEntitySelectedTemplate<T> {}
 
-class OriginCountrySelected extends GeoEntitySelectedTemplate<Country> {
+class OriginCountrySelected extends GeoEntitySelectedTemplate<Neo4jCountry> {
 
   @override
-  void setGeoEntity(Country selectedCountry) {
+  void setGeoEntity(Neo4jCountry selectedCountry) {
     if (state != selectedCountry) {
       ref.invalidate(originCitySelectedProvider);
     }

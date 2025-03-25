@@ -1,5 +1,5 @@
 enum RouteMetric {
-  TIME,
+  AVERAGE_DURATION,
   POPULARITY,
-  COST
+  AVERAGE_COST
 }

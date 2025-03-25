@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:nomad/data/backend_respository.dart';
-import 'package:nomad/domain/country.dart';
+import 'package:nomad/domain/neo4j_country.dart';
 
 import '../test_data.dart';
 
@@ -31,13 +31,10 @@ void main() {
       List<Map<String, dynamic>> responseBody = [
         {
           'id': country1.getId,
-          'name': country1.getName,
-          'description': country1.getDescription
-        },
+          'name': country1.getName},
         {
           'id': country2.getId,
-          'name': country2.getName,
-          'description': country2.getDescription
+          'name': country2.getName
         }
       ];
 
