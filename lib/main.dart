@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/screens/home/home_screen.dart';
-import 'package:nomad/screens/home/select_origin_country_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: App()));

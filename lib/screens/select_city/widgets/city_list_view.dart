@@ -37,7 +37,7 @@ class CityListView extends ConsumerWidget {
                       showDialog<void>(
                           context: context,
                           builder: (BuildContext context) {
-                            return RouteSelectDialogue(routes: routes);
+                            return AddToItineraryDialogue(selectedCity: city);
                           }
                       );
                     },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum TransportType {
-  BUS, FLIGHT, TAXI, TRAIN, VAN, FERRY, BUS_FERRY, VAN_BUS, VAN_FERRY, BUS_BUS_FERRY, BUS_VAN, FERRY_BUS, FERRY_VAN, BUS_BUS;
+  ALL, BUS, FLIGHT, TAXI, TRAIN, VAN, FERRY, BUS_FERRY, VAN_BUS, VAN_FERRY, BUS_BUS_FERRY, BUS_VAN, FERRY_BUS, FERRY_VAN, BUS_BUS;
 
   // Helper method to get icon for transport mode
   IconData getIcon() {
@@ -14,6 +14,8 @@ enum TransportType {
         return Icons.directions_boat;
       case TransportType.TRAIN:
         return Icons.train;
+      case TransportType.VAN:
+        return Icons.airport_shuttle;
       default:
         return Icons.emoji_transportation_outlined;
     }
@@ -30,6 +32,8 @@ enum TransportType {
         return Colors.teal;
       case TransportType.TRAIN:
         return Colors.red;
+      case TransportType.VAN:
+        return Colors.orange;
       default:
         return Colors.grey;
     }

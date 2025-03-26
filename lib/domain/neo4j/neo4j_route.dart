@@ -1,3 +1,4 @@
+import 'package:iso_duration_parser/iso_duration_parser.dart';
 import 'package:nomad/domain/transport_type.dart';
 
 import 'neo4j_city.dart';
@@ -23,7 +24,8 @@ class Neo4jRoute {
   factory Neo4jRoute.fromJson(Map<String, dynamic> json) {
     String routeId = json['id'];
     double popularity = double.parse((json['popularity']).toStringAsFixed(2));
-    Duration averageDuration = Duration.zero;
+    IsoDuration parsedDuration = IsoDuration.parse(json['averageDuration']);
+    Duration averageDuration = Duration(days: parsedDuration.days.toInt(), hours: parsedDuration.hours.toInt(), minutes: parsedDuration.minutes.toInt());
 
     double averageCost = json['averageCost'];
     TransportType transportType = TransportType.values.firstWhere((e) => e.name == json['transportType']);

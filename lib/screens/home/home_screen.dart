@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nomad/custom_log_printer.dart';
+import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/home/widgets/dropdown_search.dart';
 import 'package:nomad/screens/select_city/select_city_screen.dart';
 import 'package:nomad/widgets/error_snackbar.dart';
-import 'package:nomad/widgets/city_criteria_badge.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 
 import '../../domain/geo_entity.dart';
@@ -30,9 +30,9 @@ class HomeScreen extends ConsumerWidget {
             SizedBox(height: 16),
             DropdownSearch(dropdownIdentifier: DropdownIdentifier.DESTINATION_COUNTRY),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 GeoEntity? originCountry = ref.read(originCountrySelectedProvider);
-                GeoEntity? originCity = ref.read(originCitySelectedProvider);
+                Neo4jCity? originCity = ref.read(originCitySelectedProvider);
                 GeoEntity? destinationCountry = ref.read(destinationCountrySelectedProvider);
 
                 if (originCountry == null || originCity == null || destinationCountry == null) {

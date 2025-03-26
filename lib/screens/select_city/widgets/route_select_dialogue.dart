@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:nomad/domain/neo4j/neo4j_route.dart';
+import 'package:nomad/screens/select_city/providers/providers.dart';
+import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
 
-import '../../../providers/route_list_provider.dart';
+import '../../../custom_log_printer.dart';
+import '../../../domain/neo4j/neo4j_city.dart';
+import '../../../providers/itinerary_list_provider.dart';
 
-class RouteSelectDialogue extends ConsumerWidget {
-  const RouteSelectDialogue({
+class AddToItineraryDialogue extends ConsumerWidget {
+  const AddToItineraryDialogue({
     super.key,
-    required this.routes
+    required this.selectedCity
   });
 
-  final Set<Neo4jRoute> routes;
+  final Neo4jCity selectedCity;
+  static Logger _logger = Logger(printer: CustomLogPrinter('add_to_itinerary_diaglogue.dart'));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,15 +24,14 @@ class RouteSelectDialogue extends ConsumerWidget {
     return SimpleDialog(
       title: const Text('Choose your desired route'),
       children: <Widget>[
-        ...routes.map((route) {
-          return SimpleDialogOption(
-            onPressed: () {
-              ref.read(routeListProvider.notifier).addToItinerary(route);
+          SimpleDialogOption(
+            onPressed: () async {
+              ref.read(itineraryListProvider.notifier).addToItinerary(selectedCity);
               Navigator.pop(context);
             },
-            child: Text('Cost: ${route.getAverageCost}, Time: ${route.getAverageDuration}, Popularity: ${route.getPopularity}, Method: ${route.getTransportType.name}')
-          );
-        })
+            child: Text('Add to itinerary')
+          ),
+
       ],
 
     );

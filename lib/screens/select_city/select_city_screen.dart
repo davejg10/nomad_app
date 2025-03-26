@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:nomad/custom_log_printer.dart';
 import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
-import 'package:nomad/screens/select_city/providers/available_city_list_provider.dart';
+import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
 import 'package:nomad/screens/select_city/widgets/city_searchbar.dart';
 import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet.dart';
 import 'package:nomad/screens/select_city/widgets/select_city_app_bar.dart';
@@ -59,7 +59,7 @@ class SelectCityScreen extends ConsumerWidget  {
               const TravelPreferenceSlider(travelPreference: 'COST'),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(availableCityListProvider.notifier).fetchAllNextCities();
+                  ref.read(targetCitiesGivenCountryProvider.notifier).fetchTargetCities(ref.read(lastCitySelectedProvider)!);
                 },
                 child: const Text('Apply changes'),
               )

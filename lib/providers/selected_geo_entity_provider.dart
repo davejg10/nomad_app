@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:nomad/domain/geo_entity.dart';
 import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/domain/neo4j/neo4j_country.dart';
-import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/providers/itinerary_list_provider.dart';
 
 import '../custom_log_printer.dart';
 
@@ -22,7 +22,7 @@ abstract class GeoEntitySelectedTemplate<T extends GeoEntity> extends Notifier<T
 
   void setGeoEntity(T selectedGeoEntity) {
     if (state != selectedGeoEntity) {
-      ref.invalidate(routeListProvider);
+      ref.invalidate(itineraryListProvider);
     }
 
     state = selectedGeoEntity;

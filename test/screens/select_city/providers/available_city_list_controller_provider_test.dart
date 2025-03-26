@@ -10,7 +10,7 @@ import 'package:nomad/domain/transport_type.dart';
 import 'package:nomad/providers/backend_repository_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_list_controller_provider.dart';
-import 'package:nomad/screens/select_city/providers/available_city_list_provider.dart';
+import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
 
 import '../../../riverpod_provider_container.dart';
 import '../../../riverpod_state_listeners.dart';

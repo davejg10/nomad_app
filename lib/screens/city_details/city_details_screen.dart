@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/screens/select_city/providers/providers.dart';
+import 'package:nomad/widgets/city_criteria_bar.dart';
 
 import '../../domain/neo4j/neo4j_city.dart';
 import '../../domain/neo4j/neo4j_route.dart';
@@ -105,56 +106,16 @@ class CityDetailsScreen extends StatelessWidget {
             SizedBox(height: 10),
             // Sailing, Nightlife, Food Rankings
             ...selectedCity.getCityRatings.entries.map((entry) {
-              return _buildRankingItem(entry.key, entry.value);
+              return CityCriteriaBar(
+                  cityCriteria: entry.key,
+                  metric: entry.value
+              );
             }),
 
           ],
         ),
       ),
     );
-  }
-
-  // Ranking Item with progress bar
-  Widget _buildRankingItem(CityCriteria criteria, double metric) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              criteria.name,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: LinearProgressIndicator(
-              value: metric / 10,
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                _getRankingColor(metric),
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-          Text(
-            '$metric/10',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Color for ranking based on score
-  Color _getRankingColor(double metric) {
-    if (metric >= 8) return Colors.green;
-    if (metric >= 5) return Colors.orange;
-    return Colors.red;
   }
 
   Widget _buildTravelDetailsCard() {
@@ -176,7 +137,7 @@ class CityDetailsScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'The following is a list of all transport modes we have between:',
+              'The following is a list of all transport modes we have between: ${lastCitySelected.getName} -> ${selectedCity.getName}. Note that the duration and cost listed is an average for all routes of that transport mode we have.',
               style: TextStyle(
                 fontSize: 15,
               ),

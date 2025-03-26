@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/screens/city_details/city_details_screen.dart';
-import 'package:nomad/widgets/city_criteria_badge.dart';
+import 'package:nomad/screens/select_city/widgets/city_criteria_badge.dart';
 
 import '../constants.dart';
 import '../domain/city_criteria.dart';
@@ -62,11 +62,13 @@ class CityCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(selectedCity.getName, style: TextStyle(fontWeight: kFontWeight, fontSize: 18),),
-                          Row(children: [
-                            ...CityCriteria.values.map((criteria) {
-                              return CityCriteriaBadge(cityCriteria: criteria, metric: selectedCity.getCityRatings[criteria]!, screen: "SelectCity");
-                            }),
-                          ],),
+                          if (selectedCity.getCityRatings.isNotEmpty)
+                            Row(children: [
+                              ...CityCriteria.values.map((criteria) {
+                                return CityCriteriaBadge(cityCriteria: criteria, metric: selectedCity.getCityRatings[criteria]!, screen: "SelectCity");
+                              }),
+                            ],),
+
                           Text(selectedCity.getShortDescription, ),
 
                         ],

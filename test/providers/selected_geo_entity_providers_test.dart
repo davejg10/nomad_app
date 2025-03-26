@@ -6,7 +6,7 @@ import 'package:nomad/domain/neo4j_country.dart';
 import 'package:nomad/domain/geo_entity.dart';
 import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/transport_type.dart';
-import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/providers/itinerary_list_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 
 import '../riverpod_provider_container.dart';
