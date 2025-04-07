@@ -1,6 +1,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nomad/domain/country.dart';
+import 'package:nomad/domain/neo4j_country.dart';
 
 import '../test_data.dart';
 

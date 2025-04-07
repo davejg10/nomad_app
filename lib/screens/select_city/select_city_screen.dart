@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nomad/custom_log_printer.dart';
+import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
+import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
 import 'package:nomad/screens/select_city/widgets/city_searchbar.dart';
 import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet.dart';
 import 'package:nomad/screens/select_city/widgets/select_city_app_bar.dart';
 import 'package:nomad/widgets/error_snackbar.dart';
-import 'package:nomad/widgets/route_total_metric.dart';
 
 import '../../constants.dart';
-import '../../domain/route_metric.dart';
 import '../../widgets/screen_scaffold.dart';
+import '../../widgets/travel_preference_slider.dart';
 import 'providers/providers.dart';
 import 'widgets/city_list_view.dart';
-import '../../widgets/route_aggregate_card.dart';
-import 'widgets/route_summary.dart';
 
 class SelectCityScreen extends ConsumerWidget  {
   static Logger _logger = Logger(printer: CustomLogPrinter('select_city_screen.dart'));
@@ -46,19 +45,24 @@ class SelectCityScreen extends ConsumerWidget  {
                     child: CitySearchbar()
                 ),
                 Expanded(child: CityListView(),),
+                SizedBox(height: 70,)
               ],
             ),
           ),
           ScrollableBottomSheet(
             sheetContent:  [
-              RouteSummary(),
-              RouteAggregateCard(
-                boxConstraints: BoxConstraints(maxHeight: 100, maxWidth: 125),
-                columnChildren: [
-                  ...RouteMetric.values.map((metric) {
-                    return RouteTotalMetric(metric: metric);
-                  })
-                ],
+              TravelPreferenceSlider(travelPreference: CityCriteria.FOOD.name),
+              Divider(height: 10,),
+              TravelPreferenceSlider(travelPreference: CityCriteria.SAILING.name),
+              Divider(height: 10,),
+              TravelPreferenceSlider(travelPreference: CityCriteria.NIGHTLIFE.name),
+              Divider(height: 10,),
+              const TravelPreferenceSlider(travelPreference: 'COST'),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(targetCitiesGivenCountryProvider.notifier).fetchTargetCities(ref.read(lastCitySelectedProvider)!);
+                },
+                child: const Text('Apply changes'),
               )
             ],
           )

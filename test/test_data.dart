@@ -1,7 +1,7 @@
-import 'package:nomad/domain/city.dart';
+import 'package:nomad/domain/neo4j_city.dart';
 import 'package:nomad/domain/city_criteria.dart';
-import 'package:nomad/domain/country.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j_country.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/transport_type.dart';
 
 class TestData {
@@ -33,7 +33,7 @@ class TestData {
   static Country country = Country('countryid', 'countryname', 'countrydescription');
   static City targetCity = City('targetid', 'targetname', 'targetdescription', targetCityMetrics, [], country);
 
-  static RouteEntity routeToTarget = RouteEntity('routeid', double.parse(popularity.toStringAsFixed(2)), double.parse(time.toStringAsFixed(2)), cost, TransportType.BUS, targetCity);
+  static Neo4jRoute routeToTarget = Neo4jRoute('routeid', double.parse(popularity.toStringAsFixed(2)), double.parse(time.toStringAsFixed(2)), cost, TransportType.BUS, targetCity);
   static City city = City('cityid', 'cityname', 'citydescription', cityMetrics, [routeToTarget], country);
 
   static Map<String, dynamic> countryJson = {

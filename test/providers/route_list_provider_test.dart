@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nomad/domain/city.dart';
+import 'package:nomad/domain/neo4j_city.dart';
 import 'package:nomad/domain/city_criteria.dart';
-import 'package:nomad/domain/country.dart';
-import 'package:nomad/domain/route_entity.dart';
+import 'package:nomad/domain/neo4j_country.dart';
+import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/route_metric.dart';
 import 'package:nomad/domain/transport_type.dart';
-import 'package:nomad/providers/route_list_provider.dart';
+import 'package:nomad/providers/itinerary_list_provider.dart';
 
 import '../riverpod_provider_container.dart';
 import '../riverpod_state_listeners.dart';
@@ -27,15 +27,15 @@ void main() {
     Country country0 = Country("0", 'Country0', 'Some country');
     City cityA = City("", "CityA", "", cityMetrics, [], country0);
     City cityB = City("", "CityB", "", cityMetrics, [], country0);
-    RouteEntity aToB = RouteEntity("", 4.0, 3.2, 16.0, TransportType.BUS, cityB);
-    RouteEntity aToBFlight = RouteEntity("", 4.0, 3.2, 30.0, TransportType.FLIGHT, cityB);
-    RouteEntity bToA = RouteEntity("", 3.0, 4.2, 17.0, TransportType.BUS, cityA);
+    Neo4jRoute aToB = Neo4jRoute("", 4.0, 3.2, 16.0, TransportType.BUS, cityB);
+    Neo4jRoute aToBFlight = Neo4jRoute("", 4.0, 3.2, 30.0, TransportType.FLIGHT, cityB);
+    Neo4jRoute bToA = Neo4jRoute("", 3.0, 4.2, 17.0, TransportType.BUS, cityA);
 
     setUp(() {
       // Creates a container containing all of our providers
       container = createContainer();
 
-      listener = StateListener<List<RouteEntity>>();
+      listener = StateListener<List<Neo4jRoute>>();
 
       container.listen(
         routeListProvider,
@@ -47,7 +47,7 @@ void main() {
 
     test('state should be initialized to empty list', () {
       container.read(routeListProvider);
-      List<List<RouteEntity>> expectedStates = [
+      List<List<Neo4jRoute>> expectedStates = [
         []
       ];
       listener.verifyInOrder(expectedStates);

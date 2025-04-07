@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/country.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
 import 'package:nomad/providers/backend_repository_provider.dart';
 import 'package:nomad/providers/generic_queried_list_providers.dart';
 
 import 'all_origin_cities_provider.dart';
 
-final allCountriesProvider = FutureProvider<Set<Country>>((ref) async {
-  return ref.read(backendRepositoryProvider).getCountries();
+final allCountriesProvider = FutureProvider<Set<Neo4jCountry>>((ref) async {
+  return ref.read(backendRepositoryProvider).findAll();
 });
 
 // For the `ORIGIN_COUNTRY` dropdown

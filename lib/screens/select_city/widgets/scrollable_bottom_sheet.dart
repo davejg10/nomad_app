@@ -7,7 +7,7 @@ class ScrollableBottomSheet extends StatefulWidget {
     super.key,
     required this.sheetContent,
     this.minSheetPosition = 0.08,
-    this.maxSheetPosition = 0.3,
+    this.maxSheetPosition = 0.6,
     this.dragSensitivity = 600
   });
 

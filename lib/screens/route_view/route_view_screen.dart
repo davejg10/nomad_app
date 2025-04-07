@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nomad/domain/neo4j/neo4j_country.dart';
+import 'package:nomad/providers/itinerary_list_provider.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
+import 'package:nomad/screens/map_view/map_view_screen.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_origin_sliver.dart';
 import 'package:nomad/widgets/screen_scaffold.dart';
 import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
 import '../../constants.dart';
-import '../../domain/country.dart';
 import 'widgets/itinerary_destination_slivers.dart';
 
 class RouteViewScreen extends ConsumerWidget {
@@ -14,7 +16,7 @@ class RouteViewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Country country = ref.read(destinationCountrySelectedProvider)!;
+    Neo4jCountry country = ref.read(destinationCountrySelectedProvider)!;
     return ScreenScaffold(
       appBar: AppBar(
         title: Text(
@@ -24,6 +26,18 @@ class RouteViewScreen extends ConsumerWidget {
               fontWeight: kFontWeight
           ),
         ),
+        actions: [
+            IconButton(
+            icon: Icon(Icons.public),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MapViewScreen(originCity: ref.read(originCitySelectedProvider)!, itinerary: ref.read(itineraryListProvider)),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       child: Column(
         children: [

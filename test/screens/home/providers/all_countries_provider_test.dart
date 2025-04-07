@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nomad/data/backend_respository.dart';
-import 'package:nomad/domain/country.dart';
+import 'package:nomad/domain/neo4j_country.dart';
 import 'package:nomad/providers/backend_repository_provider.dart';
 import 'package:nomad/screens/home/providers/providers.dart';
 

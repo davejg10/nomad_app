@@ -5,6 +5,8 @@ import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/home/home_screen.dart';
 import 'package:nomad/screens/home/widgets/dropdown_search_anchor.dart';
 
+import '../../../domain/geo_entity.dart';
+import '../../../providers/generic_queried_list_providers.dart';
 import '../providers/providers.dart';
 
 class DropdownSearch extends ConsumerStatefulWidget {
@@ -23,9 +25,20 @@ class _DropdownSearchState extends ConsumerState<DropdownSearch> {
   final FocusNode _focusNode = FocusNode();
   final SearchController _searchController = SearchController();
 
+  late AsyncNotifierFamilyProvider<GenericQueriedListNotifier<GeoEntity>, Set<GeoEntity>, FutureProvider<Set<GeoEntity>>> queriedListProvider;
+  late NotifierProvider<GeoEntitySelectedTemplate<GeoEntity>, GeoEntity?> selectedDestinationProvider;
   @override
   void initState() {
     super.initState();
+    bool isOriginCountry = widget.dropdownIdentifier == DropdownIdentifier.ORIGIN_COUNTRY;
+    bool isDestinationCountry = widget.dropdownIdentifier == DropdownIdentifier.DESTINATION_COUNTRY;
+
+    queriedListProvider = isOriginCountry ? originCountryQueriedListProvider : isDestinationCountry ? destinationCountryQueriedListProvider : originCityQueriedListProvider;
+    selectedDestinationProvider = isOriginCountry ? originCountrySelectedProvider : isDestinationCountry ? destinationCountrySelectedProvider : originCitySelectedProvider;
+
+    if (ref.read(selectedDestinationProvider) != null) {
+      _searchController.text = ref.read(selectedDestinationProvider)!.getName;
+    }
   }
 
   @override
@@ -36,11 +49,6 @@ class _DropdownSearchState extends ConsumerState<DropdownSearch> {
 
   @override
   Widget build(BuildContext context) {
-    bool isOriginCountry = widget.dropdownIdentifier == DropdownIdentifier.ORIGIN_COUNTRY;
-    bool isDestinationCountry = widget.dropdownIdentifier == DropdownIdentifier.DESTINATION_COUNTRY;
-
-    final queriedListProvider = isOriginCountry ? originCountryQueriedListProvider : isDestinationCountry ? destinationCountryQueriedListProvider : originCityQueriedListProvider;
-    final selectedDestinationProvider = isOriginCountry ? originCountrySelectedProvider : isDestinationCountry ? destinationCountrySelectedProvider : originCitySelectedProvider;
 
     return Padding(
       padding: kSearchBarPadding,
