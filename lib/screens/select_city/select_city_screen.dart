@@ -45,6 +45,7 @@ class SelectCityScreen extends ConsumerWidget  {
                     child: CitySearchbar()
                 ),
                 Expanded(child: CityListView(),),
+                SizedBox(height: 70,)
               ],
             ),
           ),

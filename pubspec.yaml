@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.20.2
   url_launcher: ^6.3.1
   iso_duration_parser: ^1.1.1
+  mapbox_maps_flutter: ^2.6.2
 
 dev_dependencies:
   flutter_test:

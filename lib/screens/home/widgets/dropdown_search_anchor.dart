@@ -48,22 +48,14 @@ class DropdownSearchAnchor extends ConsumerWidget {
       borderRadius: BorderRadius.circular(10), // Rounded corners
   );
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isCityDropdown = dropdownIdentifier == DropdownIdentifier.ORIGIN_CITY;
-    GeoEntity? originCountrySelected = ref.watch(originCountrySelectedProvider);
-    if (isCityDropdown) {
-      // The actual state is reset in `originCountrySelectedProvider` but this clears the originCity populated field
-      searchController.text = '';
-    }
 
     return SearchAnchor(
       viewConstraints: BoxConstraints(maxHeight: 300),
       viewShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // Rounded corners
       ),
-      enabled: isCityDropdown && originCountrySelected == null ? false : true,
       viewLeading: Text(getLeadingText()),
       viewTrailing: [
         IconButton(
@@ -99,7 +91,7 @@ class DropdownSearchAnchor extends ConsumerWidget {
           );
         }
       },
-      isFullScreen: false,
+      isFullScreen: true,
       searchController: searchController,
       viewOnChanged: (userInput) {
         ref.read(queriedListProvider.notifier).filter(userInput);
@@ -131,6 +123,7 @@ class DropdownSearchAnchor extends ConsumerWidget {
             }
           },
           onTap: () {
+            searchController.openView();
 
           },
         );

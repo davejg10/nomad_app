@@ -33,7 +33,7 @@ class BackendRepository {
         }
         return allCountries;
       default:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception("There is an issue completing that request right now.");
     }
   }
@@ -44,7 +44,7 @@ class BackendRepository {
 
     switch (response.statusCode) {
       case 200:
-        _logger.i('${response.statusCode} - [Reponse]: Of some cities');
+        _logger.i('${response.statusCode} - [Response]: Of some cities');
         List<dynamic> fetchedCities = jsonDecode(response.body);
         Set<Neo4jCity> allCities = {};
         for (var city in fetchedCities) {
@@ -52,10 +52,10 @@ class BackendRepository {
         }
         return allCities;
       case 404:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception(response.body);
       default:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception("There is an issue completing that request right now.");
     }
   }
@@ -72,7 +72,7 @@ class BackendRepository {
 
     switch (response.statusCode) {
       case 200:
-        _logger.i('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.i('${response.statusCode} - [Response]: ${response.body}');
         List<dynamic> neo4jRoutes = jsonDecode(response.body);
         Set<Neo4jRoute> deserializedRoutes = {};
         for (Map<String, dynamic> route in neo4jRoutes) {
@@ -80,10 +80,10 @@ class BackendRepository {
         }
         return deserializedRoutes;
       case 404:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception(response.body);
       default:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception("There is an issue completing that request right now.");
     }
   }
@@ -104,7 +104,7 @@ class BackendRepository {
 
     switch (response.statusCode) {
       case 200:
-        _logger.i('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.i('${response.statusCode} - [Response]: ${response.body}');
         List<dynamic> routeInstances = jsonDecode(response.body);
         Set<RouteInstance> deserializedRouteInstances = {};
         for (Map<String, dynamic> routeInstance in routeInstances) {
@@ -112,8 +112,8 @@ class BackendRepository {
         }
         return deserializedRouteInstances;
       case 202:
-        _logger.w('${response.statusCode} - [Reponse]: ${response.body}');
-        int delay = (5 * 1000) * (1 << retryCount); // Exponential Backoff
+        _logger.w('${response.statusCode} - [Response]: ${response.body}');
+        int delay = (5 * 1000); // Exponential Backoff
 
         _logger.i("⏳ Data not ready, retrying in ${delay / 1000} seconds...");
         await Future.delayed(Duration(milliseconds: delay));
@@ -126,10 +126,10 @@ class BackendRepository {
           throw Exception('Attempted to retry for RouteInstances but timed-out');
         }
       case 404:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception(response.body);
       default:
-        _logger.e('${response.statusCode} - [Reponse]: ${response.body}');
+        _logger.e('${response.statusCode} - [Response]: ${response.body}');
         throw Exception("There is an issue completing that request right now.");
     }
   }

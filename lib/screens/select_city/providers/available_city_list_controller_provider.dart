@@ -16,7 +16,6 @@ final availableCityListControllerProvider = FutureProvider<Set<Neo4jCity>>((ref)
   Set<Neo4jRoute> routes = await ref.watch(targetCitiesGivenCountryProvider.future);
   Set<Neo4jCity> targetCities = {};
   for (Neo4jRoute route in routes) {
-    _logger.i("Adding ${route.getTargetCity} to Set of target Cities");
     targetCities.add(route.getTargetCity);
   }
 

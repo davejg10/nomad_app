@@ -11,6 +11,7 @@ import 'neo4j_route.dart';
 
 class Neo4jCity implements GeoEntity {
   static Logger _logger = Logger(printer: CustomLogPrinter('neo4j_city.dart'));
+  static String CENTRAL_IMAGES_CDN_ENDPOINT = 'https://st-glb-uks-devopsutils.azureedge.net/images/';
 
   final IconData _icon = Icons.location_city;
   final String _id;
@@ -29,7 +30,7 @@ class Neo4jCity implements GeoEntity {
       String cityId = json['id'];
       String name = json['name'];
       String shortDescription = json['shortDescription'];
-      String primaryBlobUrl = json['primaryBlobUrl'];
+      String primaryBlobUrl = CENTRAL_IMAGES_CDN_ENDPOINT + json['primaryBlobUrl'];
       Map<String, dynamic> coordinatesJson = json['coordinate'];
       GeoPoint3D coordinates = new GeoPoint3D(coordinatesJson['x'], coordinatesJson['y'], coordinatesJson['z']);
       List<dynamic> cityMetrics = json['cityMetrics'];

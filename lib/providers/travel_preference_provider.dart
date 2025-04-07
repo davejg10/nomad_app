@@ -17,16 +17,14 @@ class TravelPreferenceNotifier extends FamilyNotifier<int, String> {
   @override
   int build(String preferenceType) {
     ref.keepAlive();
-    int startingValue;
     minValue = 1;
-    _logger.e(preferenceType);
     if (CityCriteria.valuesAsStringSet().contains(preferenceType.toUpperCase())) {
       maxValue = 5;
     } else {
       maxValue = 3;
     }
     midValue = (maxValue / 2).ceil();
-    startingValue = midValue;
+    int startingValue = midValue;
     return startingValue;
   }
 

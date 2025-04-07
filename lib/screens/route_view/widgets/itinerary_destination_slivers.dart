@@ -23,7 +23,6 @@ class ItineraryDestinationSlivers extends ConsumerWidget {
         itemBuilder: (context, index) {
           Neo4jCity lastCity =  index == 0 ? originCity : itineraryList[index - 1];
           Neo4jCity city = itineraryList[index];
-          _logger.w("lastCity routes size: ${lastCity.getRoutes.length}");
 
           return Padding(
             padding: kCardPadding,
