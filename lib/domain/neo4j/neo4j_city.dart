@@ -23,10 +23,30 @@ class Neo4jCity implements GeoEntity {
   final Set<Neo4jRoute> _routes;
   final Neo4jCountry _country;
 
-  Neo4jCity(this._id, this._name, this._shortDescription, this._primaryBlobUrl, this._coordinates, this._cityMetrics, this._routes, this._country);
+  // These are computed from the Query on the backend and not actually stored in the java Neo4jRoute entity
+  final double _score;
+
+  Neo4jCity(this._id, this._name, this._shortDescription, this._primaryBlobUrl, this._coordinates, this._cityMetrics, this._routes, this._country, this._score);
+
+  factory Neo4jCity.fromCityInfoDTO(Map<String, dynamic> json) {
+    Neo4jCity neo4jCity = Neo4jCity.fromJson(json['city']);
+    double score = json['score'];
+    neo4jCity = Neo4jCity(
+        neo4jCity.getId,
+        neo4jCity.getName,
+        neo4jCity.getShortDescription,
+        neo4jCity.getPrimaryBlobUrl,
+        neo4jCity.getCoordinates,
+        neo4jCity.getCityRatings,
+        neo4jCity.getRoutes,
+        neo4jCity.getCountry,
+        score);
+    return neo4jCity;
+  }
 
   factory Neo4jCity.literalFromJson(Map<String, dynamic> json) {
     try {
+      _logger.w("The json: $json");
       String cityId = json['id'];
       String name = json['name'];
       String shortDescription = json['shortDescription'];
@@ -43,7 +63,7 @@ class Neo4jCity implements GeoEntity {
 
       Map<String, dynamic> countryJson = json['country'];
       Neo4jCountry country = Neo4jCountry.fromJson(countryJson);
-      return Neo4jCity(cityId, name, shortDescription, primaryBlobUrl, coordinates, _cityMetrics, {}, country);
+      return Neo4jCity(cityId, name, shortDescription, primaryBlobUrl, coordinates, _cityMetrics, {}, country, 0);
 
     } catch (e, stackTrace) {
       _logger.w("An unexpected exception occured whilst trying to deserialize the Json in Neo4jCity.literalFromJson ${e.toString()}", error: e, stackTrace: stackTrace);
@@ -59,11 +79,11 @@ class Neo4jCity implements GeoEntity {
     routeList.forEach((route) {
       routes.add(Neo4jRoute.fromJson(route));
     });
-    return Neo4jCity(literalFromJson.getId, literalFromJson.getName, literalFromJson._shortDescription, literalFromJson._primaryBlobUrl, literalFromJson._coordinates, literalFromJson.getCityRatings, routes, literalFromJson.getCountry);
+    return Neo4jCity(literalFromJson.getId, literalFromJson.getName, literalFromJson._shortDescription, literalFromJson._primaryBlobUrl, literalFromJson._coordinates, literalFromJson.getCityRatings, routes, literalFromJson.getCountry, 0);
   }
 
   Neo4jCity withRoutes(Set<Neo4jRoute> routes) {
-    return new Neo4jCity(_id, _name, _shortDescription, _primaryBlobUrl, _coordinates, _cityMetrics, routes, _country);
+    return new Neo4jCity(_id, _name, _shortDescription, _primaryBlobUrl, _coordinates, _cityMetrics, routes, _country, 0);
   }
 
   Set<Neo4jRoute> fetchRoutesForGivenCity(String cityId) {
@@ -79,7 +99,7 @@ class Neo4jCity implements GeoEntity {
   Map<CityCriteria, double> get getCityRatings => _cityMetrics;
   Set<Neo4jRoute> get getRoutes => _routes;
   Neo4jCountry get getCountry => _country;
-
+  double get getScore => _score;
 
   @override
   bool operator ==(Object other) =>

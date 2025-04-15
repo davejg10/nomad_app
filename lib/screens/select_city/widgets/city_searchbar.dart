@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
-import 'package:nomad/screens/select_city/providers/providers.dart';
-import 'package:nomad/widgets/error_snackbar.dart';
+import 'package:nomad/screens/select_city/providers/available_city_queried_list_provider.dart';
+import 'package:nomad/widgets/generic/error_snackbar.dart';
 
 class CitySearchbar extends ConsumerStatefulWidget {
   const CitySearchbar({super.key});
@@ -29,7 +29,7 @@ class _CitySearchbarState extends ConsumerState<CitySearchbar> {
 
   void closeSearchBar() {
     _searchController.text = '';
-    ref.read(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR).notifier).close();
+    ref.read(widgetVisibilityProvider(WidgetVisibilityProviderIdentifier.SELECT_CITY_SEARCHBAR).notifier).close();
   }
 
   @override

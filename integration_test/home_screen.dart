@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:nomad/data/backend_respository.dart';
+import 'package:nomad/data/city_repository.dart';
 import 'package:nomad/domain/neo4j_country.dart';
 import 'package:nomad/main.dart';
 import 'package:nomad/screens/home_screen/home_screen.dart';

@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nomad/data/backend_respository.dart';
+import 'package:nomad/data/city_repository.dart';
 import 'package:nomad/domain/neo4j_city.dart';
 import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/domain/neo4j_country.dart';
 import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/domain/transport_type.dart';
-import 'package:nomad/providers/backend_repository_provider.dart';
+import 'package:nomad/providers/repository_providers.dart';
 import 'package:nomad/providers/selected_geo_entity_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_list_controller_provider.dart';
 import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';

@@ -28,7 +28,7 @@ class MapboxUtils {
     pointAnnotationManager.create(pointAnnotationOptions);
   }
 
-  static Future<void> createPolyline(MapboxMap mapboxMap, { required Neo4jCity sourceCity, required Neo4jCity targetCity}) async {
+  static Future<void> createPolyline(MapboxMap mapboxMap, { required Neo4jCity sourceCity, required Neo4jCity targetCity, required Color routeColor}) async {
 
     PolylineAnnotationManager polylineAnnotationManager = await mapboxMap.annotations.createPolylineAnnotationManager();
 
@@ -41,6 +41,7 @@ class MapboxUtils {
     // Step 3: Add the polyline to the map
     polylineAnnotationManager.create(PolylineAnnotationOptions(
       geometry: LineString.fromPoints(points: polylineCoordinates),
+      lineColor: routeColor.value
       // lineWidth: 4.0,
       // lineOpacity: 0.8,
     ));

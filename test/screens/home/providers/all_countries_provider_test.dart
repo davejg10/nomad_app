@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nomad/data/backend_respository.dart';
+import 'package:nomad/data/city_repository.dart';
 import 'package:nomad/domain/neo4j_country.dart';
-import 'package:nomad/providers/backend_repository_provider.dart';
-import 'package:nomad/screens/home/providers/providers.dart';
+import 'package:nomad/providers/repository_providers.dart';
+import 'package:nomad/screens/home/providers/all_countries_provider.dart';
 
 import '../../../riverpod_provider_container.dart';
 import '../../../riverpod_state_listeners.dart';

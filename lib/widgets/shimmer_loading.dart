@@ -4,18 +4,22 @@ import 'package:shimmer/shimmer.dart';
 class ShimmerLoading extends StatelessWidget {
   ShimmerLoading({
     super.key,
-    required this.child
+    required this.child,
+    this.baseColor,
+    this.highlightColor
   });
 
   Widget child;
+  Color? baseColor;
+  Color? highlightColor;
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: baseColor ?? Colors.grey.shade300,
+        highlightColor: highlightColor ?? Colors.grey.shade100,
         enabled: true,
-        child: this.child
+        child: child
     );
   }
 }

@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nomad/custom_log_printer.dart';
-import 'package:nomad/domain/city_criteria.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
-import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
+import 'package:nomad/screens/select_city/widgets/city_card/city_list_view_sliver.dart';
 import 'package:nomad/screens/select_city/widgets/city_searchbar.dart';
-import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet.dart';
+import 'package:nomad/screens/select_city/widgets/last_city_tile.dart';
+import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet/scrollable_bottom_sheet.dart';
+import 'package:nomad/screens/select_city/widgets/scrollable_bottom_sheet/travel_preferences_form.dart';
 import 'package:nomad/screens/select_city/widgets/select_city_app_bar.dart';
-import 'package:nomad/widgets/error_snackbar.dart';
+import 'package:nomad/widgets/generic/error_snackbar.dart';
 
 import '../../constants.dart';
-import '../../widgets/screen_scaffold.dart';
-import '../../widgets/travel_preference_slider.dart';
-import 'providers/providers.dart';
-import 'widgets/city_list_view.dart';
+import '../../widgets/generic/screen_scaffold.dart';
+import 'providers/available_city_queried_list_provider.dart';
 
 class SelectCityScreen extends ConsumerWidget  {
   static Logger _logger = Logger(printer: CustomLogPrinter('select_city_screen.dart'));
@@ -29,10 +28,10 @@ class SelectCityScreen extends ConsumerWidget  {
       },
     );
 
-    bool searchBarOpen = ref.watch(searchWidgetVisibility(SearchWidgetIdentifier.SELECT_CITY_SEARCHBAR));
+    bool searchBarOpen = ref.watch(widgetVisibilityProvider(WidgetVisibilityProviderIdentifier.SELECT_CITY_SEARCHBAR));
     return ScreenScaffold(
-      padding: EdgeInsets.zero, //Allows ScrollSheet to be full width of screen
-      appBar: SelectCityAppBar(),
+      padding: EdgeInsets.zero,
+      appBar: const SelectCityAppBar(),
       child: Stack(
         children: [
           Padding(
@@ -40,35 +39,33 @@ class SelectCityScreen extends ConsumerWidget  {
             child: Column(
               children: [
                 if (searchBarOpen)
-                    Padding(
+                  const Padding(
                     padding: kSearchBarPadding,
                     child: CitySearchbar()
+                  ),
+                const Expanded(
+                  child: CustomScrollView(
+                    physics: BouncingScrollPhysics(),
+                    slivers: [
+                      LastCityTile(),
+                      CityListView(),
+                      SliverToBoxAdapter(child: SizedBox(height: 70,))
+                    ],
+                  )
                 ),
-                Expanded(child: CityListView(),),
-                SizedBox(height: 70,)
+                //
               ],
             ),
           ),
           ScrollableBottomSheet(
             sheetContent:  [
-              TravelPreferenceSlider(travelPreference: CityCriteria.FOOD.name),
-              Divider(height: 10,),
-              TravelPreferenceSlider(travelPreference: CityCriteria.SAILING.name),
-              Divider(height: 10,),
-              TravelPreferenceSlider(travelPreference: CityCriteria.NIGHTLIFE.name),
-              Divider(height: 10,),
-              const TravelPreferenceSlider(travelPreference: 'COST'),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(targetCitiesGivenCountryProvider.notifier).fetchTargetCities(ref.read(lastCitySelectedProvider)!);
-                },
-                child: const Text('Apply changes'),
-              )
+              TravelPreferencesForm()
             ],
           )
         ],
       )
     );
   }
+
 }
 

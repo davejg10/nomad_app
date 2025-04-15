@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum SearchWidgetIdentifier { SELECT_CITY_SEARCHBAR }
+enum WidgetVisibilityProviderIdentifier { SELECT_CITY_SEARCHBAR, SELECT_CITY_LAST_CITY_TILE }
 
-final searchWidgetVisibility = NotifierProvider.family<SearchWidgetVisibility, bool, SearchWidgetIdentifier>(SearchWidgetVisibility.new);
+final widgetVisibilityProvider = NotifierProvider.family<WidgetVisibilityNotifier, bool, WidgetVisibilityProviderIdentifier>(WidgetVisibilityNotifier.new);
 
-class SearchWidgetVisibility extends FamilyNotifier<bool, SearchWidgetIdentifier> {
+class WidgetVisibilityNotifier extends FamilyNotifier<bool, WidgetVisibilityProviderIdentifier> {
 
   @override
-  bool build(SearchWidgetIdentifier type) {
+  bool build(WidgetVisibilityProviderIdentifier type) {
     // passing param allows us to have 4 different instances of this provider
     return false;
   }
@@ -18,6 +18,10 @@ class SearchWidgetVisibility extends FamilyNotifier<bool, SearchWidgetIdentifier
 
   void close() {
     state = false;
+  }
+
+  void toggle() {
+    state = !state;
   }
 
   bool isOpen() {

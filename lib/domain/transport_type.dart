@@ -6,6 +6,8 @@ enum TransportType {
   // Helper method to get icon for transport mode
   IconData getIcon() {
     switch (this) {
+      case TransportType.ALL:
+        return Icons.apps;
       case TransportType.FLIGHT:
         return Icons.airplanemode_active;
       case TransportType.BUS:
@@ -37,6 +39,14 @@ enum TransportType {
       default:
         return Colors.grey;
     }
+  }
+
+  String getTabName() {
+    String enumName = this.name;
+    if (enumName.contains('_')) {
+      return enumName.replaceAll('_', '+');
+    }
+    return enumName;
   }
 
   String getName() {

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nomad/domain/neo4j/neo4j_route.dart';
+import 'package:nomad/providers/itinerary_list_provider.dart';
+import 'package:nomad/screens/home/providers/origin_cities_provider.dart';
 import 'package:nomad/screens/select_city/providers/target_cities_given_country_provider.dart';
 
 import '../../../custom_log_printer.dart';
@@ -12,13 +14,23 @@ Logger _logger = Logger(printer: CustomLogPrinter('available_city_list_controlle
 // Eventually there will be multiple notifiers to fetch next cities based on various criteria e.g time, metric etc
 // This provider will be a wrapper around all of them containing the logic on when to call which to return the set of next cities
 final availableCityListControllerProvider = FutureProvider<Set<Neo4jCity>>((ref) async {
-
+  _logger.e('In the available provider');
   Set<Neo4jRoute> routes = await ref.watch(targetCitiesGivenCountryProvider.future);
+  Set<Neo4jCity> originCities = await ref.watch(originCitiesProvider.future);
+  if (ref.read(itineraryListProvider).isEmpty) {
+    _logger.e('itineraryListProvider is empty, returning originCitiesProvider.future');
+
+    return originCities;
+  }
   Set<Neo4jCity> targetCities = {};
   for (Neo4jRoute route in routes) {
     targetCities.add(route.getTargetCity);
   }
+  _logger.e('itineraryListProvider is NOT empty, returning nextTargetCitiesProvider.future cities');
+
 
   return targetCities;
+
+
 });
 

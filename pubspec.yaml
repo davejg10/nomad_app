@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^6.3.1
   iso_duration_parser: ^1.1.1
   mapbox_maps_flutter: ^2.6.2
+  multi_dropdown: ^3.0.1
+  flex_color_scheme: ^8.1.1
 
 dev_dependencies:
   flutter_test:

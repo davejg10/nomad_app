@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:nomad/custom_theme.dart';
 import 'package:nomad/screens/home/home_screen.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HomeScreen(),
+      theme: CustomTheme.light
     );
   }
 }
