@@ -6,10 +6,10 @@ import 'package:nomad/widgets/city_criteria_bar.dart';
 class CityCriteriaRankingsCard extends StatelessWidget {
   const CityCriteriaRankingsCard({
     super.key,
-    required this.selectedCity
+    required this.cityCriteriaBars
   });
 
-  final Neo4jCity selectedCity;
+  final List<CityCriteriaBar> cityCriteriaBars;
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +30,7 @@ class CityCriteriaRankingsCard extends StatelessWidget {
             ),
             Divider(),
             SizedBox(height: 10),
-            // Sailing, Nightlife, Food Rankings
-            ...selectedCity.getCityRatings.entries.map((entry) {
-              return CityCriteriaBar(
-                  cityCriteria: entry.key,
-                  metric: entry.value
-              );
-            }),
-
+            ...cityCriteriaBars
           ],
         ),
       ),

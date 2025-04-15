@@ -4,6 +4,7 @@ import 'package:nomad/screens/city_details/widgets/city_available_routes_card.da
 import 'package:nomad/screens/city_details/widgets/city_criteria_rankings_card.dart';
 import 'package:nomad/screens/city_details/widgets/city_description_card.dart';
 import 'package:nomad/screens/city_details/widgets/city_sliver_app_bar.dart';
+import 'package:nomad/widgets/city_criteria_bar.dart';
 import 'package:nomad/widgets/generic/screen_scaffold.dart';
 
 import '../../domain/neo4j/neo4j_city.dart';
@@ -37,7 +38,12 @@ class CityDetailsScreen extends StatelessWidget {
                   selectedCity: selectedCity,
                 ),
                 CityCriteriaRankingsCard(
-                  selectedCity: selectedCity,
+                  cityCriteriaBars: selectedCity.getCityRatings.entries.map((entry) {
+                    return CityCriteriaBar(
+                     cityCriteria: entry.key,
+                      metric: entry.value
+                    );
+                  }).toList(),
                 ),
                 if (!isOriginCity)
                   CityAvailableRoutesCard(

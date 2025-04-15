@@ -1,78 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nomad/domain/neo4j/neo4j_country.dart';
-import 'package:nomad/providers/itinerary_list_provider.dart';
-import 'package:nomad/screens/home/providers/selected_countries_provider.dart';
-import 'package:nomad/screens/map_view/map_view_screen.dart';
-import 'package:nomad/screens/route_view/providers/route_list_provider.dart';
+import 'package:nomad/screens/route_view/widgets/tabs/route_calender_view.dart';
+import 'package:nomad/screens/route_view/widgets/tabs/route_itinerary_view.dart';
+import 'package:nomad/screens/route_view/widgets/tabs/route_totals_view.dart';
+import 'package:nomad/screens/route_view/widgets/route_view_app_bar.dart';
 import 'package:nomad/widgets/generic/screen_scaffold.dart';
-import 'package:nomad/screens/route_view/widgets/itinerary_totals_bar.dart';
 
-import '../../constants.dart';
-import 'widgets/itinerary_destination_slivers.dart';
 
-class RouteViewScreen extends ConsumerWidget {
+class RouteViewScreen extends StatefulWidget {
   const RouteViewScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Set<Neo4jCountry> selectedCountries = ref.read(selectedCountryListProvider);
-    return ScreenScaffold(
-      appBar: AppBar(
-        title: Text(
-          selectedCountries.map((country) => country.getName).join(','),
-          style: kProperBigHeader,
-        ),
-        actions: [
-            IconButton(
-            icon: Icon(Icons.public),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MapViewScreen(
-                    itinerary: ref.read(itineraryListProvider),
-                    routeList: ref.read(routeListProvider),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Container(
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
+  State<RouteViewScreen> createState() => _RouteViewScreenState();
+}
 
-                  // ItineraryTotalsBar(),
-                  // ItineraryDateSelector(),
-                  ItineraryDestinationSlivers(),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 30, bottom: 30.0),
-                      child: Center(
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.add,
-                            size: 40,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
+class _RouteViewScreenState extends State<RouteViewScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+  List<String> tabNames = ['Itinerary', 'Totals', 'Calender'];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+     _tabController = TabController(
+        length: tabNames.length,
+        vsync: this
+    );
+
+    return ScreenScaffold(
+      padding: EdgeInsets.zero,
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          RouteViewAppBar()
         ],
-      ),
+        body: Column(
+          children: [
+            Container(
+              color: Theme.of(context).colorScheme.primary,
+              child: buildTabBar()
+            ),
+            Expanded(child: buildTabView())
+          ],
+        ),
+      )
+    );
+  }
+
+  TabBar buildTabBar() {
+    return TabBar(
+      padding: EdgeInsets.zero,
+      controller: _tabController,
+      tabs: tabNames.map((name) =>
+          Container(
+            height: 30,
+            width: double.infinity,
+            color: Theme.of(context).colorScheme.primary,
+            child: Tab(
+              text: name,
+            ),
+          ),
+      ).toList(),
+    );
+  }
+
+  TabBarView buildTabView() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        RouteItineraryView(),
+        RouteTotalsView(),
+        RouteCalenderView()
+      ]
     );
   }
 }

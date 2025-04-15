@@ -8,7 +8,9 @@ class RouteInstanceCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: kCardMargin,
       elevation: kCardElevation,
+      shape: RoundedRectangleBorder(borderRadius: kCardBorderRadius),
       child: Padding(
         padding: kCardPadding,
         child: Column(

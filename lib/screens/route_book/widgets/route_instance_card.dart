@@ -53,7 +53,7 @@ class RouteInstanceCard extends ConsumerWidget {
         routeDeparture.day == routeArrival.day;
 
     return Padding(
-      padding: EdgeInsets.all(3),
+      padding: kSidePadding,
       child: Card(
         margin: kCardMargin,
         elevation: kCardElevation,
