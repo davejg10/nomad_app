@@ -16,12 +16,10 @@ class RouteViewDatePicker extends ConsumerWidget {
     super.key,
     required this.sourceCity,
     required this.targetCity,
-    required this.routes,
     required this.itineraryIndex
   });
   final Neo4jCity sourceCity;
   final Neo4jCity targetCity;
-  final Set<Neo4jRoute> routes;
   final int itineraryIndex;
 
   @override
@@ -37,13 +35,12 @@ class RouteViewDatePicker extends ConsumerWidget {
           ref.read(itineraryIndexProvider.notifier).state = itineraryIndex;
           DateTime? selectedDate = await showSingleDatePickerDialogue(ref: ref, context: context);
           if (selectedDate != null) {
-            ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, routes, selectedDate);
+            ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, selectedDate);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => RouteBookScreen(
                   sourceCity: sourceCity,
                   targetCity: targetCity,
-                  routes: routes,
                   searchDate: selectedDate
                 ),
               ),

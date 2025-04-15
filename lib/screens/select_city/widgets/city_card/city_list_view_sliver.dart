@@ -7,7 +7,7 @@ import 'package:nomad/domain/neo4j/neo4j_route.dart';
 import 'package:nomad/providers/itinerary_list_provider.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_queried_list_provider.dart';
-import 'package:nomad/widgets/city_card.dart';
+import 'package:nomad/widgets/city_card/city_card.dart';
 import 'package:nomad/widgets/generic/add_remove_dialogue.dart';
 
 import 'city_card_shimmer.dart';
@@ -33,7 +33,6 @@ class CityListView extends ConsumerWidget {
                   key: Key('cityCard${city.getName}'),
                   lastCitySelected: lastCitySelected,
                   selectedCity: city,
-                  routesToSelectedCity: isOriginCity ? {} : lastCitySelected.fetchRoutesForGivenCity(city.getId),
                   trailingButton: IconButton(
                     icon: const Icon(Symbols.add),
                     onPressed: () async {

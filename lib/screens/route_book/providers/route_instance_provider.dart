@@ -24,7 +24,8 @@ class RouteInstanceNotifier extends AsyncNotifier<Set<RouteInstance>> {
   }
 
   // SourceCity & TargetCity are required to make a ServiceBus request if we cant find RouteInstances existing in our Psql DB
-  Future<void> fetchRouteInstance(Neo4jCity sourceCity, Neo4jCity targetCity, Set<Neo4jRoute> routes, DateTime searchDate) async {
+  Future<void> fetchRouteInstance(Neo4jCity sourceCity, Neo4jCity targetCity, DateTime searchDate) async {
+    Set<Neo4jRoute> routes = sourceCity.getRoutes;
     state = const AsyncValue.loading();
     List<String> routeInstanceIds = routes.map((route) => route.getId).toList();
 

@@ -15,12 +15,10 @@ class CityAvailableRoutesCard extends ConsumerWidget {
     super.key,
     required this.lastCitySelected,
     required this.selectedCity,
-    required this.routesToSelectedCity
 
   });
   final Neo4jCity lastCitySelected;
   final Neo4jCity selectedCity;
-  final Set<Neo4jRoute> routesToSelectedCity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,13 +43,12 @@ class CityAvailableRoutesCard extends ConsumerWidget {
                 Spacer(),
                 SingleDatePicker(
                   onDateSubmitted: (DateTime selectedDate) {
-                    ref.read(routeInstanceProvider.notifier).fetchRouteInstance(lastCitySelected, selectedCity, routesToSelectedCity, selectedDate);
+                    ref.read(routeInstanceProvider.notifier).fetchRouteInstance(lastCitySelected, selectedCity, selectedDate);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => RouteBookScreen(
                           sourceCity: lastCitySelected,
                           targetCity: selectedCity,
-                          routes: routesToSelectedCity,
                           searchDate: selectedDate,
                         ),
                       ),
@@ -68,14 +65,13 @@ class CityAvailableRoutesCard extends ConsumerWidget {
               'The following is a list of all transport modes we have in our database and the average cost and duration associated with them.',
               style: kNormalTextStyle,
             ),
-            // ListView of travel modes
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
-              itemCount: routesToSelectedCity.length,
+              itemCount: lastCitySelected.fetchRoutesForGivenCity(selectedCity.getId).length,
               itemBuilder: (context, index) {
-                final route = routesToSelectedCity.toList()[index];
+                final route = lastCitySelected.fetchRoutesForGivenCity(selectedCity.getId).toList()[index];
                 return CityAvailableRoutesCardRow(
                   route: route,
                 );

@@ -37,7 +37,7 @@ class ItineraryNotifier extends Notifier<List<Neo4jCity>> {
       // Remove any RouteInstances chosen..
       ref.read(routeListProvider.notifier).removeFromRouteList(state.length);
 
-      if (state.length > 1) {
+      if (state.isNotEmpty) {
         ref.read(targetCitiesGivenCountryProvider.notifier).fetchTargetCities(
             state.last);
       } else {

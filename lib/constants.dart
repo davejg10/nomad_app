@@ -31,12 +31,17 @@ var kContainerShape = BorderRadius.circular(kShapeRadius);
 var kButtonShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(kShapeRadius));
 const EdgeInsets kButtonPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 12); // Internal padding for buttons
 
+const kProperBigHeader = TextStyle(
+    fontSize: 40,
+    fontWeight: kFontWeight
+);
+
 // const kIconButtonPadding =
 const kIconButtonElevation = 3.0;
 const kCardLowElevation = 2.0;
 const kCardElevation = 5.0;
 const kCardPadding = EdgeInsets.all(12.0);
-const kCardMargin = EdgeInsets.only(left: 2.0, right: 2.0, bottom: 7.5, top: 10.0);
+const kCardMargin = EdgeInsets.only(left: 2.0, right: 2.0, bottom: 7.5, top: 7.5);
 var kCardBorderRadius = BorderRadius.circular(20.0);
 
 const kFontWeight = FontWeight.w600;

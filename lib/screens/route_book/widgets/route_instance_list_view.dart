@@ -21,6 +21,7 @@ class RouteInstanceListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       key: PageStorageKey(transportType), // Important for scroll position preservation
       itemCount: routeInstancesForTransportType.length,
       itemBuilder: (context, index) {

@@ -21,10 +21,7 @@ class RouteViewScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           selectedCountries.map((country) => country.getName).join(','),
-          style: TextStyle(
-              fontSize: 40,
-              fontWeight: kFontWeight
-          ),
+          style: kProperBigHeader,
         ),
         actions: [
             IconButton(
@@ -50,7 +47,9 @@ class RouteViewScreen extends ConsumerWidget {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
+
                   // ItineraryTotalsBar(),
+                  // ItineraryDateSelector(),
                   ItineraryDestinationSlivers(),
                   SliverToBoxAdapter(
                     child: Padding(

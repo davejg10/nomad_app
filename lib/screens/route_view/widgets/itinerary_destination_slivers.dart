@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:nomad/constants.dart';
 import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/itinerary_list_provider.dart';
 import 'package:nomad/screens/route_view/providers/route_list_provider.dart';
 import 'package:nomad/screens/route_view/widgets/route_illustration.dart';
 import 'package:nomad/screens/route_view/widgets/route_view_date_picker.dart';
-import 'package:nomad/widgets/city_card.dart';
+import 'package:nomad/widgets/city_card/city_card.dart';
 import 'package:nomad/widgets/generic/add_remove_dialogue.dart';
-import 'package:nomad/widgets/generic/icon_background_button.dart';
 
 import '../../../custom_log_printer.dart';
 
@@ -33,7 +30,6 @@ class ItineraryDestinationSlivers extends ConsumerWidget {
               key: Key('cityCard${city.getName}'),
               lastCitySelected: lastCity,
               selectedCity: city,
-              routesToSelectedCity: lastCity.getRoutes,
               trailingButton:
                 index == itineraryList.length - 1
                 ?
@@ -59,7 +55,6 @@ class ItineraryDestinationSlivers extends ConsumerWidget {
                   RouteViewDatePicker(
                     sourceCity: city,
                     targetCity: itineraryList[index + 1],
-                    routes: lastCity.getRoutes,
                     itineraryIndex: index,
                   )
                 :
@@ -74,7 +69,6 @@ class ItineraryDestinationSlivers extends ConsumerWidget {
             return RouteIllustration(
                 sourceCity: sourceCity,
                 targetCity: targetCity,
-                routes: sourceCity.getRoutes,
                 itineraryIndex: index
             );
           } else {

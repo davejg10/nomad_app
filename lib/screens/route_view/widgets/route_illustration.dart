@@ -21,13 +21,11 @@ class RouteIllustration extends ConsumerWidget {
     super.key,
     required this.sourceCity,
     required this.targetCity,
-    required this.routes,
     required this.itineraryIndex
   });
 
   final Neo4jCity sourceCity;
   final Neo4jCity targetCity;
-  final Set<Neo4jRoute> routes;
   final int itineraryIndex;
   final dateFormat = DateFormat('EEE, MMM d');
   final timeFormat = DateFormat('h:mm a');
@@ -51,13 +49,12 @@ class RouteIllustration extends ConsumerWidget {
                 backgroundColor: routeInstance.getTransportType.getColor(),
                 onPressed: () async {
                   ref.read(itineraryIndexProvider.notifier).state = itineraryIndex;
-                  ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, routes, routeInstance!.getDeparture);
+                  ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, routeInstance!.getDeparture);
                   bool? confirmed = await showRouteInstanceSelectedDialogue(
                     context: context,
                     routeInstance: routeInstance,
                     sourceCity: sourceCity,
                     targetCity: targetCity,
-                    routes: routes,
                     itineraryIndex: itineraryIndex
                   );
                 },

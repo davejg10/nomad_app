@@ -5,7 +5,7 @@ import 'package:nomad/domain/neo4j/neo4j_city.dart';
 import 'package:nomad/providers/itinerary_list_provider.dart';
 import 'package:nomad/providers/search_widget_visibility_provider.dart';
 import 'package:nomad/screens/select_city/providers/available_city_queried_list_provider.dart';
-import 'package:nomad/widgets/city_card.dart';
+import 'package:nomad/widgets/city_card/city_card.dart';
 import 'package:nomad/widgets/generic/add_remove_dialogue.dart';
 
 class LastCityTile extends ConsumerStatefulWidget {
@@ -49,7 +49,6 @@ class _LastCityTileState extends ConsumerState<LastCityTile> with TickerProvider
           key: Key('cityCard${lastCitySelected.getName}'),
           lastCitySelected: lastCitySelected,
           selectedCity: lastCitySelected,
-          routesToSelectedCity: {},
           trailingButton: IconButton(
             icon: const Icon(
               Icons.close,

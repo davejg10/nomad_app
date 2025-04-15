@@ -56,7 +56,7 @@ class CitySliverAppBar extends ConsumerWidget {
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(30.0),
         child: Container(
-          height: 20,
+          height: 15,
           decoration: BoxDecoration(
             borderRadius: kCurvedTopEdges,
             color: canvasColor,

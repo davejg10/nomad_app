@@ -15,7 +15,6 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
     super.key,
     required this.sourceCity,
     required this.targetCity,
-    required this.routes,
     required this.searchDate,
     required this.tabController,
     required this.tabs
@@ -23,15 +22,14 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   final Neo4jCity sourceCity;
   final Neo4jCity targetCity;
-  final Set<Neo4jRoute> routes;
   final DateTime searchDate;
   final TabController tabController;
   final List<Widget> tabs;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(categorizedRouteInstanceProvider);
     String selectedSortOption = ref.watch(routeInstanceSortOptionProvider);
-    final controller =
 
     return SliverAppBar(
       title: FittedBox(
@@ -43,7 +41,7 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
         SortPopupMenu(selectedSortOption: selectedSortOption),
         SingleDatePicker(
             onDateSubmitted: (DateTime selectedSearchDate) {
-              ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, routes, selectedSearchDate);
+              ref.read(routeInstanceProvider.notifier).fetchRouteInstance(sourceCity, targetCity, selectedSearchDate);
             },
             lastDateSelected: searchDate
         ),

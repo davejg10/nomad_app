@@ -7,19 +7,16 @@ import 'package:nomad/screens/city_details/widgets/city_sliver_app_bar.dart';
 import 'package:nomad/widgets/generic/screen_scaffold.dart';
 
 import '../../domain/neo4j/neo4j_city.dart';
-import '../../domain/neo4j/neo4j_route.dart';
 
 class CityDetailsScreen extends StatelessWidget {
   const CityDetailsScreen({
     super.key,
     required this.lastCitySelected,
     required this.selectedCity,
-    required this.routesToSelectedCity
   });
 
   final Neo4jCity lastCitySelected;
   final Neo4jCity selectedCity;
-  final Set<Neo4jRoute> routesToSelectedCity;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +43,6 @@ class CityDetailsScreen extends StatelessWidget {
                   CityAvailableRoutesCard(
                     lastCitySelected: lastCitySelected,
                     selectedCity: selectedCity,
-                    routesToSelectedCity: routesToSelectedCity
                   ),
               ]),
             ),

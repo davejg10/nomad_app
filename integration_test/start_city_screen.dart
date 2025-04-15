@@ -7,7 +7,7 @@ import 'package:nomad/domain/neo4j_country.dart';
 import 'package:nomad/screens/city_details/city_details_screen.dart';
 import 'package:nomad/screens/next_city_screen.dart';
 import 'package:nomad/screens/start_city_screen.dart';
-import 'package:nomad/widgets/city_card.dart';
+import 'package:nomad/widgets/city_card/city_card.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

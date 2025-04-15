@@ -16,13 +16,14 @@ class SortPopupMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<String>(
-      icon: Container(
-        width: 30,
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            borderRadius: kContainerShape
+      padding: EdgeInsets.zero,
+      icon: Card(
+        shape: kButtonShape,
+        color: Theme.of(context).colorScheme.secondary,
+        child: Padding(
+          padding: const EdgeInsets.all(11.5),
+          child: Icon(Icons.filter_alt, size: 24,),
         ),
-        child: Icon(Icons.filter_alt),
       ),
       tooltip: 'Sort routes',
       onSelected: (String value) {

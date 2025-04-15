@@ -12,7 +12,6 @@ Future<bool?> showRouteInstanceSelectedDialogue({
   required RouteInstance routeInstance,
   required Neo4jCity sourceCity,
   required Neo4jCity targetCity,
-  required Set<Neo4jRoute> routes,
   required int itineraryIndex
 }) {
 
@@ -39,7 +38,6 @@ Future<bool?> showRouteInstanceSelectedDialogue({
                   builder: (context) => RouteBookScreen(
                     sourceCity: sourceCity,
                     targetCity: targetCity,
-                    routes: routes,
                     searchDate: routeInstance.getDeparture,
                   ),
                 ),

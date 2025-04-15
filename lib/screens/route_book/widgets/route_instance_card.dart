@@ -221,7 +221,7 @@ class RouteInstanceCard extends ConsumerWidget {
                             );
                           }
                         },
-                        backgroundColor: routeInstance.getTransportType.getColor(),
+                        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
                       ),
                     )
                   ],

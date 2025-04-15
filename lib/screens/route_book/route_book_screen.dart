@@ -12,6 +12,7 @@ import 'package:nomad/screens/route_book/widgets/app_bar/route_book_tab_bar_shim
 import 'package:nomad/screens/route_book/widgets/app_bar/sort_popup_menu.dart';
 import 'package:nomad/screens/route_book/widgets/route_instance_list_view.dart';
 import 'package:nomad/screens/route_book/widgets/route_instance_list_view_loading.dart';
+import 'package:nomad/screens/route_book/widgets/route_instance_sort_indicator.dart';
 import 'package:nomad/widgets/generic/action_button_card.dart';
 import 'package:nomad/widgets/generic/custom_not_found.dart';
 import 'package:nomad/widgets/generic/error_snackbar.dart';
@@ -29,13 +30,11 @@ class RouteBookScreen extends ConsumerStatefulWidget {
     super.key,
     required this.sourceCity,
     required this.targetCity,
-    required this.routes,
     required this.searchDate,
   });
 
   final Neo4jCity sourceCity;
   final Neo4jCity targetCity;
-  final Set<Neo4jRoute> routes;
   final DateTime searchDate;
 
   @override
@@ -83,10 +82,45 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
     return false;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final categorizedRoutes = ref.watch(categorizedRouteInstanceProvider);
+    final newAvailableTransportTypes = ref.read(categorizedRouteInstanceProvider.notifier).sortKeysByPreferredTransportType();
+    final routeInstanceState = ref.watch(routeInstanceProvider);
+    reInitializeTabController(newAvailableTransportTypes);
+
+    DateTime _searchDate = widget.searchDate;
+    String date = '${_searchDate.day}-${_searchDate.month}-${_searchDate.year}';
+
+    return ScreenScaffold(
+      padding: EdgeInsets.zero,
+      child: NestedScrollView(
+        physics: const BouncingScrollPhysics(),
+        headerSliverBuilder:  (context, innerBoxIsScrolled) => [
+          RouteBookAppBar(
+              sourceCity: widget.sourceCity,
+              targetCity: widget.targetCity,
+              searchDate: widget.searchDate,
+              tabController: routeInstanceState.isLoading ? TabController(length: 2, vsync: this) : _tabController!,
+              tabs: _buildRouteInstanceTabs(routeInstanceState.isLoading)
+          ),
+        ],
+        body: Column(
+          children: [
+            RouteInstanceSortIndicator(),
+            Expanded(
+                child: _buildRouteInstanceListView(categorizedRoutes, routeInstanceState),
+            ),
+          ],
+        ),
+      )
+    );
+  }
+
   List<Widget> _buildRouteInstanceTabs(bool isLoading) {
     if (isLoading) {
       return List.generate(2, (index) =>
-        const RouteBookTabBarShimmer(),
+      const RouteBookTabBarShimmer(),
       );
     }
     return _sortedTransportModes.map((type) =>
@@ -100,68 +134,10 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
     ).toList();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String selectedSortOption = ref.watch(routeInstanceSortOptionProvider);
-    final categorizedRoutes = ref.watch(categorizedRouteInstanceProvider);
-    final newAvailableTransportTypes = ref.read(categorizedRouteInstanceProvider.notifier).sortKeysByPreferredTransportType();
-    final routeInstanceState = ref.watch(routeInstanceProvider);
-    reInitializeTabController(newAvailableTransportTypes);
-
-    DateTime _searchDate = widget.searchDate;
-    String date = '${_searchDate.day}-${_searchDate.month}-${_searchDate.year}';
-
-    if (routeInstanceState.isLoading || routeInstanceState.hasValue) {
-
-      return ScreenScaffold(
-        padding: EdgeInsets.zero,
-        child: NestedScrollView(
-          physics: const BouncingScrollPhysics(),
-          headerSliverBuilder:  (context, innerBoxIsScrolled) => [
-            RouteBookAppBar(
-                sourceCity: widget.sourceCity,
-                targetCity: widget.targetCity,
-                routes: widget.routes,
-                searchDate: widget.searchDate,
-                tabController: routeInstanceState.isLoading ? TabController(length: 2, vsync: this) : _tabController!,
-                tabs: _buildRouteInstanceTabs(routeInstanceState.isLoading))
-          ],
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Row(
-                  children: [
-                    const Icon(Icons.sort, size: kStandardIconSize),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Sorted by: $selectedSortOption',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                  child: routeInstanceState.isLoading ?
-                  RouteInstanceListViewLoading() : _buildRouteInstanceListView(categorizedRoutes)
-              ),
-            ],
-          ),
-        )
-      );
-    } else if (routeInstanceState.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          ErrorSnackbar('There was an issue making that request, please try a different date...')
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildRouteInstanceListView(Map<TransportType, List<RouteInstance>> categorizedRoutes) {
-    if (categorizedRoutes.isEmpty) {
+  Widget _buildRouteInstanceListView(Map<TransportType, List<RouteInstance>> categorizedRoutes, AsyncValue<Set<RouteInstance>> routeInstanceState ) {
+    if (routeInstanceState.isLoading) {
+      return RouteInstanceListViewLoading();
+    } else if (categorizedRoutes.isEmpty || routeInstanceState.hasError) {
       return const Center(
         child: CustomNotFound(thingNotFound: 'Routes',)
       );

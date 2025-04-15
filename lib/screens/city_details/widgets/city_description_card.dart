@@ -25,7 +25,6 @@ class CityDescriptionCard extends ConsumerWidget {
     if (sqlCityState.hasValue && sqlCityState.value != null) {
       SqlCity sqlCity = sqlCityState.value!;
       return Card(
-
         margin: kCardMargin,
         elevation: kCardElevation,
         shape: RoundedRectangleBorder(

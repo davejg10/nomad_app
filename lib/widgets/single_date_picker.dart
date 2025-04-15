@@ -6,22 +6,24 @@ import 'package:nomad/constants.dart';
 import 'generic/single_date_picker_dialogue.dart';
 
 class SingleDatePicker extends ConsumerWidget {
-  const SingleDatePicker({
+  SingleDatePicker({
     super.key,
     required this.onDateSubmitted,
     this.lastDateSelected,
+    this.elevation
   });
 
   final Function onDateSubmitted;
   final DateTime? lastDateSelected;
+  double? elevation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     return Card(
-      elevation: kIconButtonElevation,
+      elevation: elevation,
       shape: kButtonShape,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.secondary,
       child: IconButton(
         padding: EdgeInsets.zero,
         onPressed: () async {

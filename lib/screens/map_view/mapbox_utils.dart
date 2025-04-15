@@ -6,15 +6,32 @@ import 'package:flutter/services.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:nomad/domain/sql/route_instance.dart';
 
 import '../../domain/neo4j/neo4j_city.dart';
 
 class MapboxUtils {
 
+  static void animateMapToCity(MapboxMap? mapboxMap, List<Neo4jCity> itinerary, Map<int, RouteInstance> routeList, int index) async {
+    Neo4jCity selectedCity = itinerary[index];
+    if (index > 0) {
+      Color routeColor = routeList[index-1] != null ? routeList[index-1]!.getTransportType.getColor() : Colors.black;
+      await MapboxUtils.createPolyline(mapboxMap!, sourceCity: itinerary[index - 1], targetCity: itinerary[index], routeColor: routeColor);
+    }
+    await mapboxMap?.flyTo(
+      CameraOptions(
+        center: Point(coordinates: Position.named(lat: selectedCity.getCoordinates.getLongitude, lng: selectedCity.getCoordinates.getLatitude)),
+        zoom: 8.0,
+        bearing: 0.0,
+        pitch: 30,
+      ),
+      MapAnimationOptions(duration: 3000, startDelay: 0),
+    );
+  }
+
   static Future<void> placeMarker(MapboxMap mapboxMap, { required Neo4jCity city }) async {
     Uint8List wayPointImage = await MapboxUtils.loadWayPointImageNetwork(city.getPrimaryBlobUrl);
     wayPointImage = await MapboxUtils.makeImageCircular(wayPointImage);
-    // Uint8List wayPointImage = await MapboxUtils.loadWayPointImage('assets/static/pin_drop.png');
     PointAnnotationManager pointAnnotationManager = await mapboxMap.annotations.createPointAnnotationManager();
 
     PointAnnotationOptions pointAnnotationOptions = PointAnnotationOptions(
@@ -45,11 +62,6 @@ class MapboxUtils {
       // lineWidth: 4.0,
       // lineOpacity: 0.8,
     ));
-  }
-
-  static Future loadWayPointImage(String assetPath) async {
-    final ByteData bytes = await rootBundle.load(assetPath);
-    return bytes.buffer.asUint8List();
   }
 
   static Future<Uint8List> loadWayPointImageNetwork(String url) async {
