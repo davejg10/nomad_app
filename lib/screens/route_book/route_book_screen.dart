@@ -18,6 +18,7 @@ import 'package:nomad/widgets/generic/custom_not_found.dart';
 import 'package:nomad/widgets/generic/error_snackbar.dart';
 import 'package:nomad/widgets/generic/icon_background_button.dart';
 import 'package:nomad/widgets/generic/screen_scaffold.dart';
+import 'package:nomad/widgets/generic/text_fitter.dart';
 import 'package:nomad/widgets/single_date_picker.dart';
 
 import '../../custom_log_printer.dart';
@@ -41,12 +42,16 @@ class RouteBookScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _RouteBookScreenState();
 }
 
-class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerProviderStateMixin {
-  static Logger _logger = Logger(printer: CustomLogPrinter('route_book_screen.dart'));
+class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerProviderStateMixin  {
+  static Logger _logger = Logger(
+      printer: CustomLogPrinter('route_book_screen.dart'));
 
   TabController? _tabController;
   late Set<RouteInstance> routeInstances;
-  List<TransportType> _sortedTransportModes = [TransportType.FLIGHT, TransportType.FERRY]; // Initialize with dummy value for loading
+  List<TransportType> _sortedTransportModes = [
+    TransportType.FLIGHT,
+    TransportType.FERRY
+  ]; // Initialize with dummy value for loading
 
   @override
   void initState() {
@@ -59,7 +64,8 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
     super.dispose();
   }
 
-  void reInitializeTabController(List<TransportType> newAvailableTransportTypes) {
+  void reInitializeTabController(
+      List<TransportType> newAvailableTransportTypes) {
     if (_tabController == null || _didModesChange(newAvailableTransportTypes)) {
       _sortedTransportModes = newAvailableTransportTypes; // Update stored modes
       _tabController?.dispose(); // Dispose old one if exists
@@ -85,7 +91,9 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
   @override
   Widget build(BuildContext context) {
     final categorizedRoutes = ref.watch(categorizedRouteInstanceProvider);
-    final newAvailableTransportTypes = ref.read(categorizedRouteInstanceProvider.notifier).sortKeysByPreferredTransportType();
+    final newAvailableTransportTypes = ref.read(
+        categorizedRouteInstanceProvider.notifier)
+        .sortKeysByPreferredTransportType();
     final routeInstanceState = ref.watch(routeInstanceProvider);
     reInitializeTabController(newAvailableTransportTypes);
 
@@ -93,27 +101,26 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
     String date = '${_searchDate.day}-${_searchDate.month}-${_searchDate.year}';
 
     return ScreenScaffold(
-      padding: EdgeInsets.zero,
-      child: NestedScrollView(
-        physics: const BouncingScrollPhysics(),
-        headerSliverBuilder:  (context, innerBoxIsScrolled) => [
-          RouteBookAppBar(
-              sourceCity: widget.sourceCity,
-              targetCity: widget.targetCity,
-              searchDate: widget.searchDate,
-              tabController: routeInstanceState.isLoading ? TabController(length: 2, vsync: this) : _tabController!,
-              tabs: _buildRouteInstanceTabs(routeInstanceState.isLoading)
-          ),
-        ],
-        body: Column(
-          children: [
-            RouteInstanceSortIndicator(),
-            Expanded(
-                child: _buildRouteInstanceListView(categorizedRoutes, routeInstanceState),
+        padding: EdgeInsets.zero,
+        child: NestedScrollView(
+          // floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) =>
+          [
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: RouteBookAppBar(
+                  sourceCity: widget.sourceCity,
+                  targetCity: widget.targetCity,
+                  searchDate: widget.searchDate,
+                  tabController: routeInstanceState.isLoading ? TabController(
+                      length: 2, vsync: this) : _tabController!,
+                  tabs: _buildRouteInstanceTabs(routeInstanceState.isLoading),
+                innerBoxIsScrolled: innerBoxIsScrolled
+              ),
             ),
           ],
-        ),
-      )
+          body: _buildRouteInstanceListView(categorizedRoutes, routeInstanceState),
+        )
     );
   }
 
@@ -128,24 +135,29 @@ class _RouteBookScreenState extends ConsumerState<RouteBookScreen> with TickerPr
           height: 60,
           child: Tab(
             icon: Icon(type.getIcon()),
-            text: type.getTabName(),
+            child: TextFitter(text: type.getTabName()),
           ),
         ),
     ).toList();
   }
 
-  Widget _buildRouteInstanceListView(Map<TransportType, List<RouteInstance>> categorizedRoutes, AsyncValue<Set<RouteInstance>> routeInstanceState ) {
+  Widget _buildRouteInstanceListView(
+      Map<TransportType, List<RouteInstance>> categorizedRoutes,
+      AsyncValue<Set<RouteInstance>> routeInstanceState) {
     if (routeInstanceState.isLoading) {
       return RouteInstanceListViewLoading();
     } else if (categorizedRoutes.isEmpty || routeInstanceState.hasError) {
       return const Center(
-        child: CustomNotFound(thingNotFound: 'Routes',)
+          child: CustomNotFound(thingNotFound: 'Routes',)
       );
     }
+
     return TabBarView(
       controller: _tabController,
       children: _sortedTransportModes.map((transportType) {
         return RouteInstanceListView(
+          key: ValueKey('custom_${transportType.name}'),
+          tabKey: PageStorageKey<String>(transportType.name),
           routeInstancesForTransportType: categorizedRoutes[transportType] ?? [],
           transportType: transportType,
         );

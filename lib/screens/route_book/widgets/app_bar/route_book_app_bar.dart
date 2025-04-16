@@ -17,7 +17,8 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
     required this.targetCity,
     required this.searchDate,
     required this.tabController,
-    required this.tabs
+    required this.tabs,
+    required this.innerBoxIsScrolled
   });
 
   final Neo4jCity sourceCity;
@@ -25,6 +26,7 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final DateTime searchDate;
   final TabController tabController;
   final List<Widget> tabs;
+  final bool innerBoxIsScrolled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,6 +50,7 @@ class RouteBookAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ],
       pinned: true,
       floating: true,
+      forceElevated: innerBoxIsScrolled,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight + 10),
         child: TabBar(

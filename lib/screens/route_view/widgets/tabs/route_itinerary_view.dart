@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../itinerary_destination_slivers.dart';
-
 class RouteItineraryView extends StatelessWidget {
-  const RouteItineraryView({super.key});
+  const RouteItineraryView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -14,6 +14,7 @@ class RouteViewScreen extends StatefulWidget {
 }
 
 class _RouteViewScreenState extends State<RouteViewScreen> with TickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
   List<String> tabNames = ['Itinerary', 'Totals', 'Calender'];
 
@@ -25,6 +26,7 @@ class _RouteViewScreenState extends State<RouteViewScreen> with TickerProviderSt
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -35,9 +37,11 @@ class _RouteViewScreenState extends State<RouteViewScreen> with TickerProviderSt
         vsync: this
     );
 
+
     return ScreenScaffold(
       padding: EdgeInsets.zero,
       child: NestedScrollView(
+        controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           RouteViewAppBar()
         ],
@@ -75,9 +79,9 @@ class _RouteViewScreenState extends State<RouteViewScreen> with TickerProviderSt
     return TabBarView(
       controller: _tabController,
       children: [
-        RouteItineraryView(),
-        RouteTotalsView(),
-        RouteCalenderView()
+        RouteItineraryView(key: PageStorageKey<String>('itinerary')),
+        RouteTotalsView(key: PageStorageKey<String>('totals')),
+        RouteCalenderView(key: PageStorageKey<String>('calender'), scrollController: _scrollController,)
       ]
     );
   }

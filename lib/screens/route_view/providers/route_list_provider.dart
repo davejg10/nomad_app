@@ -63,9 +63,9 @@ class RouteListNotifier extends Notifier<Map<int, RouteInstance>> {
       return laterRouteInstances[mapKeysAsList.first]!.getDeparture;
     }
 
-    DateTime? tripStartDate = ref.read(tripDateEndProvider);
+    DateTime? tripEndDate = ref.read(tripDateFinishProvider);
 
-    return tripStartDate;
+    return tripEndDate;
   }
 
   // double calculateCityCriteriaTotal(CityCriteria criteria) {
